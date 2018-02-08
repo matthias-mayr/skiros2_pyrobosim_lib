@@ -44,7 +44,7 @@ class my_primitive(PrimitiveBase):
     
     def onStart(self):
         """Called just before 1st execute"""
-        return self.step("Start")
+        return True
         
     def execute(self):
         """ Main execution function """
