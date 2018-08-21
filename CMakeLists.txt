@@ -14,6 +14,6 @@ catkin_python_setup()
 catkin_package(
 #  INCLUDE_DIRS 
 #  LIBRARIES 
-# CATKIN_DEPENDS rospy 
+ CATKIN_DEPENDS rospy skiros2_msgs
 #  DEPENDS 
 )
