@@ -33,25 +33,21 @@ class my_primitive(PrimitiveBase):
         """Called once when loading the primitive. If return False, the primitive is not loaded"""
         return True
 
-    def onReset(self):
-        """Re-initialize the primitive"""
-        pass
-
     def onPreempt(self):
         """ Called when skill is requested to stop. """
-        pass
+        return True
 
     def onStart(self):
         """Called just before 1st execute"""
         return True
 
     def execute(self):
-        """ Main execution function """
-        if self._progress_code<2:
+        """ Main execution function. Should return with either: self.fail, self.step or self.success """
+        if self._progress_code<10:
             return self.step("Step")
         else:
             return self.success("Done")
 
     def onEnd(self):
-        """Called just after last execute"""
-        pass
+        """Called just after last execute OR preemption"""
+        return True

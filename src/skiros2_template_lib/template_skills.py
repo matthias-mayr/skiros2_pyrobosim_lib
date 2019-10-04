@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Sequential
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -26,4 +26,7 @@ class my_skill(SkillBase):
         self.setDescription(MySkill(), self.__class__.__name__)
 
     def expand(self, skill):
-        skill.addChild(self.getSkill(":MyPrimitive", ""))
+        skill.setProcessor(Sequential())
+        skill(
+            self.skill("MyPrimitive", "my_primitive")
+        )
