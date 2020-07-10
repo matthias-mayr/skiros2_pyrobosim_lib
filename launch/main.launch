@@ -1,6 +1,5 @@
 <launch>
-  <arg name="primitive_list" default="[my_primitive]"/>
-  <arg name="skill_list" default="[my_skill]"/>
+  <arg name="skill_list" default="[my_primitive, my_skill]"/>
   <arg name="debug" default="false"/>
   <arg name="robot_ontology_prefix" default="xyz"/>
   <arg name="robot_name" default="xyz_robot"/>
@@ -18,7 +17,6 @@
       <arg name="verbose" value="false"/>
       <arg name="debug" value="$(arg debug)"/>
       <arg name="libraries_list" value="[skiros2_template_lib]"/>
-      <arg name="primitive_list" value="$(arg primitive_list)"/>
       <arg name="skill_list" value="$(arg skill_list)" />
       <arg name="robot_ontology_prefix" value="$(arg robot_ontology_prefix)"/>
       <arg name="robot_name" value="$(arg robot_name)"/>
