@@ -12,6 +12,6 @@ Template of a custom package for [skiros2](https://github.com/RVMI/skiros2).
 > sed -i 's/xyz/my_robot_name/' *.*
 
 * Launch main.launch
-> roslaunch skiros2 main.launch
+> roslaunch skiros2_template_lib main.launch
 
 
