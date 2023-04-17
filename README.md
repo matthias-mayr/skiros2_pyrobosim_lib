@@ -26,6 +26,6 @@ find . -depth -execdir rename 's/xyz/my_robot_name/' '{}' \;
 * Source your workspace
 * Launch main.launch
 ```
-roslaunch skiros2_template_lib main.launch
+roslaunch skiros2_<my_package_name>_lib main.launch
 ```
 
