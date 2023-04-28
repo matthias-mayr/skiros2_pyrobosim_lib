@@ -35,7 +35,7 @@ class my_primitive(PrimitiveBase):
 
     def onPreempt(self):
         """ Called when skill is requested to stop. """
-        return True
+        return self.fail("Stopped", -1)
 
     def onStart(self):
         """Called just before 1st execute"""
