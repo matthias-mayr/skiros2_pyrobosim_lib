@@ -1,6 +1,6 @@
 ###  SkiROS2 template library
 
-Template of a custom package for [skiros2](https://github.com/RVMI/skiros2).
+Template of a custom package for [SkiROS2](https://github.com/RVMI/skiros2).
 
 ### Configure steps
 
@@ -26,6 +26,6 @@ find . -depth -execdir rename 's/xyz/my_robot_name/' '{}' \;
 * Source your workspace
 * Launch main.launch
 ```
-roslaunch skiros2_<my_package_name>_lib main.launch
+ros2 launch skiros2_<my_package_name>_lib main.launch.py
 ```
 
