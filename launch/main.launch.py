@@ -8,13 +8,13 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     skiros_config = {
-        "libraries_list": "['skiros2_template_lib']",
+        "libraries_list": "['skiros2_pyrobosim_lib']",
         "skill_list": "[my_primitive, my_skill]",
         "init_scene": "''",
         "verbose": "true",
-        "workspace_dir": get_package_share_directory('skiros2_template_lib') + "/owl",
-        "robot_name": "xyz_robot",
-        "robot_ontology_prefix": "xyz"
+        "workspace_dir": get_package_share_directory('skiros2_pyrobosim_lib') + "/owl",
+        "robot_name": "robi_robot",
+        "robot_ontology_prefix": "robi"
     }
 
     launch_include = IncludeLaunchDescription(

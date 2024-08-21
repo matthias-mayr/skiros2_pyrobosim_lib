@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'skiros2_template_lib'
+package_name = 'skiros2_pyrobosim_lib'
 
 setup(
     name=package_name,
@@ -10,7 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name, ['launch/main.launch.py']),
-        ('share/' + package_name + "/owl", ['owl/xyz_robot_description.owl']),
+        ('share/' + package_name + "/owl", ['owl/robi_robot_description.owl']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
