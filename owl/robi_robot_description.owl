@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://rvmi.aau.dk/ontologies/xyz.owl#"
-     xml:tts="http://rvmi.aau.dk/ontologies/xyz.owl"
+<rdf:RDF xmlns="http://rvmi.aau.dk/ontologies/robi.owl#"
+     xml:tts="http://rvmi.aau.dk/ontologies/robi.owl"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:skiros="http://rvmi.aau.dk/ontologies/skiros.owl#"
-     xmlns:tts="http://rvmi.aau.dk/ontologies/xyz.owl#">
-    <owl:Ontology rdf:about="http://rvmi.aau.dk/ontologies/xyz.owl">
+     xmlns:tts="http://rvmi.aau.dk/ontologies/robi.owl#">
+    <owl:Ontology rdf:about="http://rvmi.aau.dk/ontologies/robi.owl">
         <owl:imports rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl"/>
     </owl:Ontology>
     
@@ -23,7 +23,7 @@
 
     <!-- http://rvmi.aau.dk/ontologies/tts.owl#MyDataType 
 
-    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/xyz.owl#MyDataType"/>-->
+    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#MyDataType"/>-->
         <!--rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#DeviceProperty"/>
     </owl:DatatypeProperty>-->
 
@@ -38,12 +38,12 @@
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#MyRelation 
 
-    <owl:ObjectProperty rdf:about="http://rvmi.aau.dk/ontologies/xyz.owl#conditionProperty"/> -->
+    <owl:ObjectProperty rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#conditionProperty"/> -->
     
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#at 
 
-    <owl:ObjectProperty rdf:about="http://rvmi.aau.dk/ontologies/xyz.owl#at">
+    <owl:ObjectProperty rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#at">
         <rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#conditionProperty"/>
     </owl:ObjectProperty>-->
     
@@ -58,9 +58,9 @@
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#tts_robot -->
 
-    <owl:NamedIndividual rdf:about="http://rvmi.aau.dk/ontologies/xyz.owl#xyz_robot">
+    <owl:NamedIndividual rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#robi_robot">
         <rdf:type rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#Robot"/>
         <skiros:DiscreteReasoner>AauSpatialReasoner</skiros:DiscreteReasoner>
-        <skiros:SkillMgr>/xyz_robot</skiros:SkillMgr>
+        <skiros:SkillMgr>robi_robot</skiros:SkillMgr>
     </owl:NamedIndividual>
 </rdf:RDF>
