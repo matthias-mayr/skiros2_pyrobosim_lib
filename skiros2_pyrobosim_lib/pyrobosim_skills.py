@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Serial
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Serial, SerialStar
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -6,27 +6,28 @@ from skiros2_common.core.world_element import Element
 # Descriptions
 #################################################################################
 
-class MySkill(SkillDescription):
+class Problem1Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("WorldModelObject", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("ObjectStartLocation", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("ObjectTargetLocation", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
 
 #################################################################################
 # Implementations
 #################################################################################
 
-class my_skill(SkillBase):
+class problem_1_solution(SkillBase):
     """
-    Tree is:
-    ----->:Skill (->)
-    ------->:MyPrimitive
-
     """
     def createDescription(self):
-        self.setDescription(MySkill(), self.__class__.__name__)
+        self.setDescription(Problem1Solution(), self.__class__.__name__)
 
     def expand(self, skill):
-        skill.setProcessor(Serial())
+        skill.setProcessor(SerialStar())
         skill(
-            self.skill("MyPrimitive", "my_primitive")
+            self.skill("NavigateExecution", "", remap={"Target": "ObjectStartLocation"}),
+            self.skill("PickExecution", ""),
+            self.skill("NavigateExecution", "", remap={"Target": "ObjectTargetLocation"}),
+            self.skill("PlaceExecution", "")
         )

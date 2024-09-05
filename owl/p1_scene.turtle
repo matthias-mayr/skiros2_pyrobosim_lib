@@ -1,0 +1,77 @@
+@prefix cora: <http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix robi: <http://rvmi.aau.dk/ontologies/robi.owl#> .
+@prefix skiros: <http://rvmi.aau.dk/ontologies/skiros.owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+skiros:Scene-0 a skiros:Scene,
+        owl:NamedIndividual ;
+    rdfs:label "" ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "map"^^xsd:string ;
+    skiros:OrientationW "1.0"^^xsd:float ;
+    skiros:OrientationX "0.0"^^xsd:float ;
+    skiros:OrientationY "0.0"^^xsd:float ;
+    skiros:OrientationZ "0.0"^^xsd:float ;
+    skiros:PositionX "0.0"^^xsd:float ;
+    skiros:PositionY "0.0"^^xsd:float ;
+    skiros:PositionZ "0.0"^^xsd:float ;
+    skiros:contain skiros:TransformationPose-5,
+        skiros:TransformationPose-8,
+        cora:Robot-1 .
+
+skiros:NavigateExecution a owl:class ;
+    rdfs:subClassOf skiros:PyrobosimPrimitives .
+
+skiros:NavigateExecution-7 a skiros:NavigateExecution,
+        owl:NamedIndividual ;
+    rdfs:label "pyrobosim_action_client" ;
+    skiros:hasParam skiros:Parameter-10,
+        skiros:Parameter-9 .
+
+skiros:Parameter-10 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Robot" ;
+    skiros:DataType "sumo:Agent"^^xsd:string ;
+    skiros:ParameterType 2 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-9 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Target" ;
+    skiros:DataType "skiros:TransformationPose"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Part-11 a skiros:Part,
+        owl:NamedIndividual ;
+    rdfs:label "banana0" .
+
+skiros:PyrobosimPrimitives a owl:class ;
+    rdfs:subClassOf skiros:Skiros2PyrobosimLib .
+
+skiros:Skiros2PyrobosimLib a owl:class ;
+    rdfs:subClassOf skiros:Skill .
+
+skiros:TransformationPose-5 a skiros:TransformationPose,
+        owl:NamedIndividual ;
+    rdfs:label "table_source" ;
+    skiros:contain skiros:Part-11 .
+
+skiros:TransformationPose-8 a skiros:TransformationPose,
+        owl:NamedIndividual ;
+    rdfs:label "table_sink" .
+
+cora:Robot-1 a cora:Robot,
+        owl:NamedIndividual ;
+    rdfs:label "robot" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "cora:Robot-1"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:SkillMgr "robi_robot"^^xsd:string ;
+    skiros:Template "robi:robi_robot"^^xsd:string ;
+    skiros:hasSkill skiros:NavigateExecution-7 ;
+    skiros:hasTemplate robi:robi_robot .
+
