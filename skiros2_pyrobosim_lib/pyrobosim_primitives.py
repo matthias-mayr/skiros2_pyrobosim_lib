@@ -7,7 +7,7 @@ from skiros2_std_skills.action_client_primitive import PrimitiveActionClient
 
 from rclpy import action
 
-from problem_interface.perform_action import ACTIONS, ACTION_NAME
+from delib_ws_problem_interface.perform_action import ACTIONS, ACTION_NAME
 from pyrobosim_msgs.action import ExecuteTaskAction
 from pyrobosim_msgs.msg import TaskAction
 
@@ -36,15 +36,18 @@ class PlaceExecution(SkillDescription):
 #################################################################################
 
 class pyrobosim_action_client_base(PrimitiveActionClient):
+    """
+    @brief Base class for pyrobosim actions for the boilerplate code
+    """
     def buildClient(self)->action.ActionClient:
         """
         @brief Called when starting the skill
-        @return an action client (e.g. actionlib.SimpleActionClient)
+        @return an action client
         """
         return action.ActionClient(self.node, ExecuteTaskAction, ACTION_NAME)
         
 
-    def buildTaskAction(self, action: ACTIONS, target: str):
+    def pyrobosimTaskAction(self, action: ACTIONS, target: str):
         """
         @brief Called when starting the skill
         @return an action msg initialized
@@ -60,6 +63,7 @@ class pyrobosim_action_client_base(PrimitiveActionClient):
         task_action.action = action_goal
         return task_action
 
+### Primitive skill implementation
 
 class navigate_execution(pyrobosim_action_client_base):
     def createDescription(self):
@@ -67,7 +71,7 @@ class navigate_execution(pyrobosim_action_client_base):
         self.setDescription(NavigateExecution(), self.__class__.__name__)
 
     def buildGoal(self):
-        return self.buildTaskAction(ACTIONS.NAVIGATE, self.params["Target"].value.label)
+        return self.pyrobosimTaskAction(ACTIONS.NAVIGATE, self.params["Target"].value.label)
 
 class pick_execution(pyrobosim_action_client_base):
     def createDescription(self):
@@ -75,7 +79,7 @@ class pick_execution(pyrobosim_action_client_base):
         self.setDescription(PickExecution(), self.__class__.__name__)
 
     def buildGoal(self):
-        return self.buildTaskAction(ACTIONS.PICK, self.params["Object"].value.label)
+        return self.pyrobosimTaskAction(ACTIONS.PICK, self.params["Object"].value.label)
 
 class place_execution(pyrobosim_action_client_base):
     def createDescription(self):
@@ -83,28 +87,4 @@ class place_execution(pyrobosim_action_client_base):
         self.setDescription(PlaceExecution(), self.__class__.__name__)
 
     def buildGoal(self):
-        return self.buildTaskAction(ACTIONS.PLACE, self.params["Object"].value.label)
-
-
-    def onInit(self):
-        """Called once when loading the primitive. If return False, the primitive is not loaded"""
-        return True
-
-    def onPreempt(self):
-        """ Called when skill is requested to stop. """
-        return self.fail("Stopped", -1)
-
-    def onStart(self):
-        """Called just before 1st execute"""
-        return True
-
-    def execute(self):
-        """ Main execution function. Should return with either: self.fail, self.step or self.success """
-        if self._progress_code<10:
-            return self.step("Step")
-        else:
-            return self.success("Done")
-
-    def onEnd(self):
-        """Called just after last execute OR preemption"""
-        return True
+        return self.pyrobosimTaskAction(ACTIONS.PLACE, self.params["Object"].value.label)
