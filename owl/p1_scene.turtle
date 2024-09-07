@@ -46,7 +46,7 @@ skiros:Parameter-9 a skiros:Parameter,
 
 skiros:Part-11 a skiros:Part,
         owl:NamedIndividual ;
-    rdfs:label "banana0" .
+    rdfs:label "snacks0" .
 
 skiros:PyrobosimPrimitives a owl:class ;
     rdfs:subClassOf skiros:Skiros2PyrobosimLib .
@@ -56,12 +56,12 @@ skiros:Skiros2PyrobosimLib a owl:class ;
 
 skiros:TransformationPose-5 a skiros:TransformationPose,
         owl:NamedIndividual ;
-    rdfs:label "table_source" ;
+    rdfs:label "pantry_storage" ;
     skiros:contain skiros:Part-11 .
 
 skiros:TransformationPose-8 a skiros:TransformationPose,
         owl:NamedIndividual ;
-    rdfs:label "table_sink" .
+    rdfs:label "table" .
 
 cora:Robot-1 a cora:Robot,
         owl:NamedIndividual ;
