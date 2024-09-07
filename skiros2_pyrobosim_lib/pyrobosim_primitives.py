@@ -4,13 +4,14 @@ from skiros2_common.core.world_element import Element
 from skiros2_common.core.primitive import PrimitiveBase
 
 from skiros2_std_skills.action_client_primitive import PrimitiveActionClient
+from skiros2_common.core.abstract_skill import State
 
 from rclpy import action
 
 from delib_ws_problem_interface.perform_action import ACTIONS, ACTION_NAME
 from pyrobosim_msgs.action import ExecuteTaskAction
 from pyrobosim_msgs.msg import TaskAction
-
+from pyrobosim.planning.actions import ExecutionStatus
 
 #################################################################################
 # Descriptions
@@ -46,6 +47,11 @@ class pyrobosim_action_client_base(PrimitiveActionClient):
         """
         return action.ActionClient(self.node, ExecuteTaskAction, ACTION_NAME)
         
+    def onDone(self, msg) -> State:
+        if msg.execution_result.status == ExecutionStatus.SUCCESS:
+            return self.success("Successfully finished")
+        else:
+            return self.fail("Failure with msg: {}".format(msg.execution_result.message), msg.execution_result.status)
 
     def pyrobosimTaskAction(self, action: ACTIONS, target: str):
         """
