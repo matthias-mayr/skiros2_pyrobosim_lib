@@ -1,0 +1,64 @@
+@prefix cora: <http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix robi: <http://rvmi.aau.dk/ontologies/robi.owl#> .
+@prefix skiros: <http://rvmi.aau.dk/ontologies/skiros.owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rparts: <http://www.inf.ufrgs.br/phi-group/ontologies/RParts.owl#> .
+
+skiros:Scene-0 a skiros:Scene,
+        owl:NamedIndividual ;
+    rdfs:label "" ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "map"^^xsd:string ;
+    skiros:OrientationW "1.0"^^xsd:float ;
+    skiros:OrientationX "0.0"^^xsd:float ;
+    skiros:OrientationY "0.0"^^xsd:float ;
+    skiros:OrientationZ "0.0"^^xsd:float ;
+    skiros:PositionX "0.0"^^xsd:float ;
+    skiros:PositionY "0.0"^^xsd:float ;
+    skiros:PositionZ "0.0"^^xsd:float ;
+    skiros:contain skiros:OpenableLocation-5,
+        skiros:OpenableLocation-8,
+        skiros:Door-20,
+        cora:Robot-1 .
+
+skiros:OpenableLocation-5 a skiros:OpenableLocation,
+        owl:NamedIndividual ;
+    rdfs:label "pantry_storage" ;
+    skiros:Open "false"^^xsd:boolean ;
+    skiros:contain skiros:Part-9 .
+
+skiros:OpenableLocation-8 a skiros:OpenableLocation,
+        owl:NamedIndividual ;
+    skiros:Open "true"^^xsd:boolean ;
+    rdfs:label "table" .
+
+skiros:Door-20 a skiros:Door,
+        owl:NamedIndividual ;
+    skiros:Open "false"^^xsd:boolean ;
+    rdfs:label "hall_dining_trash" .
+
+skiros:Part-9 a skiros:Part,
+        owl:NamedIndividual ;
+    rdfs:label "snacks0" .
+
+cora:Robot-1 a cora:Robot,
+        owl:NamedIndividual ;
+    rdfs:label "robi:robot" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "cora:Robot-1"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:SkillMgr "robi_robot"^^xsd:string ;
+    skiros:Template "robi:robot"^^xsd:string ;
+    skiros:hasA rparts:GripperEffector-2 ;
+    skiros:at skiros:OpenableLocation-8 ;
+    skiros:hasTemplate robi:robot .
+
+rparts:GripperEffector-2 a rparts:GripperEffector,
+        owl:NamedIndividual ;
+    rdfs:label "Robi robot gripper" ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:ContainerState "Empty"^^xsd:string .
+

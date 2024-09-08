@@ -9,8 +9,11 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     skiros_config = {
         "libraries_list": "[skiros2_pyrobosim_lib, skiros2_std_skills]",
-        "skill_list": "[navigate, pick, place, navigate_execution, pick_execution, place_execution, problem_1_solution, wm_set_relation, wm_move_object]",
-        "init_scene": "p1_scene.turtle",
+        "skill_list": "[navigate, pick, place, open_location, close_location,\
+                            navigate_execution, pick_execution, place_execution, open_execution, close_execution,\
+                            wm_set_relation, wm_move_object, wm_set_properties,\
+                            problem_1_solution]",
+        "init_scene": "p2_scene.turtle",
         "verbose": "true",
         "workspace_dir": get_package_share_directory('skiros2_pyrobosim_lib') + "/owl",
         "robot_name": "robot",

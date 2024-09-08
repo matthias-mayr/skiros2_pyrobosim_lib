@@ -50,6 +50,30 @@ class Place(SkillDescription):
         self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False))
         self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True))
 
+class OpenLocation(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, True))
+        # =======PostConditions=========
+        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", True, True))
+        # Planning book-keeping conditions:
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, False))
+
+class CloseLocation(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, True))
+        # =======PostConditions=========
+        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", False, True))
+        # Planning book-keeping conditions:
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, False))
+
 
 #################################################################################
 # Implementations
@@ -96,4 +120,26 @@ class place(SkillBase):
                 remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
         )
 
+class open_location(SkillBase):
+    def createDescription(self):
+        self.setDescription(OpenLocation(), self.__class__.__name__)
 
+    def expand(self, skill):
+        skill(
+            self.skill("OpenExecution", ""),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "OpenableLocation"},
+                specify={"Properties": {"skiros:Open": True}}),
+        )
+
+class close_location(SkillBase):
+    def createDescription(self):
+        self.setDescription(CloseLocation(), self.__class__.__name__)
+
+    def expand(self, skill):
+        skill(
+            self.skill("CloseExecution", ""),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "OpenableLocation"},
+                specify={"Properties": {"skiros:Open": False}}),
+        )

@@ -38,11 +38,10 @@ class OpenExecution(SkillDescription):
         #=======Params=========
         self.addParam("Object", Element("skiros:OpenableLocation"), ParamTypes.Required)
 
-        # precondition not open
-        # preconditino robot at location
-        # postcondition is open
-
-        
+class CloseExecution(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("Object", Element("skiros:OpenableLocation"), ParamTypes.Required)
 
 
 #################################################################################
@@ -115,3 +114,11 @@ class open_execution(pyrobosim_action_client_base):
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.OPEN, self.params["Object"].value.label)
+    
+class close_execution(pyrobosim_action_client_base):
+    def createDescription(self):
+        """Set the primitive type"""
+        self.setDescription(CloseExecution(), self.__class__.__name__)
+
+    def buildGoal(self):
+        return self.pyrobosimTaskAction(ACTIONS.CLOSE, self.params["Object"].value.label)
