@@ -13,6 +13,18 @@
     </owl:Ontology>
     
 
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Door -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Door">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
+    </owl:Class>
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -21,11 +33,12 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <!-- http://rvmi.aau.dk/ontologies/tts.owl#MyDataType 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Open -->
 
-    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#MyDataType"/>-->
-        <!--rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#DeviceProperty"/>
-    </owl:DatatypeProperty>-->
+    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Open">
+        <rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
 
 
     <!-- 
@@ -36,10 +49,13 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#MyRelation 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#adjacentLocation -->
 
-    <owl:ObjectProperty rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#conditionProperty"/> -->
-    
+    <owl:ObjectProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#adjacentLocation">
+        <rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#spatiallyRelated"/>
+        <rdfs:domain rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
+        <rdfs:range rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
+    </owl:ObjectProperty>
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#at 
 
@@ -58,7 +74,7 @@
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#tts_robot -->
 
-    <owl:NamedIndividual rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#robi_robot">
+    <owl:NamedIndividual rdf:about="http://rvmi.aau.dk/ontologies/robi.owl#robot">
         <rdf:type rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#Robot"/>
         <skiros:DiscreteReasoner>AauSpatialReasoner</skiros:DiscreteReasoner>
         <skiros:SkillMgr>robi_robot</skiros:SkillMgr>
