@@ -2,7 +2,7 @@
   <arg name="skill_list" default="[my_primitive, my_skill]"/>
   <arg name="debug" default="false"/>
   <arg name="robot_ontology_prefix" default="robi"/>
-  <arg name="robot_name" default="robi_robot"/>
+  <arg name="robot_name" default="robot"/>
 
   <include file="$(find skiros2)/launch/world_model_server.launch">
       <arg name="init_scene" value=""/>

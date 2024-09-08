@@ -17,10 +17,11 @@ from pyrobosim.planning.actions import ExecutionStatus
 # Descriptions
 #################################################################################
 
+
 class NavigateExecution(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("Target", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
 
 class PickExecution(SkillDescription):
     def createDescription(self):
@@ -31,6 +32,18 @@ class PlaceExecution(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
+
+class OpenExecution(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("Object", Element("skiros:OpenableLocation"), ParamTypes.Required)
+
+        # precondition not open
+        # preconditino robot at location
+        # postcondition is open
+
+        
+
 
 #################################################################################
 # Implementations
@@ -59,7 +72,7 @@ class pyrobosim_action_client_base(PrimitiveActionClient):
         @return an action msg initialized
         """
         action_goal = TaskAction()
-        action_goal.robot = self.params["Robot"].value.label
+        action_goal.robot = self.params["Robot"].value.label.split(":")[-1]
         action_goal.type = action.name.lower()
         if action == ACTIONS.NAVIGATE:
             action_goal.target_location = target
@@ -77,7 +90,7 @@ class navigate_execution(pyrobosim_action_client_base):
         self.setDescription(NavigateExecution(), self.__class__.__name__)
 
     def buildGoal(self):
-        return self.pyrobosimTaskAction(ACTIONS.NAVIGATE, self.params["Target"].value.label)
+        return self.pyrobosimTaskAction(ACTIONS.NAVIGATE, self.params["TargetLocation"].value.label)
 
 class pick_execution(pyrobosim_action_client_base):
     def createDescription(self):
@@ -94,3 +107,11 @@ class place_execution(pyrobosim_action_client_base):
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.PLACE, self.params["Object"].value.label)
+
+class open_execution(pyrobosim_action_client_base):
+    def createDescription(self):
+        """Set the primitive type"""
+        self.setDescription(OpenExecution(), self.__class__.__name__)
+
+    def buildGoal(self):
+        return self.pyrobosimTaskAction(ACTIONS.OPEN, self.params["Object"].value.label)
