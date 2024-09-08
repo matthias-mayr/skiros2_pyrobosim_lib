@@ -20,6 +20,12 @@
         <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
     </owl:Class>
 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Charger -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Charger">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
+    </owl:Class>
+
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Door -->
 
     <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Door">

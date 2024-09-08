@@ -39,6 +39,10 @@ skiros:Door-20 a skiros:Door,
     skiros:Open "false"^^xsd:boolean ;
     rdfs:label "hall_dining_trash" .
 
+skiros:Charger-30 a skiros:Charger,
+        owl:NamedIndividual ;
+    rdfs:label "charger" .
+
 skiros:Part-9 a skiros:Part,
         owl:NamedIndividual ;
     rdfs:label "snacks0" .

@@ -96,6 +96,17 @@ class CloseDoor(SkillDescription):
         # Planning book-keeping conditions:
         self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, False))
 
+class Charge(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        self.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Required)
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
+        # Planning book-keeping conditions:
+        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
 
 #################################################################################
 # Implementations
@@ -184,4 +195,13 @@ class close_door(SkillBase):
         skill(
             self.skill("Navigate", "", remap={"TargetLocation": "OpenableLocation"}),
             self.skill("CloseLocation", ""),
+        )
+
+class charge(SkillBase):
+    def createDescription(self):
+        self.setDescription(Charge(), self.__class__.__name__)
+
+    def expand(self, skill):
+        skill(
+            self.skill("Navigate", "", remap={"TargetLocation": "ChargerLocation"}),
         )
