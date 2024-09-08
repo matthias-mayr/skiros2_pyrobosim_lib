@@ -3,17 +3,19 @@
 <package format="3">
   <name>skiros2_pyrobosim_lib</name>
   <version>2.0.0</version>
-  <description>Template of a library for skiros2</description>
+  <description>SkiROS2 skills and knowledge representation for a set of pyrobosim problems </description>
 
-  <maintainer email="francesco@m-tech.aau.dk">Francesco Rovida</maintainer>
   <maintainer email="matthias.mayr@cs.lth.se">Matthias Mayr</maintainer>
-  <license>L-GPL</license>
-  <author email="francesco@m-tech.aau.dk">Francesco Rovida</author>
+  
+  <license>LGPL-3.0-or-later</license>
   <author email="matthias.mayr@cs.lth.se">Matthias Mayr</author>
-
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>skiros2</exec_depend>
+  <exec_depend>skiros2_std_skills</exec_depend>
+  <exec_depend>pyrobosim</exec_depend>
+  <exec_depend>pyrobosim_ros</exec_depend>
+  <exec_depend>pyrobosim_msgs</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>
