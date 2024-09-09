@@ -31,6 +31,12 @@
     <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Door">
         <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
     </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Room -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Room">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
+    </owl:Class>
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -42,7 +48,7 @@
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Open -->
 
     <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Open">
-        <rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
+        <rdfs:domain rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
 
