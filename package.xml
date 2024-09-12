@@ -14,10 +14,13 @@
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>skiros2</exec_depend>
+  <exec_depend>skiros2_gui</exec_depend>
   <exec_depend>skiros2_std_skills</exec_depend>
+  <exec_depend>skiros2_std_reasoners</exec_depend>
   <exec_depend>pyrobosim</exec_depend>
   <exec_depend>pyrobosim_ros</exec_depend>
   <exec_depend>pyrobosim_msgs</exec_depend>
+  <exec_depend>delib_ws_worlds</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
