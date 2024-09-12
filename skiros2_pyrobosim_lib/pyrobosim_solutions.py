@@ -9,9 +9,8 @@ from skiros2_common.core.world_element import Element
 class Problem1Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("ObjectStartLocation", Element("skiros:OpenableLocation"), ParamTypes.Inferred)
-        self.addParam("SecondStartLocation", Element("skiros:OpenableLocation"), ParamTypes.Inferred)
-        self.addParam("ObjectTargetLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
+        self.addParam("ObjectStartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        self.addParam("ObjectTargetLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
 
         #=======PreConditions=========
@@ -32,6 +31,7 @@ class problem_1_solution(SkillBase):
         skill(
             self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
             self.skill("Pick", ""),
-            self.skill("Navigate", "", remap={"StartLocation": "SecondStartLocation", "TargetLocation": "ObjectTargetLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill("Navigate", "", remap={"TargetLocation": "ObjectTargetLocation"}),
             self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"})
         )
