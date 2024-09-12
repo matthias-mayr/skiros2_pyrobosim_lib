@@ -1,6 +1,10 @@
+#!/usr/bin/env python3
+import os
 import yaml
 from rdflib import Graph, Namespace, Literal, RDF, URIRef
 from rdflib.namespace import XSD, RDFS, OWL
+
+from ament_index_python import get_package_share_directory
 
 # Namespaces
 CORP = Namespace("http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#")
@@ -208,15 +212,27 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Convert YAML data to Turtle format.")
-    parser.add_argument('input_file', help="Path to the input YAML file")
-    parser.add_argument('output_file', help="Path to the output Turtle file")
+    # make the input_file and output_file arguments optional
+    parser.add_argument('input_file', nargs='?', help="Path to the input YAML file")
+    parser.add_argument('output_file', nargs='?', help="Path to the output Turtle file")
     args = parser.parse_args()
 
-    try:
-        yaml_data = load_yaml(args.input_file)
-        turtle_output = yaml_to_turtle(yaml_data)
-        with open(args.output_file, 'w') as f:
-            f.write(turtle_output)
-        print("Turtle data successfully generated.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    # If input or output file is not provided, the script converts all 4 problems
+    if args.input_file is None:
+        # get input files like world1.yaml from a ROS 2 package called delib_ws_worlds
+        # get full path of ROS 2 package
+        input_files = [os.path.join(get_package_share_directory("delib_ws_worlds"), "worlds", f"world{i}.yaml") for i in range(1, 5)]
+        output_files = [os.path.join(get_package_share_directory("skiros2_pyrobosim_lib"), "owl", f"p{i}_scene.turtle") for i in range(1, 5)]
+    else:
+        input_files = [args.input_file]
+        output_files = [args.output_file]
+
+    for input_file, output_file in zip(input_files, output_files):
+        try:
+            yaml_data = load_yaml(input_file)
+            turtle_output = yaml_to_turtle(yaml_data)
+            with open(output_file, 'w') as f:
+                f.write(turtle_output)
+            print(f"Turtle data successfully generated for {input_file}.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
