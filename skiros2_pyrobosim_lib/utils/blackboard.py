@@ -19,9 +19,6 @@ class bb_unset_param(PrimitiveBase):
         self.setDescription(BbUnsetParam(), self.__class__.__name__)
 
     def execute(self):
-        param = self.params["Parameter"].value
-        new_el = Element()
-        new_el.type = param.type
-
-        self.params["Parameter"].value = new_el
-        return self.success("Unset of {} succeeded".format(param.label))
+        param = self.params["Parameter"]
+        param.unset()
+        return self.success("Unset succeeded")
