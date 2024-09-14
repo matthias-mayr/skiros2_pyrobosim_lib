@@ -44,6 +44,10 @@ class CloseExecution(SkillDescription):
         self.addParam("Object", Element("skiros:OpenableLocation"), ParamTypes.Required)
 
 
+class Success(SkillDescription):
+    pass
+
+
 #################################################################################
 # Implementations
 #################################################################################
@@ -122,3 +126,11 @@ class close_execution(pyrobosim_action_client_base):
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.CLOSE, self.params["Object"].value.label)
+
+
+class success(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(Success(), self.__class__.__name__)
+
+    def execute(self):
+        return self.success("Success")
