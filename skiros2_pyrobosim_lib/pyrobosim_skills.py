@@ -79,11 +79,11 @@ class CloseLocation(SkillDescription):
         self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, True))
+        # self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, True))
         # =======PostConditions=========
         self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", False, True))
         # Planning book-keeping conditions:
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, False))
+        # self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, False))
 
 class CloseDoor(SkillDescription):
     def createDescription(self):
