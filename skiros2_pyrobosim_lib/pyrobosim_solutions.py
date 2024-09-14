@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Serial, SerialStar
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Serial, SerialStar, Selector
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -7,6 +7,16 @@ from skiros2_common.core.world_element import Element
 #################################################################################
 
 class Problem1Solution(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("ObjectStartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        self.addParam("ObjectTargetLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
+
+        #=======PreConditions=========
+        self.addPreCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectStartLocation", "Object", True))
+
+class Problem2Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("ObjectStartLocation", Element("skiros:Location"), ParamTypes.Inferred)
@@ -34,4 +44,29 @@ class problem_1_solution(SkillBase):
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("Navigate", "", remap={"TargetLocation": "ObjectTargetLocation"}),
             self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"})
+        )
+
+
+class problem_2_solution(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Problem2Solution(), self.__class__.__name__)
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("Navigate", "", remap={"TargetLocation": "ObjectTargetLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill(Selector())(
+                self.skill("OpenLocation", "", remap={"OpenableLocation": "ObjectTargetLocation"}),
+                self.skill("Success", ""),
+            ),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "OpenableLocation"}),
+            self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill("Pick", ""),
+            self.skill("Navigate", "", remap={"TargetLocation": "ObjectTargetLocation"}),
+            self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"}),
+            self.skill("CloseLocation", "", remap={"OpenableLocation": "ObjectTargetLocation"}),
         )
