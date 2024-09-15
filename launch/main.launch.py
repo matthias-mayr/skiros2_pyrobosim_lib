@@ -33,6 +33,7 @@ def generate_launch_description():
         "skill_list": TextSubstitution(text=f"[navigate, pick, place, open_location, close_location, open_door, close_door, charge,\
                             navigate_execution, pick_execution, place_execution, open_execution, close_execution,\
                             wm_set_relation, wm_move_object, wm_set_properties, bb_unset_param, success,\
+                            select_object_to_fetch,\
                             problem_1_solution, problem_2_solution]"),
         "init_scene": [TextSubstitution(text="p"), problem_number, TextSubstitution(text="_scene.turtle")],
         "verbose": "false",
