@@ -34,7 +34,7 @@ class problem_1_solution(SkillBase):
     """
     """
     def createDescription(self):
-        self.setDescription(Problem1Solution(), self.__class__.__name__)
+        self.setDescription(Problem1Solution(), "Problem 1 Solution - Fetch Item")
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())
@@ -51,7 +51,7 @@ class problem_2_solution(SkillBase):
     """
     """
     def createDescription(self):
-        self.setDescription(Problem2Solution(), self.__class__.__name__)
+        self.setDescription(Problem2Solution(), "Problem 2 Solution - Waste Disposal")
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())

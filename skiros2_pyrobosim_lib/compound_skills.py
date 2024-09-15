@@ -116,7 +116,7 @@ class navigate(SkillBase):
     """
     """
     def createDescription(self):
-        self.setDescription(Navigate(), self.__class__.__name__)
+        self.setDescription(Navigate(), "Navigate to Location")
 
     def set_at(self, src, dst, state):
       return self.skill("WmSetRelation", "wm_set_relation",
@@ -133,7 +133,7 @@ class navigate(SkillBase):
 
 class pick(SkillBase):
     def createDescription(self):
-        self.setDescription(Pick(), self.__class__.__name__)
+        self.setDescription(Pick(), "Pick Part")
 
     def expand(self, skill):
         skill(
@@ -144,7 +144,7 @@ class pick(SkillBase):
 
 class place(SkillBase):
     def createDescription(self):
-        self.setDescription(Place(), self.__class__.__name__)
+        self.setDescription(Place(), "Place Part")
 
     def expand(self, skill):
         skill(
@@ -155,7 +155,7 @@ class place(SkillBase):
 
 class open_location(SkillBase):
     def createDescription(self):
-        self.setDescription(OpenLocation(), self.__class__.__name__)
+        self.setDescription(OpenLocation(), "Open Location")
 
     def expand(self, skill):
         skill(
@@ -167,7 +167,7 @@ class open_location(SkillBase):
 
 class open_door(SkillBase):
     def createDescription(self):
-        self.setDescription(OpenDoor(), self.__class__.__name__)
+        self.setDescription(OpenDoor(), "Open Door")
 
     def expand(self, skill):
         skill(
@@ -177,7 +177,7 @@ class open_door(SkillBase):
 
 class close_location(SkillBase):
     def createDescription(self):
-        self.setDescription(CloseLocation(), self.__class__.__name__)
+        self.setDescription(CloseLocation(), "Close Location")
 
     def expand(self, skill):
         skill(
@@ -189,7 +189,7 @@ class close_location(SkillBase):
 
 class close_door(SkillBase):
     def createDescription(self):
-        self.setDescription(CloseDoor(), self.__class__.__name__)
+        self.setDescription(CloseDoor(), "Close Door")
 
     def expand(self, skill):
         skill(
@@ -199,7 +199,7 @@ class close_door(SkillBase):
 
 class charge(SkillBase):
     def createDescription(self):
-        self.setDescription(Charge(), self.__class__.__name__)
+        self.setDescription(Charge(), "Navigate to Charger")
 
     def expand(self, skill):
         skill(

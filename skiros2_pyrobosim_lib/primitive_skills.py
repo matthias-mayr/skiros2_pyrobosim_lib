@@ -90,7 +90,7 @@ class pyrobosim_action_client_base(PrimitiveActionClient):
 class navigate_execution(pyrobosim_action_client_base):
     def createDescription(self):
         """Set the primitive type"""
-        self.setDescription(NavigateExecution(), self.__class__.__name__)
+        self.setDescription(NavigateExecution(), "Navigate Execution")
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.NAVIGATE, self.params["TargetLocation"].value.label)
@@ -98,7 +98,7 @@ class navigate_execution(pyrobosim_action_client_base):
 class pick_execution(pyrobosim_action_client_base):
     def createDescription(self):
         """Set the primitive type"""
-        self.setDescription(PickExecution(), self.__class__.__name__)
+        self.setDescription(PickExecution(), "Pick Execution")
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.PICK, self.params["Object"].value.label)
@@ -106,7 +106,7 @@ class pick_execution(pyrobosim_action_client_base):
 class place_execution(pyrobosim_action_client_base):
     def createDescription(self):
         """Set the primitive type"""
-        self.setDescription(PlaceExecution(), self.__class__.__name__)
+        self.setDescription(PlaceExecution(), "Place Execution")
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.PLACE, self.params["Object"].value.label)
@@ -114,7 +114,7 @@ class place_execution(pyrobosim_action_client_base):
 class open_execution(pyrobosim_action_client_base):
     def createDescription(self):
         """Set the primitive type"""
-        self.setDescription(OpenExecution(), self.__class__.__name__)
+        self.setDescription(OpenExecution(), "Open Execution")
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.OPEN, self.params["Object"].value.label)
@@ -122,7 +122,7 @@ class open_execution(pyrobosim_action_client_base):
 class close_execution(pyrobosim_action_client_base):
     def createDescription(self):
         """Set the primitive type"""
-        self.setDescription(CloseExecution(), self.__class__.__name__)
+        self.setDescription(CloseExecution(), "Close Execution")
 
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.CLOSE, self.params["Object"].value.label)
@@ -130,7 +130,7 @@ class close_execution(pyrobosim_action_client_base):
 
 class success(PrimitiveBase):
     def createDescription(self):
-        self.setDescription(Success(), self.__class__.__name__)
+        self.setDescription(Success(), "Success")
 
     def execute(self):
         return self.success("Success")
