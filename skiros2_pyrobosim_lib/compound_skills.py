@@ -1,5 +1,6 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Serial, SerialStar
 from skiros2_common.core.params import ParamTypes
+from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
 
 #################################################################################
@@ -50,7 +51,7 @@ class Place(SkillDescription):
         self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False))
         self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True))
 
-class OpenLocation(SkillDescription):
+class OpenOpenableLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
         self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
@@ -73,7 +74,7 @@ class OpenDoor(SkillDescription):
         # Planning book-keeping conditions:
         self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, False))
 
-class CloseLocation(SkillDescription):
+class CloseOpenableLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
         self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
@@ -107,6 +108,16 @@ class Charge(SkillDescription):
         self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
         # Planning book-keeping conditions:
         self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
+
+class OpenLocation(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+
+class CloseLocation(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
 
 #################################################################################
 # Implementations
@@ -153,9 +164,9 @@ class place(SkillBase):
                 remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
         )
 
-class open_location(SkillBase):
+class open_openablelocation(SkillBase):
     def createDescription(self):
-        self.setDescription(OpenLocation(), "Open Location")
+        self.setDescription(OpenOpenableLocation(), "Open Location")
 
     def expand(self, skill):
         skill(
@@ -175,9 +186,9 @@ class open_door(SkillBase):
             self.skill("OpenLocation", ""),
         )
 
-class close_location(SkillBase):
+class close_openablelocation(SkillBase):
     def createDescription(self):
-        self.setDescription(CloseLocation(), "Close Location")
+        self.setDescription(CloseOpenableLocation(), "Close Location")
 
     def expand(self, skill):
         skill(
@@ -205,3 +216,71 @@ class charge(SkillBase):
         skill(
             self.skill("Navigate", "", remap={"TargetLocation": "ChargerLocation"}),
         )
+
+class open_location(SkillBase):
+    def createDescription(self):
+        self.setDescription(OpenLocation(), "Open Location")
+
+    def modifyDescription(self, skill):
+        skill.addPreCondition(self.getHasPropCond("HasOpen", "skiros:Open", "Location", True))
+        skill.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Location", "=", False, True))
+
+    def expand(self, skill):
+        skill(
+            self.skill("OpenOpenableLocation", ""),
+        )
+
+class skip_open_openablelocation(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(OpenLocation(), "Skip to Open OpenableLocation")
+
+    def modifyDescription(self, skill):
+        skill.addPreCondition(self.getHasPropCond("HasOpen", "skiros:Open", "Location", True))
+        skill.addPreCondition(self.getPropCond("IsOpen", "skiros:Open", "Location", "=", True, True))
+
+    def execute(self):
+        return self.success("Skipped opening openablelocation that is already open")
+
+class skip_open_location(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(OpenLocation(), "Skip to Open Location")
+
+    def modifyDescription(self, skill):
+        skill.addPreCondition(self.getHasPropCond("HasOpen", "skiros:Open", "Location", False))
+
+    def execute(self):
+        return self.success("Skipped opening location that can not be opened")
+    
+class close_location(SkillBase):
+    def createDescription(self):
+        self.setDescription(CloseLocation(), "Close Location")
+
+    def modifyDescription(self, skill):
+        skill.addPreCondition(self.getHasPropCond("HasOpen", "skiros:Open", "Location", True))
+        skill.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Location", "=", True, True))
+
+    def expand(self, skill):
+        skill(
+            self.skill("CloseOpenableLocation", ""),
+        )
+
+class skip_close_openablelocation(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(CloseLocation(), "Skip to Close OpenableLocation")
+
+    def modifyDescription(self, skill):
+        skill.addPreCondition(self.getHasPropCond("HasOpen", "skiros:Open", "Location", True))
+        skill.addPreCondition(self.getPropCond("IsOpen", "skiros:Open", "Location", "=", False, True))
+
+    def execute(self):
+        return self.success("Skipped closing openablelocation that is already closed")
+
+class skip_close_location(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(CloseLocation(), "Skip to Close Location")
+
+    def modifyDescription(self, skill):
+        skill.addPreCondition(self.getHasPropCond("HasOpen", "skiros:Open", "Location", False))
+
+    def execute(self):
+        return self.success("Skipped closing location that can not be closed")
