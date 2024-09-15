@@ -11,7 +11,24 @@
     <owl:Ontology rdf:about="http://rvmi.aau.dk/ontologies/robi.owl">
         <owl:imports rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl"/>
     </owl:Ontology>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Dumpster -->
     
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Dumpster">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Pantry -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Pantry">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Fridge -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Fridge">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation"/>
+    </owl:Class>
 
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#OpenableLocation -->

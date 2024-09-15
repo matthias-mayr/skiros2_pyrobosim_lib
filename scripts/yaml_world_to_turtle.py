@@ -96,8 +96,20 @@ def create_room_ttl(graph, room_data, room_id, room_mapping):
 def create_location_ttl(graph, location_data, location_id, location_mapping):
     """Create Turtle for locations, handling openable locations."""
     if 'is_open' in location_data:
-        location_uri = SKIROS[f"OpenableLocation-{location_id}"]
-        graph.add((location_uri, RDF.type, SKIROS.OpenableLocation))
+        if location_data["name"] == "pantry":
+            rdf_type = SKIROS.Pantry
+            rdf_name = "Pantry"
+        elif location_data["name"] == "fridge":
+            rdf_type = SKIROS.Fridge
+            rdf_name = "Fridge"
+        elif location_data["category"] == "trashcan_large":
+            rdf_type = SKIROS.Dumpster
+            rdf_name = "Dumpster"
+        else:
+            rdf_type = SKIROS.OpenableLocation
+            rdf_name = "OpenableLocation"
+        location_uri = SKIROS[f"{rdf_name}-{location_id}"]
+        graph.add((location_uri, RDF.type, rdf_type))
         graph.add((location_uri, SKIROS.Open, Literal(location_data['is_open'], datatype=XSD.boolean)))
     else:
         location_uri = SKIROS[f"Location-{location_id}"]
@@ -236,6 +248,6 @@ if __name__ == "__main__":
             turtle_output = yaml_to_turtle(yaml_data, world_number)
             with open(output_file, 'w') as f:
                 f.write(turtle_output)
-            print(f"Turtle data successfully generated for {input_file}.")
+            print(f"Turtle data successfully generated for {input_file} and saved to {output_file}")
         except Exception as e:
             print(f"An error occurred: {e}")

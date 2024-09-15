@@ -93,6 +93,18 @@ skiros:Door-9 a skiros:Door,
     skiros:adjacentLocation skiros:Room-1,
         skiros:Room-2 .
 
+skiros:Dumpster-20 a skiros:Dumpster,
+        owl:NamedIndividual ;
+    rdfs:label "dumpster" ;
+    skiros:Open false .
+
+skiros:Fridge-17 a skiros:Fridge,
+        owl:NamedIndividual ;
+    rdfs:label "fridge" ;
+    skiros:Open false ;
+    skiros:contain skiros:Part-24,
+        skiros:Part-25 .
+
 skiros:Location-15 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "table" .
@@ -106,30 +118,18 @@ skiros:Location-21 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "charger" .
 
-skiros:OpenableLocation-17 a skiros:OpenableLocation,
-        owl:NamedIndividual ;
-    rdfs:label "fridge" ;
-    skiros:Open false ;
-    skiros:contain skiros:Part-24,
-        skiros:Part-25 .
-
-skiros:OpenableLocation-18 a skiros:OpenableLocation,
-        owl:NamedIndividual ;
-    rdfs:label "pantry" ;
-    skiros:Open true ;
-    skiros:contain skiros:Part-22,
-        skiros:Part-23 .
-
 skiros:OpenableLocation-19 a skiros:OpenableLocation,
         owl:NamedIndividual ;
     rdfs:label "bin" ;
     skiros:Open true ;
     skiros:contain skiros:Part-27 .
 
-skiros:OpenableLocation-20 a skiros:OpenableLocation,
+skiros:Pantry-18 a skiros:Pantry,
         owl:NamedIndividual ;
-    rdfs:label "dumpster" ;
-    skiros:Open false .
+    rdfs:label "pantry" ;
+    skiros:Open true ;
+    skiros:contain skiros:Part-22,
+        skiros:Part-23 .
 
 skiros:Part-22 a skiros:Part,
         owl:NamedIndividual ;
@@ -164,13 +164,13 @@ rparts:GripperEffector-15 a rparts:GripperEffector,
 skiros:Room-2 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "kitchen" ;
-    skiros:contain skiros:OpenableLocation-17,
-        skiros:OpenableLocation-18 .
+    skiros:contain skiros:Fridge-17,
+        skiros:Pantry-18 .
 
 skiros:Room-3 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "trash" ;
-    skiros:contain skiros:OpenableLocation-20 .
+    skiros:contain skiros:Dumpster-20 .
 
 skiros:Room-4 a skiros:Room,
         owl:NamedIndividual ;
