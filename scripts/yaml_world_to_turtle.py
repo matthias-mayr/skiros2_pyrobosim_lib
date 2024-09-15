@@ -114,7 +114,7 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
 # Create Turtle for doors/hallways (modeled as doors)
 def create_door_ttl(graph, door_data, door_id, room_mapping):
     """Create Turtle for doors and hallways."""
-    door_label = f"hallway_{door_data['room_start']}_{door_data['room_end']}"
+    door_label = f"hall_{door_data['room_start']}_{door_data['room_end']}"
     door_uri = SKIROS[f"Door-{door_id}"]
     
     graph.add((door_uri, RDF.type, SKIROS.Door))
