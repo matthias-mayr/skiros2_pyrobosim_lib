@@ -1,4 +1,5 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Serial, SerialStar
+from skiros2_skill.core.skill import SkillDescription, SkillBase
+from skiros2_skill.core.processors import RetryOnFail, SerialStar, ParallelFs
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
@@ -137,7 +138,9 @@ class navigate(SkillBase):
     def expand(self, skill):
         skill.setProcessor(SerialStar())
         skill(
-            self.skill("NavigateExecution", "", remap={"Target": "ObjectTargetLocation"}),
+            self.skill(RetryOnFail(10))(
+                self.skill("NavigateExecution", "", remap={"Target": "ObjectTargetLocation"}),
+            ),
             self.set_at("Robot", "StartLocation", False),
             self.set_at("Robot", "TargetLocation", True),
         )
@@ -148,7 +151,9 @@ class pick(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill("PickExecution", ""),
+            self.skill(RetryOnFail(10))(
+                self.skill("PickExecution", ""),
+            ),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Container", "TargetLocation": "Gripper"}),
         )
@@ -159,7 +164,9 @@ class place(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill("PlaceExecution", ""),
+            self.skill(RetryOnFail(10))(
+                self.skill("PlaceExecution", ""),
+            ),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
         )
@@ -170,7 +177,9 @@ class open_openablelocation(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill("OpenExecution", ""),
+            self.skill(RetryOnFail(10))(
+                self.skill("OpenExecution", ""),
+            ),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
                 specify={"Properties": {"skiros:Open": True}}),
@@ -192,7 +201,9 @@ class close_openablelocation(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill("CloseExecution", ""),
+            self.skill(RetryOnFail(10))(
+                self.skill("CloseExecution", ""),
+            ),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
                 specify={"Properties": {"skiros:Open": False}}),
