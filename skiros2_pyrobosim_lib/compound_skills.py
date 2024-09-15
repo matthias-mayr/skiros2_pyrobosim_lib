@@ -188,7 +188,7 @@ class open_door(SkillBase):
 
 class close_openablelocation(SkillBase):
     def createDescription(self):
-        self.setDescription(CloseOpenableLocation(), "Close Location")
+        self.setDescription(CloseOpenableLocation(), "Close OpenableLocation")
 
     def expand(self, skill):
         skill(
@@ -227,7 +227,7 @@ class open_location(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill("OpenOpenableLocation", ""),
+            self.skill("OpenOpenableLocation", "", remap={"OpenableLocation": "Location"}),
         )
 
 class skip_open_openablelocation(PrimitiveBase):
@@ -261,7 +261,7 @@ class close_location(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill("CloseOpenableLocation", ""),
+            self.skill("CloseOpenableLocation", "", remap={"OpenableLocation": "Location"}),
         )
 
 class skip_close_openablelocation(PrimitiveBase):
