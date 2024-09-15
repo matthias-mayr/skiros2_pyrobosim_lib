@@ -95,7 +95,7 @@ def create_room_ttl(graph, room_data, room_id, room_mapping):
 # Create Turtle for locations
 def create_location_ttl(graph, location_data, location_id, location_mapping):
     """Create Turtle for locations, handling openable locations."""
-    if 'is_open' in location_data:
+    if location_data["category"] == "storage":
         if location_data["name"] == "pantry":
             rdf_type = SKIROS.Pantry
             rdf_name = "Pantry"
@@ -108,15 +108,21 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
         else:
             rdf_type = SKIROS.OpenableLocation
             rdf_name = "OpenableLocation"
-        location_uri = SKIROS[f"{rdf_name}-{location_id}"]
-        graph.add((location_uri, RDF.type, rdf_type))
-        graph.add((location_uri, SKIROS.Open, Literal(location_data['is_open'], datatype=XSD.boolean)))
+    elif location_data["category"] == "table":
+        rdf_type = SKIROS.Table
+        rdf_name = "Table"
+    elif location_data["category"] == "charger":
+        rdf_type = SKIROS.Charger
+        rdf_name = "Charger"
     else:
-        location_uri = SKIROS[f"Location-{location_id}"]
-        graph.add((location_uri, RDF.type, SKIROS.Location))
-    
+        rdf_type = SKIROS.Location
+        rdf_name = "Location"
+    location_uri = SKIROS[f"{rdf_name}-{location_id}"]
+    graph.add((location_uri, RDF.type, rdf_type))
     graph.add((location_uri, RDF.type, OWL.NamedIndividual))
     graph.add((location_uri, RDFS.label, Literal(location_data['name'])))
+    if 'is_open' in location_data:
+        graph.add((location_uri, SKIROS.Open, Literal(location_data['is_open'], datatype=XSD.boolean)))
     
     # Store in location_mapping
     location_mapping[location_data['name']] = location_uri
