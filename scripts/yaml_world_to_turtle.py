@@ -35,14 +35,13 @@ class IDGenerator:
         return id_number
 
 # Create Turtle for the scene (always Scene-0)
-def create_scene_ttl(graph):
+def create_scene_ttl(graph, world_number: int):
     """Create Turtle for the scene."""
     scene_uri = SKIROS["Scene-0"]
     graph.add((scene_uri, RDF.type, SKIROS.Scene))
     graph.add((scene_uri, RDF.type, OWL.NamedIndividual))
-    graph.add((scene_uri, RDFS.label, Literal("")))
+    graph.add((scene_uri, RDFS.label, Literal(f"Scene World {world_number}")))
     graph.add((scene_uri, SKIROS.FrameId, Literal("map", datatype=XSD.string)))
-    graph.add((scene_uri, SKIROS.PositionX, Literal("0.0", datatype=XSD.float)))
     return scene_uri
 
 # Create Turtle for the robot with the specified attributes and a gripper
@@ -151,7 +150,7 @@ def create_object_ttl(graph, object_data, part_id, location_mapping):
     return part_uri
 
 # YAML to Turtle conversion
-def yaml_to_turtle(yaml_data):
+def yaml_to_turtle(yaml_data, world_number: int):
     """Convert YAML data to Turtle format."""
     graph = Graph()
     
@@ -168,7 +167,7 @@ def yaml_to_turtle(yaml_data):
     location_mapping = {}  # Mapping of location labels to location URIs
 
     # Create Scene (always Scene-0)
-    scene_uri = create_scene_ttl(graph)
+    scene_uri = create_scene_ttl(graph, world_number)
     room_uris = []
     door_uris = []
 
@@ -215,22 +214,26 @@ if __name__ == "__main__":
     # make the input_file and output_file arguments optional
     parser.add_argument('input_file', nargs='?', help="Path to the input YAML file")
     parser.add_argument('output_file', nargs='?', help="Path to the output Turtle file")
+    parser.add_argument('world_number', nargs='?', help="World number to convert")
     args = parser.parse_args()
 
+    NUMBER_OF_PROBLEMS = 4
     # If input or output file is not provided, the script converts all 4 problems
     if args.input_file is None:
         # get input files like world1.yaml from a ROS 2 package called delib_ws_worlds
         # get full path of ROS 2 package
-        input_files = [os.path.join(get_package_share_directory("delib_ws_worlds"), "worlds", f"world{i}.yaml") for i in range(1, 5)]
-        output_files = [os.path.join(get_package_share_directory("skiros2_pyrobosim_lib"), "owl", f"p{i}_scene.turtle") for i in range(1, 5)]
+        input_files = [os.path.join(get_package_share_directory("delib_ws_worlds"), "worlds", f"world{i}.yaml") for i in range(1, NUMBER_OF_PROBLEMS + 1)]
+        output_files = [os.path.join(get_package_share_directory("skiros2_pyrobosim_lib"), "owl", f"p{i}_scene.turtle") for i in range(1, NUMBER_OF_PROBLEMS + 1)]
+        world_numbers = [i for i in range(1, NUMBER_OF_PROBLEMS + 1)]
     else:
         input_files = [args.input_file]
         output_files = [args.output_file]
+        world_numbers = [args.world_number]
 
-    for input_file, output_file in zip(input_files, output_files):
+    for input_file, output_file, world_number in zip(input_files, output_files, world_numbers):
         try:
             yaml_data = load_yaml(input_file)
-            turtle_output = yaml_to_turtle(yaml_data)
+            turtle_output = yaml_to_turtle(yaml_data, world_number)
             with open(output_file, 'w') as f:
                 f.write(turtle_output)
             print(f"Turtle data successfully generated for {input_file}.")

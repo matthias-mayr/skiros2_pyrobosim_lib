@@ -8,9 +8,8 @@
 
 skiros:Scene-0 a skiros:Scene,
         owl:NamedIndividual ;
-    rdfs:label "" ;
+    rdfs:label "Scene World 2" ;
     skiros:FrameId "map"^^xsd:string ;
-    skiros:PositionX "0.0"^^xsd:float ;
     skiros:contain skiros:Door-10,
         skiros:Door-11,
         skiros:Door-12,
