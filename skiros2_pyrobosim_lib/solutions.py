@@ -41,8 +41,7 @@ class problem_1_solution(SkillBase):
         skill(
             self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
             self.skill("Pick", ""),
-            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
-            self.skill("Navigate", "", remap={"TargetLocation": "ObjectTargetLocation"}),
+            self.skill("Navigate", "", remap={"StartLocation": "ObjectStartLocation", "TargetLocation": "ObjectTargetLocation"}),
             self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"})
         )
 
