@@ -10,7 +10,7 @@ from rclpy import action
 
 from delib_ws_problem_interface.perform_action import ACTIONS, ACTION_NAME
 from pyrobosim_msgs.action import ExecuteTaskAction
-from pyrobosim_msgs.msg import TaskAction
+from pyrobosim_msgs.msg import TaskAction, RobotState
 from pyrobosim.planning.actions import ExecutionStatus
 
 #################################################################################
@@ -43,6 +43,10 @@ class CloseExecution(SkillDescription):
         #=======Params=========
         self.addParam("Object", Element("skiros:OpenableLocation"), ParamTypes.Required)
 
+class GetBatteryPercentage(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("BatteryLevel", float, ParamTypes.Optional)
 
 class Success(SkillDescription):
     pass
@@ -127,6 +131,26 @@ class close_execution(pyrobosim_action_client_base):
     def buildGoal(self):
         return self.pyrobosimTaskAction(ACTIONS.CLOSE, self.params["Object"].value.label)
 
+class get_battery_percentage(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(GetBatteryPercentage(), "Get Battery Percentage")
+
+    def onStart(self):
+        # initial ros 2 topic subscriber
+        robot_name = self.params["Robot"].value.label.split(":")[-1]
+        topic = "/{}/robot_state".format(robot_name)
+        self.subscription = self.node.create_subscription(RobotState, topic, self.callback, 1)
+        self.battery_level = None
+        return True
+    
+    def callback(self, msg):
+        self.battery_level = msg.battery_level
+
+    def execute(self):
+        if self.battery_level is None:
+            return self.step("Waiting for battery level")
+        self.params["BatteryLevel"].value = self.battery_level
+        return self.success("Battery level is {}".format(self.battery_level))
 
 class success(PrimitiveBase):
     def createDescription(self):
