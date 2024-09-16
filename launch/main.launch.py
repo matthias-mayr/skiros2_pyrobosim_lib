@@ -17,7 +17,7 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             "problem_number",
-            default_value="1",
+            default_value="3",
             description="The problem to start",
         )
     )
