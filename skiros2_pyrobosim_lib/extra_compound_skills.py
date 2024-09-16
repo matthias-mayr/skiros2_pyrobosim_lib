@@ -8,27 +8,27 @@ from skiros2_common.core.world_element import Element
 # Descriptions
 #################################################################################
 
-class OpenDoor(SkillDescription):
+class OpenHallwayDoor(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("OpenableLocation", Element("skiros:Door"), ParamTypes.Required)
+        self.addParam("Door", Element("skiros:Door"), ParamTypes.Required)
         # =======PreConditions=========
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, True))
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", False, True))
         # =======PostConditions=========
-        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", True, True))
+        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "Door", "=", True, True))
         # Planning book-keeping conditions:
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, False))
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", True, False))
 
-class CloseDoor(SkillDescription):
+class CloseHallwayDoor(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("OpenableLocation", Element("skiros:Door"), ParamTypes.Required)
+        self.addParam("Door", Element("skiros:Door"), ParamTypes.Required)
         # =======PreConditions=========
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, True))
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", True, True))
         # =======PostConditions=========
-        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", False, True))
+        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "Door", "=", False, True))
         # Planning book-keeping conditions:
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, False))
+        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", False, False))
 
 class Charge(SkillDescription):
     def createDescription(self):
@@ -57,24 +57,24 @@ class CloseLocation(SkillDescription):
 # Implementations
 #################################################################################
 
-class open_door(SkillBase):
+class open_hallway_door(SkillBase):
     def createDescription(self):
-        self.setDescription(OpenDoor(), "Open Door")
+        self.setDescription(OpenHallwayDoor(), "Open Hallway Door")
 
     def expand(self, skill):
         skill(
-            self.skill("Navigate", "", remap={"TargetLocation": "OpenableLocation"}),
-            self.skill("OpenLocation", ""),
+            self.skill("Navigate", "", remap={"TargetLocation": "Door"}),
+            self.skill("OpenLocation", "", remap={"Location": "Door"}),
         )
 
-class close_door(SkillBase):
+class close_hallway_door(SkillBase):
     def createDescription(self):
-        self.setDescription(CloseDoor(), "Close Door")
+        self.setDescription(CloseHallwayDoor(), "Close Hallway Door")
 
     def expand(self, skill):
         skill(
-            self.skill("Navigate", "", remap={"TargetLocation": "OpenableLocation"}),
-            self.skill("CloseLocation", ""),
+            self.skill("Navigate", "", remap={"TargetLocation": "Door"}),
+            self.skill("CloseLocation", "", remap={"Location": "Door"}),
         )
 
 class charge(SkillBase):
