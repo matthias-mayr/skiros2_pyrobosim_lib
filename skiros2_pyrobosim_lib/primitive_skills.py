@@ -141,6 +141,8 @@ class get_battery_percentage(PrimitiveBase):
         topic = "/{}/robot_state".format(robot_name)
         self.subscription = self.node.create_subscription(RobotState, topic, self.callback, 1)
         self.battery_level = None
+        # Obtain world model robot element
+        # self.robot = self._wmi.get_element(self.params["Robot"].value.id)
         return True
     
     def callback(self, msg):
@@ -150,6 +152,8 @@ class get_battery_percentage(PrimitiveBase):
         if self.battery_level is None:
             return self.step("Waiting for battery level")
         self.params["BatteryLevel"].value = self.battery_level
+        # self.robot.setProperty("skiros:BatteryPercentage", self.battery_level)
+        # self._wmi.update_element_properties(self.robot)
         return self.success("Battery level is {}".format(self.battery_level))
 
 class success(PrimitiveBase):

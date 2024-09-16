@@ -28,6 +28,7 @@ cora:Robot-14 a cora:Robot,
         owl:NamedIndividual ;
     rdfs:label "robi:robot" ;
     skiros:BaseFrameId ""^^xsd:string ;
+    skiros:BatteryPercentage "100"^^xsd:float ;
     skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
     skiros:FrameId "cora:Robot-14"^^xsd:string ;
     skiros:PublishTf true ;

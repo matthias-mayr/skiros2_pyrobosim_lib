@@ -74,6 +74,13 @@
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#BatteryPercentage -->
+
+    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#BatteryPercentage">
+        <rdfs:subPropertyOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#DeviceProperty"/>
+        <rdfs:domain rdf:resource="http://rvmi.aau.dk/ontologies/cora.owl#Robot"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////

@@ -64,6 +64,7 @@ def create_robot_ttl(graph, robot_data, robot_id, room_mapping):
     graph.add((robot_uri, SKIROS.PublishTf, Literal(True, datatype=XSD.boolean)))
     graph.add((robot_uri, SKIROS.SkillMgr, Literal("robi_robot", datatype=XSD.string)))
     graph.add((robot_uri, SKIROS.Template, Literal("robi:robot", datatype=XSD.string)))
+    graph.add((robot_uri, SKIROS.BatteryPercentage, Literal(100, datatype=XSD.float)))
     graph.add((robot_uri, SKIROS.hasTemplate, ROBI["robot"]))
     
     # Add the gripper
