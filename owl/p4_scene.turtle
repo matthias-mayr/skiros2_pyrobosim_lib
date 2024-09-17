@@ -38,6 +38,14 @@ cora:Robot-14 a cora:Robot,
     skiros:hasA rparts:GripperEffector-15 ;
     skiros:hasTemplate robi:robot .
 
+skiros:Bread-22 a skiros:Bread,
+        owl:NamedIndividual ;
+    rdfs:label "bread" .
+
+skiros:Butter-25 a skiros:Butter,
+        owl:NamedIndividual ;
+    rdfs:label "butter" .
+
 skiros:Charger-21 a skiros:Charger,
         owl:NamedIndividual ;
     rdfs:label "charger" .
@@ -102,19 +110,19 @@ skiros:Fridge-17 a skiros:Fridge,
         owl:NamedIndividual ;
     rdfs:label "fridge" ;
     skiros:Open false ;
-    skiros:contain skiros:Part-24,
-        skiros:Part-25 .
+    skiros:contain skiros:Butter-25,
+        skiros:Soda-24 .
 
 skiros:Location-16 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "desk" ;
-    skiros:contain skiros:Part-26 .
+    skiros:contain skiros:Waste-26 .
 
 skiros:Location-19 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "bin" ;
     skiros:Open true ;
-    skiros:contain skiros:Part-27 .
+    skiros:contain skiros:Waste-27 .
 
 skiros:Location-20 a skiros:Location,
         owl:NamedIndividual ;
@@ -125,36 +133,28 @@ skiros:Pantry-18 a skiros:Pantry,
         owl:NamedIndividual ;
     rdfs:label "pantry" ;
     skiros:Open true ;
-    skiros:contain skiros:Part-22,
-        skiros:Part-23 .
+    skiros:contain skiros:Bread-22,
+        skiros:Snacks-23 .
 
-skiros:Part-22 a skiros:Part,
-        owl:NamedIndividual ;
-    rdfs:label "bread" .
-
-skiros:Part-23 a skiros:Part,
+skiros:Snacks-23 a skiros:Snacks,
         owl:NamedIndividual ;
     rdfs:label "snacks" .
 
-skiros:Part-24 a skiros:Part,
+skiros:Soda-24 a skiros:Soda,
         owl:NamedIndividual ;
     rdfs:label "soda" .
-
-skiros:Part-25 a skiros:Part,
-        owl:NamedIndividual ;
-    rdfs:label "butter" .
-
-skiros:Part-26 a skiros:Part,
-        owl:NamedIndividual ;
-    rdfs:label "waste" .
-
-skiros:Part-27 a skiros:Part,
-        owl:NamedIndividual ;
-    rdfs:label "waste" .
 
 skiros:Table-15 a skiros:Table,
         owl:NamedIndividual ;
     rdfs:label "table" .
+
+skiros:Waste-26 a skiros:Waste,
+        owl:NamedIndividual ;
+    rdfs:label "waste" .
+
+skiros:Waste-27 a skiros:Waste,
+        owl:NamedIndividual ;
+    rdfs:label "waste" .
 
 rparts:GripperEffector-15 a rparts:GripperEffector,
         owl:NamedIndividual ;

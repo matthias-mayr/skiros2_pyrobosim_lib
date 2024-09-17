@@ -156,15 +156,32 @@ def create_door_ttl(graph, door_data, door_id, room_mapping):
 # Create Turtle for objects
 def create_object_ttl(graph, object_data, part_id, location_mapping):
     """Create Turtle for objects and associate them with their locations."""
-    part_uri = SKIROS[f"Part-{part_id}"]
-    graph.add((part_uri, RDF.type, SKIROS.Part))
-    graph.add((part_uri, RDF.type, OWL.NamedIndividual))
-    graph.add((part_uri, RDFS.label, Literal(object_data['category'])))
+    if object_data['category'] == "snacks":
+        part_uri = f"Snacks-{part_id}"
+        part_type = SKIROS.Snacks
+    elif object_data['category'] == "waste":
+        part_uri = f"Waste-{part_id}"
+        part_type = SKIROS.Waste
+    elif object_data['category'] == "bread":
+        part_uri = f"Bread-{part_id}"
+        part_type = SKIROS.Bread
+    elif object_data['category'] == "butter":
+        part_uri = f"Butter-{part_id}"
+        part_type = SKIROS.Butter
+    elif object_data['category'] == "soda":
+        part_uri = f"Soda-{part_id}"
+        part_type = SKIROS.Soda
+    else:
+        part_uri = f"Part-{part_id}"
+        part_type = SKIROS.Part
+    graph.add((SKIROS[part_uri], RDF.type, part_type))
+    graph.add((SKIROS[part_uri], RDF.type, OWL.NamedIndividual))
+    graph.add((SKIROS[part_uri], RDFS.label, Literal(object_data['category'])))
     
     # Use the location_mapping for skiros:contain
     location_uri = location_mapping.get(object_data['parent'])
     if location_uri:
-        graph.add((location_uri, SKIROS.contain, part_uri))
+        graph.add((location_uri, SKIROS.contain, SKIROS[part_uri]))
     
     return part_uri
 

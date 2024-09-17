@@ -31,11 +31,20 @@ class Problem3Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Table", Element("skiros:Table"), ParamTypes.Required)
-        self.addParam("Fridge", Element("skiros:Fridge"), ParamTypes.Required)
-        self.addParam("Pantry", Element("skiros:Pantry"), ParamTypes.Required)
+        self.addParam("Bread", Element("skiros:Bread"), ParamTypes.Required)
+        self.addParam("Butter", Element("skiros:Butter"), ParamTypes.Required)
+        self.addParam("Fridge", Element("skiros:Fridge"), ParamTypes.Inferred)
+        self.addParam("Pantry", Element("skiros:Pantry"), ParamTypes.Inferred)
 
-        self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:open", "Fridge", "=", False, True))
-        self.addPostCondition(self.getPropCond("PantryClosed", "skiros:open", "Pantry", "=", False, True))
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("FridgeContainsButter", "skiros:contain", "Fridge", "Butter", True))
+        self.addPreCondition(self.getRelationCond("PantryContainsBread", "skiros:contain", "Pantry", "Bread", True))
+
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("TableContainsBread", "skiros:contain", "Table", "Bread", True))
+        self.addPostCondition(self.getRelationCond("TableContainsButter", "skiros:contain", "Table", "Butter", True))
+        self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
+        self.addPostCondition(self.getPropCond("PantryClosed", "skiros:Open", "Pantry", "=", False, True))
 
 class MoveAllObjects(SkillDescription):
     def createDescription(self):
@@ -60,7 +69,8 @@ class problem_1_solution(SkillBase):
             self.skill("OpenLocation", "", remap={"Location": "ObjectStartLocation"}),
             self.skill("Pick", ""),
             self.skill("Navigate", "", remap={"StartLocation": "ObjectStartLocation", "TargetLocation": "ObjectTargetLocation"}),
-            self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"})
+            self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
         )
 
 
@@ -98,18 +108,18 @@ class problem_3_solution(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill(SerialStar())(
-                self.skill("MoveAllObjects", "", remap={"InitialLocation": "Fridge", "TargetLocation": "Table"}),
-                self.skill("Navigate", "", remap={"TargetLocation": "Fridge"}),
-                self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
+                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
+                self.skill("Navigate", "", remap={"TargetLocation": "Pantry"}),
+                self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
+                # Unset some blackboard parameters to avoid conflicts
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
-                self.skill("BbUnsetParam", "", remap={"Parameter": "InitialLocation"}),
+                self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             ),
             self.skill(SerialStar())(
-                self.skill("MoveAllObjects", "", remap={"InitialLocation": "Pantry", "TargetLocation": "Table"}),
-                self.skill("Navigate", "", remap={"TargetLocation": "Pantry"}),
-                self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
-                self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
+                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Butter"}),
+                self.skill("Navigate", "", remap={"TargetLocation": "Fridge"}),
+                self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
             )
         )
 

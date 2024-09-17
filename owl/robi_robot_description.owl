@@ -12,6 +12,36 @@
         <owl:imports rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl"/>
     </owl:Ontology>
 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Soda -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Soda">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Snacks"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Butter -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Butter">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Part"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Bread -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Bread">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Snacks"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Waste -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Waste">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Part"/>
+    </owl:Class>
+
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Snacks -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Snacks">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Part"/>
+    </owl:Class>
+
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Dumpster -->
     
     <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Dumpster">
