@@ -11,8 +11,8 @@ from skiros2_common.core.world_element import Element
 class Navigate(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
@@ -23,8 +23,8 @@ class Navigate(SkillDescription):
 class Pick(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("Container", Element("skiros:Location"), ParamTypes.Inferred)
         self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
+        self.addParam("Container", Element("skiros:Location"), ParamTypes.Inferred)
         self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
@@ -55,26 +55,23 @@ class Place(SkillDescription):
 class OpenOpenableLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
+        self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Inferred)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
         self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, True))
         # =======PostConditions=========
         self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", True, True))
-        # Planning book-keeping conditions:
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, False))
 
 class CloseOpenableLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Required)
+        self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Inferred)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
-        # self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", True, True))
+        self.addPreCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", True, True))
         # =======PostConditions=========
         self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", False, True))
-        # Planning book-keeping conditions:
-        # self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, False))
+
 
 #################################################################################
 # Implementations

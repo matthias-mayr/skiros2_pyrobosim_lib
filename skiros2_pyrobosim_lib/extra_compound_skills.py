@@ -45,12 +45,16 @@ class Charge(SkillDescription):
 class OpenLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Inferred)
+
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
 
 class CloseLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Inferred)
+
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
 
 
 #################################################################################
