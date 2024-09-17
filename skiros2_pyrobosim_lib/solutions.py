@@ -13,8 +13,10 @@ class Problem1Solution(SkillDescription):
         self.addParam("ObjectTargetLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
 
-        #=======PreConditions=========
+        # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectStartLocation", "Object", True))
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectTargetLocation", "Object", True))
 
 class Problem2Solution(SkillDescription):
     def createDescription(self):
