@@ -34,7 +34,7 @@ def generate_launch_description():
                             navigate_execution, pick_execution, place_execution, open_execution, close_execution, get_battery_percentage,\
                             wm_set_relation, wm_move_object, wm_set_properties, bb_unset_param, success,\
                             select_object_to_fetch, skip_open_openablelocation, skip_open_location, open_location, skip_close_openablelocation, skip_close_location, close_location,\
-                            problem_1_solution, problem_2_solution, problem_3_solution]"),
+                            problem_1_solution, problem_2_solution, problem_3_solution, move_all_objects]"),
         "init_scene": [TextSubstitution(text="p"), problem_number, TextSubstitution(text="_scene.turtle")],
         "verbose": "false",
         "workspace_dir": get_package_share_directory("skiros2_pyrobosim_lib") + "/owl",

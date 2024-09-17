@@ -34,8 +34,8 @@ class Problem3Solution(SkillDescription):
         self.addParam("Fridge", Element("skiros:Fridge"), ParamTypes.Required)
         self.addParam("Pantry", Element("skiros:Pantry"), ParamTypes.Required)
 
-        # Todo: Add post conditions:
-        # - Fridge & pantry must be closed
+        self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:open", "Fridge", "=", False, True))
+        self.addPostCondition(self.getPropCond("PantryClosed", "skiros:open", "Pantry", "=", False, True))
 
 class MoveAllObjects(SkillDescription):
     def createDescription(self):
