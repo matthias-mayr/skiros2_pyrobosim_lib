@@ -92,7 +92,7 @@ class navigate(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill(RetryOnFail(10))(
-                self.skill("NavigateExecution", "", remap={"Target": "ObjectTargetLocation"}),
+                self.skill("NavigateExecution", ""),
             ),
             self.set_at("Robot", "StartLocation", False),
             self.set_at("Robot", "TargetLocation", True),
