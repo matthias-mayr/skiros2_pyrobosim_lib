@@ -41,9 +41,37 @@ ros2 launch skiros2_pyrobosim_lib main.launch.py problem_number:=1
 
 This brings up the SkiROS2 interface as well as the pyrobosim world. As a first thing, it is a good browse through the available skills and the world model. You can do this with the SkiROS2 interface or by looking at the files in the `skiros2_pyrobosim_lib` package.
 
-### World Model
-The world model is a semantic database that contains information about the environment. You can see the current state of the world model in the SkiROS2 interface. You will notice that there are quite some relations between the entities in the world model. These relations are used by the skills to reason about the environment. They are also used to limit the parameters that can be used in the skills.
 
-### Skills
-There are already quite some skills available. Feel free to try out some of them and see how they react. You will notice that some skills are not executable because the preconditions are not met. For example: one can not pick up an object if one is already holding an object. This is because the preconditions of the `pick` skill require that the robot is not holding anything.
+## Repository Structure
 
+Below you'll find the structure of this repository.  
+You can also get it directly from [github.com/matthias-mayr/skiros2_pyrobosim_lib](https://github.com/matthias-mayr/skiros2_pyrobosim_lib)
+
+```
+├── README.md  
+├── docs                 ### The documents guiding you through 
+│   ├── 0_Start.md                  --> Introduction
+│   └── 1_Problem_1_Object_Fetch.md --> Instructions for Problem 1
+├── launch
+│   └── main.launch.py              --> Launch file for SkiROS2 in the workshop
+├── owl                     ### Knowledge: scenes and ontology
+│   ├── p1_scene.turtle     ├── Scenes for problem 1
+│   ├── p2_scene.turtle     ├── to
+│   ├── p3_scene.turtle     ├── problem
+│   ├── p4_scene.turtle     └── 4
+│   └── robi_robot_description.owl  --> Ontology with classes & relations
+├── scripts
+│   └── yaml_world_to_turtle.py     --> Converts world.yaml to scene.turtle 
+└── skiros2_pyrobosim_lib           ### All our skills
+    ├── basic_compound_skills.py    --> Skills wrapping pyrobosim primituves
+    ├── extra_compound_skills.py    --> More advanced skills
+    ├── primitive_skills.py         --> Skills for pyrobosim & python directly
+    ├── reasoning_skills.py         --> Skills that use relations to reason
+    ├── solutions.py                --> Don't look here until you're done:-)
+    └── utils                       --> Extra utility skills
+        └── blackboard.py
+```
+
+## Let's get Started
+
+Follow this link or just go in the docs folder [docs/0_Start.md](docs/0_Start.md) or view it online [on the Github repo](https://github.com/matthias-mayr/skiros2_pyrobosim_lib/tree/main/docs/0_Start.md).
