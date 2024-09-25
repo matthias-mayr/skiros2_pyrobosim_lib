@@ -1,6 +1,6 @@
 ###  SkiROS2 pyrobosim Library
 
-A warm welcome to the SkiROS2 setup for the [problems of the deliberation group ROSCon24 workshop](https://github.com/ros-wg-delib/roscon24-workshop). This repository contains skills and knowledge representation for the started problem. Among the skills are wrapper skills for `pyrobosim` actions as well as sceletons to solve the problems and their solutions.
+A warm welcome to the SkiROS2 setup for the [problems of the deliberation group ROSCon24 workshop](https://github.com/ros-wg-delib/roscon24-workshop). This repository contains skills and knowledge representation for the started problem. Among the skills are wrapper skills for `pyrobosim` actions as well as skeletons to solve the problems and their solutions.
 
 **SkiROS2** is a platform to create complex robot behaviors by composing _skills_ - modular software blocks - into [behavior trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control)).
 
@@ -63,7 +63,7 @@ You can also get it directly from [github.com/matthias-mayr/skiros2_pyrobosim_li
 ├── scripts
 │   └── yaml_world_to_turtle.py     --> Converts world.yaml to scene.turtle 
 └── skiros2_pyrobosim_lib           ### All our skills
-    ├── basic_compound_skills.py    --> Skills wrapping pyrobosim primituves
+    ├── basic_compound_skills.py    --> Skills wrapping pyrobosim primitives
     ├── extra_compound_skills.py    --> More advanced skills
     ├── primitive_skills.py         --> Skills for pyrobosim & python directly
     ├── reasoning_skills.py         --> Skills that use relations to reason
