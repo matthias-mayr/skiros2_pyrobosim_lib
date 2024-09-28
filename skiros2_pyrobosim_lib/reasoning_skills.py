@@ -17,7 +17,6 @@ class SelectObjectToFetch(SkillDescription):
         self.addParam("Object", Element("skiros:Part"), ParamTypes.Optional)
         # =======PreConditions=========
 
-
 class SelectDoorsToTarget(SkillDescription):
     def createDescription(self):
         # =======Params=========
@@ -25,6 +24,14 @@ class SelectDoorsToTarget(SkillDescription):
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
 
+class LocationIsDoor(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Open", bool, ParamTypes.Required)
+        self.addParam("ReverseResult", False, ParamTypes.Required)
+        # =======PostConditions=========
+        # is of type door or not
 
 #################################################################################
 # Implementations
@@ -216,3 +223,23 @@ class select_doors_to_target(PrimitiveBase):
         self.params["IntermediateLocation"].value = self.current_location
         return self.step(f"Door '{self.current_location.label}' selected")
 
+
+class location_is_door(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(LocationIsDoor(), "Location is Door")
+
+    def execute(self):
+        location = self.params["Location"].value
+
+        is_door = location.type == "skiros:Door"
+        is_open = location.getProperty("skiros:Open").value if is_door else False
+
+        result = is_door and (is_open == self.params["Open"].value)
+        if self.params["ReverseResult"].value:
+            result = not result
+
+        data = dict(location=location.label, is_door=is_door, is_open=is_open)
+        if result:
+            return self.success(str(data))
+        else:
+            return self.fail(str(data), -1)
