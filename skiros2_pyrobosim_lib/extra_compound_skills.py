@@ -56,18 +56,6 @@ class CloseLocation(SkillDescription):
 
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
 
-class NavigateBuilding(SkillDescription):
-    def createDescription(self):
-        # =======Params=========
-        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
-        # =======PreConditions=========
-        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
-        # =======PostConditions=========
-        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
-        # Planning book-keeping conditions:
-        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
-
 
 #################################################################################
 # Implementations
