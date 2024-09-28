@@ -218,8 +218,14 @@ class select_doors_to_target(PrimitiveBase):
         if not self.path:
             return self.success("Path has been completed")
 
-        self.current_location = self.path[0]
-        self.path = self.path[1:]
+        self.current_location, self.path = self.path[0], self.path[1:]
+        if self.location_type(self.current_location) is self.Edge.door and not self.current_location.getProperty("skiros:Open").value:
+            self.params["IntermediateLocation"].value = self.current_location
+            return self.step("Door needs to be opened")
+        elif not self.path:
+            return self.success("Path has been completed")
+
+        self.current_location, self.path = self.path[0], self.path[1:]
         self.params["IntermediateLocation"].value = self.current_location
         return self.step(f"Door '{self.current_location.label}' selected")
 
