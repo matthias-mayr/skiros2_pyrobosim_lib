@@ -89,6 +89,7 @@ class select_doors_to_target(PrimitiveBase):
     def find_path_between(self, start, target):
         goal_found = False
 
+        log.warn(f"Starting path search from {start}")
         start_type = self.location_type(start)
         if start_type is None:
             log.warn(f"Start location is not a known type {start.label}: {start.type}")
@@ -193,7 +194,6 @@ class select_doors_to_target(PrimitiveBase):
     def location_type(self, location):
         cls = location.type
 
-        log.warn(f'Location type: {location.label}: {cls} <- {self.wmi.get_super_class(cls)}')
         if cls == 'skiros:Door':
             return self.Edge.door
         elif cls == 'skiros:Room':
