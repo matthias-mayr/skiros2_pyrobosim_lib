@@ -1,8 +1,9 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase
-from skiros2_skill.core.processors import RetryOnFail, SerialStar, ParallelFs
+from skiros2_skill.core.processors import SerialStar, Selector, Serial
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
+from .basic_compound_skills import Navigate
 
 #################################################################################
 # Descriptions
@@ -158,3 +159,19 @@ class skip_close_location(PrimitiveBase):
 
     def execute(self):
         return self.success("Skipped closing location that can not be closed")
+
+
+class navigate_to_target(SkillBase):
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate to target")
+    
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("Navigate", "navigate"),
+            self.skill(Selector())(
+                self.skill("LocationIsDoor", "", remap={"Location": "TargetLocation"}, specify={"ReverseResult": True, "Open": False}),
+                self.skill("OpenOpenableLocation", "", remap={"OpenableLocation": "TargetLocation"}),
+            ),
+        )
+
