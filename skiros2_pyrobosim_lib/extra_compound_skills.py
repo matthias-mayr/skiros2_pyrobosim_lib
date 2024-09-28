@@ -175,3 +175,25 @@ class navigate_to_target(SkillBase):
             ),
         )
 
+class navigate_and_plan(SkillBase):
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate Through Rooms")
+
+    def modifyDescription(self, skill):
+        self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("BbUnsetParam", "", remap={"Parameter": "IntermediateLocation"}),
+            self.skill(Serial())(
+                self.skill(Selector())(
+                    self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
+                    self.skill(SerialStar())(
+                        self.skill("Navigate", "navigate_to_target", remap={"TargetLocation": "IntermediateLocation"}),
+                        self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
+                    ),
+                ),
+                self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
+            ),
+        )
