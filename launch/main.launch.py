@@ -16,7 +16,7 @@ def skills_and_skiros2(context, *args, **kwargs):
     own_skills = ""
 
     # This is our basic skill set that we work with:
-    reasoning_skills = "location_is_door"
+    reasoning_skills = "location_is_door, copy_value"
     primitive_skills = "navigate_execution, pick_execution, place_execution, open_execution, close_execution, get_battery_percentage, wm_set_relation, wm_move_object, wm_set_properties, bb_unset_param, success,"
     basic_compound_skills = "navigate, pick, place, open_openablelocation, close_openablelocation,"
     # Then we have new skills for each of the problems:
