@@ -17,7 +17,6 @@ class SelectObjectToFetch(SkillDescription):
         self.addParam("Object", Element("skiros:Part"), ParamTypes.Optional)
         # =======PreConditions=========
 
-
 class SelectDoorsToTarget(SkillDescription):
     def createDescription(self):
         # =======Params=========
@@ -25,6 +24,14 @@ class SelectDoorsToTarget(SkillDescription):
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
 
+class LocationIsDoor(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Open", bool, ParamTypes.Required)
+        self.addParam("ReverseResult", False, ParamTypes.Required)
+        # =======PostConditions=========
+        # is of type door or not
 
 #################################################################################
 # Implementations
@@ -82,6 +89,7 @@ class select_doors_to_target(PrimitiveBase):
     def find_path_between(self, start, target):
         goal_found = False
 
+        log.warn(f"Starting path search from {start}")
         start_type = self.location_type(start)
         if start_type is None:
             log.warn(f"Start location is not a known type {start.label}: {start.type}")
@@ -186,7 +194,6 @@ class select_doors_to_target(PrimitiveBase):
     def location_type(self, location):
         cls = location.type
 
-        log.warn(f'Location type: {location.label}: {cls} <- {self.wmi.get_super_class(cls)}')
         if cls == 'skiros:Door':
             return self.Edge.door
         elif cls == 'skiros:Room':
@@ -211,8 +218,34 @@ class select_doors_to_target(PrimitiveBase):
         if not self.path:
             return self.success("Path has been completed")
 
-        self.current_location = self.path[0]
-        self.path = self.path[1:]
+        self.current_location, self.path = self.path[0], self.path[1:]
+        if self.location_type(self.current_location) is self.Edge.door and not self.current_location.getProperty("skiros:Open").value:
+            self.params["IntermediateLocation"].value = self.current_location
+            return self.step("Door needs to be opened")
+        elif not self.path:
+            return self.success("Path has been completed")
+
+        self.current_location, self.path = self.path[0], self.path[1:]
         self.params["IntermediateLocation"].value = self.current_location
         return self.step(f"Door '{self.current_location.label}' selected")
 
+
+class location_is_door(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(LocationIsDoor(), "Location is Door")
+
+    def execute(self):
+        location = self.params["Location"].value
+
+        is_door = location.type == "skiros:Door"
+        is_open = location.getProperty("skiros:Open").value if is_door else False
+
+        result = is_door and (is_open == self.params["Open"].value)
+        if self.params["ReverseResult"].value:
+            result = not result
+
+        data = dict(location=location.label, is_door=is_door, is_open=is_open)
+        if result:
+            return self.success(str(data))
+        else:
+            return self.fail(str(data), -1)

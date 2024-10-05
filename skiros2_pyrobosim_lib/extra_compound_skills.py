@@ -1,8 +1,9 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase
-from skiros2_skill.core.processors import RetryOnFail, SerialStar, ParallelFs
+from skiros2_skill.core.processors import SerialStar, Selector, Serial
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
+from .basic_compound_skills import Navigate
 
 #################################################################################
 # Descriptions
@@ -55,18 +56,6 @@ class CloseLocation(SkillDescription):
         self.addParam("Location", Element("skiros:Location"), ParamTypes.Inferred)
 
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
-
-class NavigateBuilding(SkillDescription):
-    def createDescription(self):
-        # =======Params=========
-        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
-        # =======PreConditions=========
-        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
-        # =======PostConditions=========
-        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
-        # Planning book-keeping conditions:
-        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
 
 
 #################################################################################
@@ -170,3 +159,41 @@ class skip_close_location(PrimitiveBase):
 
     def execute(self):
         return self.success("Skipped closing location that can not be closed")
+
+
+class navigate_to_target(SkillBase):
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate to target")
+    
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("Navigate", "navigate"),
+            self.skill(Selector())(
+                self.skill("LocationIsDoor", "", remap={"Location": "TargetLocation"}, specify={"ReverseResult": True, "Open": False}),
+                self.skill("OpenOpenableLocation", "", remap={"OpenableLocation": "TargetLocation"}),
+            ),
+        )
+
+class navigate_and_plan(SkillBase):
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate Through Rooms")
+
+    def modifyDescription(self, skill):
+        self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("BbUnsetParam", "", remap={"Parameter": "IntermediateLocation"}),
+            self.skill(Serial())(
+                self.skill(Selector())(
+                    self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
+                    self.skill(SerialStar())(
+                        self.skill("Navigate", "navigate_to_target", remap={"TargetLocation": "IntermediateLocation"}),
+                        self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
+                    ),
+                ),
+                self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
+            ),
+        )

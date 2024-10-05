@@ -16,14 +16,15 @@ def skills_and_skiros2(context, *args, **kwargs):
     own_skills = ""
 
     # This is our basic skill set that we work with:
+    reasoning_skills = "location_is_door, copy_value, is_none"
     primitive_skills = "navigate_execution, pick_execution, place_execution, open_execution, close_execution, get_battery_percentage, wm_set_relation, wm_move_object, wm_set_properties, bb_unset_param, success,"
-    basic_compound_skills = "navigate, pick, place, open_openablelocation, close_openablelocation,"
+    basic_compound_skills = "navigate, pick, place, open_openablelocation, close_openablelocation, navigate_to_target, navigate_and_plan"
     # Then we have new skills for each of the problems:
     problem_1_item_skills = "problem_1,"
     problem_2_waste_skills = "problem_1_solution, select_doors_to_target, skip_open_openablelocation, skip_open_location, open_location, skip_close_openablelocation, skip_close_location, close_location, open_hallway_door, close_hallway_door,"
     problem_3_table_skills = "problem_2_solution,"
     problem_4_charge_skills = "problem_3_solution, charge,"
-    skill_list = ["[", basic_compound_skills, primitive_skills, problem_1_item_skills]
+    skill_list = ["[", reasoning_skills, basic_compound_skills, primitive_skills, problem_1_item_skills]
     if problem_number > 1:
         skill_list.append(problem_2_waste_skills)
     if problem_number > 2:
