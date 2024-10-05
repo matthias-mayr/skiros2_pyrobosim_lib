@@ -24,7 +24,8 @@ def skills_and_skiros2(context, *args, **kwargs):
     problem_2_waste_skills = ["problem_2_solution", "select_doors_to_target", "skip_open_openablelocation", "skip_open_location", "open_location", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door"]
     problem_3_table_skills = ["problem_3", "problem_3_solution"]
     problem_4_charge_skills = ["charge"]
-    skill_list = [*reasoning_skills, *basic_compound_skills, *primitive_skills, *problem_1_item_skills]
+    planner_skills = ["planner_solution_1", "planner_solution_2", "planner_solution_3", "planner_solution_4"]
+    skill_list = [*reasoning_skills, *basic_compound_skills, *primitive_skills, *problem_1_item_skills, *planner_skills]
     if problem_number > 1:
         skill_list.extend(problem_2_waste_skills)
     if problem_number > 2:
