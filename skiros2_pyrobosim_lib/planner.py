@@ -1,5 +1,6 @@
 import os
-import ros2pkg.api
+import ros2pkg.api as pkg
+import skiros2_common.tools.logger as log
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_skill.core.skill import SkillDescription, SkillBase, SerialStar, RetryOnFail
@@ -47,13 +48,10 @@ class extract_pddl_goal_from_file(PrimitiveBase):
         self.setDescription(ExtractPddlGoalFromFile(), "Extract PDDL Goal from File")
     
     def execute(self):
-        import ros2pkg
-        import skiros2_common.tools.logger as log
-
         package = self.params["Package"].value
         file = self.params["File"].value
 
-        package_path = ros2pkg.api.get_prefix_path(package)
+        package_path = pkg.get_prefix_path(package)
         if package_path is None:
             return self.fail(f"Could not find package '{package}'", -1)
 
