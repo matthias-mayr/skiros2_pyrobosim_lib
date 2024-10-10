@@ -54,7 +54,7 @@ class CloseLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
         self.addParam("Location", Element("skiros:Location"), ParamTypes.Inferred)
-
+        # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
 
 
@@ -90,7 +90,6 @@ class charge(SkillBase):
         skill(
             self.skill("Navigate", "", remap={"TargetLocation": "ChargerLocation"}),
         )
-
 
 class open_location(SkillBase):
     def createDescription(self):

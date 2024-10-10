@@ -30,8 +30,6 @@ class LocationIsDoor(SkillDescription):
         self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Open", bool, ParamTypes.Required)
         self.addParam("ReverseResult", False, ParamTypes.Required)
-        # =======PostConditions=========
-        # is of type door or not
 
 #################################################################################
 # Implementations
