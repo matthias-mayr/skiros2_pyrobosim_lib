@@ -17,8 +17,6 @@ class Navigate(SkillDescription):
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
         self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
-        # Planning book-keeping conditions:
-        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
 
 class Pick(SkillDescription):
     def createDescription(self):
