@@ -23,6 +23,12 @@ class Problem1(SkillDescription):
         # Finally a postcondition stating that after the Problem1 skill ran, the object must be contained by the 'ObjectTargetLocation'
         self.addPostCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectTargetLocation", "Object", True))
 
+class Problem2(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
 
 class Problem3(SkillDescription):
     def createDescription(self):
@@ -43,6 +49,27 @@ class Problem3(SkillDescription):
         self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
         self.addPostCondition(self.getPropCond("PantryClosed", "skiros:Open", "Pantry", "=", False, True))
 
+class Problem4(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Table", Element("skiros:Table"), ParamTypes.Required)
+        self.addParam("Bread", Element("skiros:Bread"), ParamTypes.Required)
+        self.addParam("Butter", Element("skiros:Butter"), ParamTypes.Required)
+        self.addParam("Fridge", Element("skiros:Fridge"), ParamTypes.Inferred)
+        self.addParam("Pantry", Element("skiros:Pantry"), ParamTypes.Inferred)
+
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("FridgeContainsButter", "skiros:contain", "Fridge", "Butter", True))
+        self.addPreCondition(self.getRelationCond("PantryContainsBread", "skiros:contain", "Pantry", "Bread", True))
+
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("TableContainsBread", "skiros:contain", "Table", "Bread", True))
+        self.addPostCondition(self.getRelationCond("TableContainsButter", "skiros:contain", "Table", "Butter", True))
+        self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
+        self.addPostCondition(self.getPropCond("PantryClosed", "skiros:Open", "Pantry", "=", False, True))
 
 #################################################################################
 # Implementations
