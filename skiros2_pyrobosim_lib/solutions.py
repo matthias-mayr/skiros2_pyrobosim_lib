@@ -21,10 +21,9 @@ class Problem1Solution(SkillDescription):
 class Problem2Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("ObjectTargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("Object1", Element("skiros:Waste"), ParamTypes.Required)
-        self.addParam("Object2", Element("skiros:Waste"), ParamTypes.Required)
-
+        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
 
 class Problem3Solution(SkillDescription):
     def createDescription(self):
@@ -105,22 +104,22 @@ class problem_2_solution(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill(SerialStar())(
-                self.skill("Navigate", "navigate_and_open_doors", remap={"TargetLocation": "ObjectTargetLocation"}),
+                self.skill("Navigate", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill(Selector())(
-                    self.skill("OpenLocation", "", remap={"OpenableLocation": "ObjectTargetLocation"}),
+                    self.skill("OpenLocation", "", remap={"OpenableLocation": "Dumpster"}),
                     self.skill("Success", ""),
                 ),
             ),
             self.skill(SerialStar())(
-                self.skill("Problem1Solution", "", remap={"Object": "Object1"}),
+                self.skill("Problem1Solution", "", remap={"Object": "Object1", "ObjectTargetLocation": "Dumpster"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
             ),
             self.skill(SerialStar())(
-                self.skill("Problem1Solution", "", remap={"Object": "Object2"}),
+                self.skill("Problem1Solution", "", remap={"Object": "Object2", "ObjectTargetLocation": "Dumpster"}),
             ),
-            self.skill("CloseLocation", "", remap={"OpenableLocation": "ObjectTargetLocation"}),
+            self.skill("CloseLocation", "", remap={"OpenableLocation": "Dumpster"}),
         )
 
 class problem_3_solution(SkillBase):
