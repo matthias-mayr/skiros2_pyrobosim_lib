@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, ParallelFf, SerialStar, Selector
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, ParallelFf, Serial, SerialStar, Selector
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -21,12 +21,9 @@ class Problem1Solution(SkillDescription):
 class Problem2Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("ObjectStartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         self.addParam("ObjectTargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("Object", Element("skiros:Part"), ParamTypes.Required)
-
-        #=======PreConditions=========
-        self.addPreCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectStartLocation", "Object", True))
+        self.addParam("Object1", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Object2", Element("skiros:Waste"), ParamTypes.Required)
 
 
 class Problem3Solution(SkillDescription):
