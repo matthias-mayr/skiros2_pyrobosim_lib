@@ -57,8 +57,13 @@ class extract_pddl_goal_from_file(PrimitiveBase):
         file_path = os.path.join(package_path, "share", package, file)
 
         if not os.path.isfile(file_path):
-            log.warn(f"Could not find file '{file}' under package '{package}' on path '{file_path}', if the file is new, consider rebuilding")
-            return self.fail(f"Could not find file '{file}' under package '{package}' on path '{file_path}', if the file is new, consider rebuilding", -1)
+            no_file_msg = (
+                f"Could not find file '{file}' under package '{package}' on path '{file_path}'. "
+                "If the file is new, consider rebuilding, if the folder is new consider adding it "
+                "to the build process and rebuilding."
+            )
+            log.warn(no_file_msg)
+            return self.fail(no_file_msg, -1)
 
         goal = []
         with open(file_path, "r") as f:
