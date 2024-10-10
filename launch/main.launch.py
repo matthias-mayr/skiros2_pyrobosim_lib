@@ -34,6 +34,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         skill_list.extend(problem_4_charge_skills)
     skill_list.extend(own_skills)
 
+    ### SkiROS2 configuration and launch setup
     skiros_config = {
         "libraries_list": "[skiros2_pyrobosim_lib, skiros2_std_skills]",
         "skill_list": f"[{','.join(skill_list)}]",
@@ -43,10 +44,19 @@ def skills_and_skiros2(context, *args, **kwargs):
         "robot_name": "robot",
         "robot_ontology_prefix": "robi",
     }
-    return[IncludeLaunchDescription(
+    skiros2_launch_configuration = [IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory("skiros2"), "skiros2.launch.py")),
             launch_arguments=skiros_config.items(),
         )]
+    # Include updater for the battery percentage for problem 4
+    if problem_number > 3:
+        skiros2_launch_configuration.append(Node(
+            package="skiros2_pyrobosim_lib",
+            executable="update_battery_percentage.py",
+            name="update_battery_percentage",
+            output="screen",
+        ))
+    return skiros2_launch_configuration
 
 
 def generate_launch_description():
