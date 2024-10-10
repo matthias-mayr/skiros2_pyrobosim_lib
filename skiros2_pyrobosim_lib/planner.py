@@ -83,7 +83,7 @@ class extract_pddl_goal_from_file(PrimitiveBase):
             goal[-1] = ")".join(last_line.split(")")[:-1])
 
         if not goal:
-            return self.fail(f"Could not find a valid pddl goal in file '{file}'", -1)
+            return self.fail(f"File '{file}' did not contain a line starting with '(:goal' or there was an unclosed parenthesis.", -1)
 
         goal_str = "".join(goal)
         log.debug(f"Found goal\n{goal_str}")
