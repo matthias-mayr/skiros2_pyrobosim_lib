@@ -45,6 +45,28 @@ class Problem3Solution(SkillDescription):
         self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
         self.addPostCondition(self.getPropCond("PantryClosed", "skiros:Open", "Pantry", "=", False, True))
 
+class Problem4Solution(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Table", Element("skiros:Table"), ParamTypes.Required)
+        self.addParam("Bread", Element("skiros:Bread"), ParamTypes.Required)
+        self.addParam("Butter", Element("skiros:Butter"), ParamTypes.Required)
+        self.addParam("Fridge", Element("skiros:Fridge"), ParamTypes.Inferred)
+        self.addParam("Pantry", Element("skiros:Pantry"), ParamTypes.Inferred)
+
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("FridgeContainsButter", "skiros:contain", "Fridge", "Butter", True))
+        self.addPreCondition(self.getRelationCond("PantryContainsBread", "skiros:contain", "Pantry", "Bread", True))
+
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("TableContainsBread", "skiros:contain", "Table", "Bread", True))
+        self.addPostCondition(self.getRelationCond("TableContainsButter", "skiros:contain", "Table", "Butter", True))
+        self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
+        self.addPostCondition(self.getPropCond("PantryClosed", "skiros:Open", "Pantry", "=", False, True))
+
 class MoveAllObjects(SkillDescription):
     def createDescription(self):
         #=======Params=========
@@ -126,6 +148,20 @@ class problem_3_solution(SkillBase):
             )
         )
 
+class problem_4_solution(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Problem4Solution(), "Problem 4 Solution - Waste Disposal and Setting the Table")
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("Problem3Solution", ""),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
+            self.skill("Problem2Solution", ""),
+        )
 
 class move_all_objects(SkillBase):
     """
