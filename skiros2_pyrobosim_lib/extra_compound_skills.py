@@ -161,7 +161,7 @@ class skip_close_location(PrimitiveBase):
         return self.success("Skipped closing location that can not be closed")
 
 
-class navigate_to_target(SkillBase):
+class navigate_and_open_door(SkillBase):
     def createDescription(self):
         self.setDescription(Navigate(), "Navigate to target")
     
@@ -175,9 +175,9 @@ class navigate_to_target(SkillBase):
             ),
         )
 
-class navigate_and_plan(SkillBase):
+class navigate_and_open_doors(SkillBase):
     def createDescription(self):
-        self.setDescription(Navigate(), "Navigate Through Rooms")
+        self.setDescription(Navigate(), "Navigate and Open Doors")
 
     def modifyDescription(self, skill):
         self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
@@ -190,7 +190,7 @@ class navigate_and_plan(SkillBase):
                 self.skill(Selector())(
                     self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
                     self.skill(SerialStar())(
-                        self.skill("Navigate", "navigate_to_target", remap={"TargetLocation": "IntermediateLocation"}),
+                        self.skill("Navigate", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
                         self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
                     ),
                 ),
