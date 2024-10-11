@@ -93,7 +93,6 @@ class problem_1_solution(SkillBase):
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
         )
 
-
 class problem_2_solution(SkillBase):
     """
     """

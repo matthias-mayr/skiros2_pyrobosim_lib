@@ -9,7 +9,7 @@ from skiros2_common.core.world_element import Element
 
 class IsNone(SkillDescription):
     def createDescription(self):
-        self.addParam("Param", Element("sumo:object"), ParamTypes.Optional)
+        self.addParam("Param", Element("sumo:Object"), ParamTypes.Optional)
 
 class CopyValue(SkillDescription):
     def createDescription(self):
