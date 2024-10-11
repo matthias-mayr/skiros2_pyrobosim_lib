@@ -115,6 +115,7 @@ class problem_2_solution(SkillBase):
                 self.skill("Problem1Solution", "", remap={"Object": "Object1", "ObjectTargetLocation": "Dumpster"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
+                self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             ),
             self.skill(SerialStar())(
                 self.skill("Problem1Solution", "", remap={"Object": "Object2", "ObjectTargetLocation": "Dumpster"}),
