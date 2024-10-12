@@ -190,9 +190,7 @@ class navigate_and_open_doors(SkillBase):
         self.setDescription(Navigate(), "Navigate and Open Doors")
 
     def modifyDescription(self, skill):
-        self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
-        # Planning book-keeping conditions:
-        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
+        skill.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())
