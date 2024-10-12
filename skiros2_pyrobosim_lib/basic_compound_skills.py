@@ -1,5 +1,5 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase
-from skiros2_skill.core.processors import RetryOnFail, SerialStar, ParallelFs
+from skiros2_skill.core.processors import RetryOnFail, SerialStar, Serial
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
@@ -81,19 +81,16 @@ class navigate(SkillBase):
     def createDescription(self):
         self.setDescription(Navigate(), "Navigate to Location")
 
-    def set_at(self, src, dst, state):
-      return self.skill("WmSetRelation", "wm_set_relation",
-          remap={'Dst': dst},
-          specify={'Src': self.params[src].value, 'Relation': 'skiros:at', 'RelationState': state})
-
     def expand(self, skill):
-        skill.setProcessor(SerialStar())
+        skill.setProcessor(Serial())
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("NavigateExecution", ""),
-            ),
-            self.set_at("Robot", "StartLocation", False),
-            self.set_at("Robot", "TargetLocation", True),
+            self.skill("BatteryCheckAndCharge"),
+            self.skill(SerialStar())(
+                self.skill(RetryOnFail(10))(
+                    self.skill("NavigateExecution", ""),
+                ),
+                self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
+            )
         )
 
 class pick(SkillBase):
