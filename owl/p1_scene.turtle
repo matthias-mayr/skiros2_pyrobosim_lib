@@ -22,21 +22,8 @@ skiros:Scene-0 a skiros:Scene,
         skiros:Room-2,
         skiros:Room-3,
         skiros:Room-4,
-        skiros:Room-5 .
-
-cora:Robot-14 a cora:Robot,
-        owl:NamedIndividual ;
-    rdfs:label "robi:robot" ;
-    skiros:BaseFrameId ""^^xsd:string ;
-    skiros:BatteryPercentage "100"^^xsd:float ;
-    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
-    skiros:FrameId "cora:Robot-14"^^xsd:string ;
-    skiros:PublishTf true ;
-    skiros:SkillMgr "robi_robot"^^xsd:string ;
-    skiros:Template "robi:robot"^^xsd:string ;
-    skiros:at skiros:Room-1 ;
-    skiros:hasA rparts:GripperEffector-15 ;
-    skiros:hasTemplate robi:robot .
+        skiros:Room-5,
+        cora:Robot-14 .
 
 skiros:Bread-22 a skiros:Bread,
         owl:NamedIndividual ;
@@ -159,6 +146,20 @@ rparts:GripperEffector-15 a rparts:GripperEffector,
     rdfs:label "Robi robot gripper" ;
     skiros:ContainerState "Empty"^^xsd:string ;
     skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string .
+
+cora:Robot-14 a cora:Robot,
+        owl:NamedIndividual ;
+    rdfs:label "robi:robot" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:BatteryPercentage "100"^^xsd:float ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "cora:Robot-14"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:SkillMgr "robot"^^xsd:string ;
+    skiros:Template "robi:robot"^^xsd:string ;
+    skiros:at skiros:Room-1 ;
+    skiros:hasA rparts:GripperEffector-15 ;
+    skiros:hasTemplate robi:robot .
 
 skiros:Room-2 a skiros:Room,
         owl:NamedIndividual ;

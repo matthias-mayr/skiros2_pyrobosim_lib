@@ -62,7 +62,7 @@ def create_robot_ttl(graph, robot_data, robot_id, room_mapping):
     graph.add((robot_uri, SKIROS.DiscreteReasoner, Literal("AauSpatialReasoner", datatype=XSD.string)))
     graph.add((robot_uri, SKIROS.FrameId, Literal(f"cora:Robot-{robot_id}", datatype=XSD.string)))
     graph.add((robot_uri, SKIROS.PublishTf, Literal(True, datatype=XSD.boolean)))
-    graph.add((robot_uri, SKIROS.SkillMgr, Literal("robi_robot", datatype=XSD.string)))
+    graph.add((robot_uri, SKIROS.SkillMgr, Literal("robot", datatype=XSD.string)))
     graph.add((robot_uri, SKIROS.Template, Literal("robi:robot", datatype=XSD.string)))
     graph.add((robot_uri, SKIROS.BatteryPercentage, Literal(100, datatype=XSD.float)))
     graph.add((robot_uri, SKIROS.hasTemplate, ROBI["robot"]))
@@ -206,6 +206,7 @@ def yaml_to_turtle(yaml_data, world_number: int):
     scene_uri = create_scene_ttl(graph, world_number)
     room_uris = []
     door_uris = []
+    robot_uris = []
 
     # Create rooms
     for room in yaml_data.get('rooms', []):
@@ -219,7 +220,8 @@ def yaml_to_turtle(yaml_data, world_number: int):
 
     # Create robots
     for robot in yaml_data.get('robots', []):
-        create_robot_ttl(graph, robot, id_gen.get_next(), room_mapping)
+        robot_uri = create_robot_ttl(graph, robot, id_gen.get_next(), room_mapping)
+        robot_uris.append(robot_uri)
 
     # Create locations
     for location in yaml_data.get('locations', []):
@@ -239,6 +241,8 @@ def yaml_to_turtle(yaml_data, world_number: int):
         graph.add((scene_uri, SKIROS.contain, room_uri))
     for door_uri in door_uris:
         graph.add((scene_uri, SKIROS.contain, door_uri))
+    for robot_uri in robot_uris:
+        graph.add((scene_uri, SKIROS.contain, robot_uri))
 
     return graph.serialize(format='turtle')
 
