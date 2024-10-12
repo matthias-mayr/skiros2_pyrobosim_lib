@@ -1,6 +1,7 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, ParallelFf, SerialStar, Selector
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, ParallelFf, SerialStar, RetryOnFail
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
+from .pyrobosim_compound_skills import Navigate, Pick, Place, OpenOpenableLocation, CloseOpenableLocation
 
 #################################################################################
 # Descriptions
@@ -41,8 +42,9 @@ class problem_3(SkillBase):
         skill(
             # FIXME 3: We will fetch the bread here and later the butter
             self.skill(SerialStar())(
-                # FIXME 3: Add more skills to solve this task. Try to use a previous skill
-                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
+                # FIXME 3: Add more skills to solve this task. Try to use a previous skill.
+                # If you could not solve problme 1, you can use the solution "Problem1Solution" instead of "Problem1" in the next line
+                self.skill("Problem1", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
                 
 
                 # FIXME 3: Close the pantry
@@ -57,4 +59,63 @@ class problem_3(SkillBase):
             self.skill(SerialStar())(
                 # FIXME 3: Add more skills to solve this task. Try to use a previous skill
             )
+        )
+
+
+class navigate_with_retry(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate to Location with Retry")
+
+    def expand(self, skill):
+        skill(
+            self.skill("NavigateExecution", ""),
+            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
+        )
+
+class pick_with_retry(SkillBase):
+    def createDescription(self):
+        self.setDescription(Pick(), "Pick Part with Retry")
+
+    def expand(self, skill):
+        skill(
+            self.skill("PickExecution", ""),
+            self.skill("WmMoveObject", "wm_move_object",
+                remap={"StartLocation": "Container", "TargetLocation": "Gripper"}),
+        )
+
+class place_with_retry(SkillBase):
+    def createDescription(self):
+        self.setDescription(Place(), "Place Part with Retry")
+
+    def expand(self, skill):
+        skill(
+            self.skill("PlaceExecution", ""),
+            self.skill("WmMoveObject", "wm_move_object",
+                remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
+        )
+
+class open_openablelocation_with_retry(SkillBase):
+    def createDescription(self):
+        self.setDescription(OpenOpenableLocation(), "Open Location with Retry")
+
+    def expand(self, skill):
+        skill(
+            self.skill("OpenExecution", ""),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "OpenableLocation"},
+                specify={"Properties": {"skiros:Open": True}}),
+        )
+
+class close_openablelocation_with_retry(SkillBase):
+    def createDescription(self):
+        self.setDescription(CloseOpenableLocation(), "Close OpenableLocation with Retry")
+
+    def expand(self, skill):
+        skill(
+            self.skill("CloseExecution", ""),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "OpenableLocation"},
+                specify={"Properties": {"skiros:Open": False}}),
         )

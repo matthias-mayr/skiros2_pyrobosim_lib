@@ -1,7 +1,7 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase, SerialStar, Selector, Serial, RetryOnFail
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
-from .pyrobosim_compound_skills import Navigate
+from .pyrobosim_compound_skills import Navigate, Pick, Place, OpenOpenableLocation, CloseOpenableLocation
 
 #################################################################################
 # Descriptions
@@ -127,20 +127,112 @@ class problem_3_solution(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill(SerialStar())(
-                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
-                self.skill("Navigate", "", remap={"TargetLocation": "Pantry"}),
-                self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
+                self.skill("Problem1Solution", "problem_1_solution_for_problem_3", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
+                self.skill("Navigate", "navigate_with_retry_solution", remap={"TargetLocation": "Pantry"}),
+                self.skill(RetryOnFail(10))(    # Note: You do not need this retry. It is only here, because we might use the unfinished skill
+                    self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
+                ),
                 # Unset some blackboard parameters to avoid conflicts
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             ),
             self.skill(SerialStar())(
-                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Butter"}),
-                self.skill("Navigate", "", remap={"TargetLocation": "Fridge"}),
-                self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
+                self.skill("Problem1Solution", "problem_1_solution_for_problem_3", remap={"ObjectTargetLocation": "Table", "Object": "Butter"}),
+                self.skill("Navigate", "navigate_with_retry_solution", remap={"TargetLocation": "Fridge"}),
+                self.skill(RetryOnFail(10))(    # Note: You do not need this retry. It is only here, because we might use the unfinished skill
+                    self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
+                ),
             )
         )
+
+class problem_1_solution_for_problem_3(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Problem1Solution(), "Problem 1 Solution - Fetch Item")
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("Navigate", "navigate_with_retry_solution", remap={"TargetLocation": "ObjectStartLocation"}),
+            self.skill(RetryOnFail(10))(
+                self.skill("OpenLocation", "", remap={"Location": "ObjectStartLocation"}),
+            ),
+            self.skill("Pick", "pick_with_retry_solution"),
+            self.skill("Navigate", "navigate_with_retry_solution", remap={"StartLocation": "ObjectStartLocation", "TargetLocation": "ObjectTargetLocation"}),
+            self.skill("Place", "place_with_retry_solution", remap={"PlacingLocation": "ObjectTargetLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+        )
+
+class navigate_with_retry_solution(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate to Location with Retry Solution")
+
+    def expand(self, skill):
+        skill(
+            self.skill(RetryOnFail(10))(
+                self.skill("NavigateExecution", ""),
+            ),
+            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
+        )
+
+class pick_with_retry_solution(SkillBase):
+    def createDescription(self):
+        self.setDescription(Pick(), "Pick Part with Retry Solution")
+
+    def expand(self, skill):
+        skill(
+            self.skill(RetryOnFail(10))(
+                self.skill("PickExecution", ""),
+            ),
+            self.skill("WmMoveObject", "wm_move_object",
+                remap={"StartLocation": "Container", "TargetLocation": "Gripper"}),
+        )
+
+class place_with_retry_solution(SkillBase):
+    def createDescription(self):
+        self.setDescription(Place(), "Place Part with Retry Solution")
+
+    def expand(self, skill):
+        skill(
+            self.skill(RetryOnFail(10))(
+                self.skill("PlaceExecution", ""),
+            ),
+            self.skill("WmMoveObject", "wm_move_object",
+                remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
+        )
+
+class open_openablelocation_with_retry_solution(SkillBase):
+    def createDescription(self):
+        self.setDescription(OpenOpenableLocation(), "Open Location with Retry Solution")
+
+    def expand(self, skill):
+        skill(
+            self.skill(RetryOnFail(10))(
+                self.skill("OpenExecution", ""),
+            ),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "OpenableLocation"},
+                specify={"Properties": {"skiros:Open": True}}),
+        )
+
+class close_openablelocation_with_retry_solution(SkillBase):
+    def createDescription(self):
+        self.setDescription(CloseOpenableLocation(), "Close OpenableLocation with Retry Solution")
+
+    def expand(self, skill):
+        skill(
+            self.skill(RetryOnFail(10))(
+                self.skill("CloseExecution", ""),
+            ),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "OpenableLocation"},
+                specify={"Properties": {"skiros:Open": False}}),
+        )
+
 
 class problem_4_solution(SkillBase):
     """
