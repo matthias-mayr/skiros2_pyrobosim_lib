@@ -1,5 +1,5 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase
-from skiros2_skill.core.processors import SerialStar, Selector, Serial
+from skiros2_skill.core.processors import SerialStar, Selector, Serial, RetryOnFail
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
@@ -57,6 +57,12 @@ class CloseLocation(SkillDescription):
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
 
+class BatteryCheckAndCharge(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("MinBatteryLevel", 40.0, ParamTypes.Required)
+        self.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Optional)
+
 
 #################################################################################
 # Implementations
@@ -87,8 +93,12 @@ class charge(SkillBase):
         self.setDescription(Charge(), "Navigate to Charger")
 
     def expand(self, skill):
+        skill.setProcessor(SerialStar())
         skill(
-            self.skill("Navigate", "", remap={"TargetLocation": "ChargerLocation"}),
+            self.skill(RetryOnFail(10))(
+                self.skill("NavigateExecution", "", remap={"TargetLocation": "ChargerLocation"}),
+            ),
+            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "ChargerLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
 
 class open_location(SkillBase):
@@ -198,4 +208,18 @@ class navigate_and_open_doors(SkillBase):
                 ),
                 self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
             ),
+        )
+
+class battery_check_and_charge(SkillBase):
+    def createDescription(self):
+        self.setDescription(BatteryCheckAndCharge(), "Battery Check and Charge")
+
+    def expand(self, skill):
+        skill.setProcessor(Selector())
+        skill(
+            self.skill("BatteryAboveLevel", ""),
+            self.skill(Serial())(
+                self.skill("ChargerLocationFromWM", ""),
+                self.skill("Charge", ""),
+            )
         )

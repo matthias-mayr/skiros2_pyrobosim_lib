@@ -2,6 +2,7 @@ from skiros2_skill.core.skill import SkillDescription
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 from skiros2_common.core.primitive import PrimitiveBase
+import skiros2_world_model.ros.world_model_interface as wmi
 
 from skiros2_std_skills.action_client_primitive import PrimitiveActionClient
 from skiros2_common.core.abstract_skill import State
@@ -47,6 +48,16 @@ class GetBatteryPercentage(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("BatteryLevel", float, ParamTypes.Optional)
+
+class BatteryAboveLevel(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("MinBatteryLevel", float, ParamTypes.Required)
+
+class ChargerLocationFromWM(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("ChargerLocation", Element("skiros:Location"), ParamTypes.Optional)
 
 class Success(SkillDescription):
     pass
@@ -155,6 +166,36 @@ class get_battery_percentage(PrimitiveBase):
         # self.robot.setProperty("skiros:BatteryPercentage", self.battery_level)
         # self._wmi.update_element_properties(self.robot)
         return self.success("Battery level is {}".format(self.battery_level))
+
+class battery_above_level(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(BatteryAboveLevel(), "Battery Above Level")
+
+    def onStart(self):
+        self.robot = self._wmi.get_element(self.params["Robot"].value.id)
+        self.min_level = self.params["MinBatteryLevel"].value
+        return True
+
+    def execute(self):
+        self.battery_level = self.robot.getProperty("skiros:BatteryPercentage").value
+        if self.battery_level >= self.min_level:
+            return self.success(f"Current battery level {self.battery_level} is above the minimum {self.min_level}.")
+        else:
+            return self.fail(f"Current battery level {self.battery_level} is below the minimum {self.min_level}.", -1)
+
+class charger_location_from_wm(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(ChargerLocationFromWM(), "Charger Location From World Model")
+
+    def onStart(self):
+        self.chargers = self._wmi.resolve_elements(wmi.Element(":Charger"))
+        return True
+
+    def execute(self):
+        if not self.chargers:
+            return self.fail("No charger found in the world model")
+        self.params["ChargerLocation"].value = self.chargers[0]
+        return self.success(f"Charger location set to '{self.chargers[0].id}'")
 
 class success(PrimitiveBase):
     def createDescription(self):

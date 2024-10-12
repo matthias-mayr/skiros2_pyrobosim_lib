@@ -23,7 +23,7 @@ def skills_and_skiros2(context, *args, **kwargs):
     problem_1_item_skills = ["problem_1", "problem_1_solution"]
     problem_2_waste_skills = ["problem_2_solution", "select_doors_to_target", "skip_open_openablelocation", "skip_open_location", "open_location", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door"]
     problem_3_table_skills = ["problem_3", "problem_3_solution"]
-    problem_4_charge_skills = ["problem_4_solution", "charge"]
+    problem_4_charge_skills = ["problem_4_solution", "charge", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
     planner_skills = ["plan_from_file", "extract_pddl_goal_from_file", "task_plan"]
     skill_list = [*reasoning_skills, *basic_compound_skills, *primitive_skills, *problem_1_item_skills, *planner_skills]
     if problem_number > 1:
