@@ -64,6 +64,17 @@ class BatteryCheckAndCharge(SkillDescription):
         self.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Optional)
 
 
+class NavigateAndOpenDoor(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
+
+
 #################################################################################
 # Implementations
 #################################################################################
@@ -173,12 +184,12 @@ class skip_close_location(PrimitiveBase):
 class navigate_and_open_door(SkillBase):
     def createDescription(self):
         self.setAvailableForPlanning(False)
-        self.setDescription(Navigate(), "Navigate and Open Single Door")
+        self.setDescription(NavigateAndOpenDoor(), "Navigate and Open Single Door")
     
     def expand(self, skill):
         skill.setProcessor(SerialStar())
         skill(
-            self.skill("Navigate", "navigate"),
+            self.skill("Navigate", ""),
             self.skill(Selector())(
                 self.skill("LocationIsDoor", "", remap={"Location": "TargetLocation"}, specify={"ReverseResult": True, "Open": False}),
                 self.skill("OpenOpenableLocation", "", remap={"OpenableLocation": "TargetLocation"}),
@@ -187,7 +198,7 @@ class navigate_and_open_door(SkillBase):
 
 class navigate_and_open_doors(SkillBase):
     def createDescription(self):
-        self.setDescription(Navigate(), "Navigate and Open Doors")
+        self.setDescription(NavigateAndOpenDoor(), "Navigate and Open Doors")
 
     def modifyDescription(self, skill):
         skill.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
@@ -200,7 +211,7 @@ class navigate_and_open_doors(SkillBase):
                 self.skill(Selector())(
                     self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
                     self.skill(SerialStar())(
-                        self.skill("Navigate", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
+                        self.skill("NavigateAndOpenDoor", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
                         self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
                     ),
                 ),
