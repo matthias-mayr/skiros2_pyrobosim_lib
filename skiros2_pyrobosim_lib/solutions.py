@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, ParallelFf, SerialStar, Selector
+from skiros2_skill.core.skill import SkillDescription, SkillBase, SerialStar, Selector
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -65,12 +65,6 @@ class Problem4Solution(SkillDescription):
         self.addPostCondition(self.getRelationCond("TableContainsButter", "skiros:contain", "Table", "Butter", True))
         self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
         self.addPostCondition(self.getPropCond("PantryClosed", "skiros:Open", "Pantry", "=", False, True))
-
-class MoveAllObjects(SkillDescription):
-    def createDescription(self):
-        #=======Params=========
-        self.addParam("InitialLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
 
 #################################################################################
 # Implementations
@@ -160,23 +154,4 @@ class problem_4_solution(SkillBase):
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
             self.skill("Problem2Solution", ""),
-        )
-
-class move_all_objects(SkillBase):
-    """
-    """
-    def createDescription(self):
-        self.setDescription(MoveAllObjects(), "Move All Objects from Initial to Target Location")
-
-    def expand(self, skill):
-        skill.setProcessor(ParallelFs())
-        skill(
-            self.skill("SelectObjectToFetch", "", remap={"Location": "InitialLocation", "TargetLocation": "Table"}),
-            self.skill(ParallelFf())(
-                self.skill("SelectObjectToFetch", "", remap={"Location": "InitialLocation", "TargetLocation": "Table"}),
-                self.skill(SerialStar())(
-                    self.skill("Problem1Solution", "", remap={"ObjectStartLocation": "InitialLocation", "ObjectTargetLocation": "Table"}),
-                    self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
-                )
-            ),
         )

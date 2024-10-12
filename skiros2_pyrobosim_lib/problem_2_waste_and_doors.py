@@ -1,6 +1,6 @@
 from enum import Enum, auto
 import skiros2_common.tools.logger as log
-from skiros2_skill.core.skill import SkillDescription
+from skiros2_skill.core.skill import SkillDescription, SkillBase, SerialStar, Selector, Serial
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
@@ -9,20 +9,24 @@ from skiros2_common.core.world_element import Element
 # Descriptions
 #################################################################################
 
-class SelectObjectToFetch(SkillDescription):
+class Problem2(SkillDescription):
     def createDescription(self):
-        # =======Params=========
-        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("Object", Element("skiros:Part"), ParamTypes.Optional)
-        # =======PreConditions=========
+        #=======Params=========
+        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
 
-class SelectDoorsToTarget(SkillDescription):
+
+class NavigateAndOpenDoor(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
+        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
+        # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
+
 
 class LocationIsDoor(SkillDescription):
     def createDescription(self):
@@ -31,45 +35,77 @@ class LocationIsDoor(SkillDescription):
         self.addParam("Open", bool, ParamTypes.Required)
         self.addParam("ReverseResult", False, ParamTypes.Required)
 
+
+class SelectDoorsToTarget(SkillDescription):
+    def createDescription(self):
+        # =======Params=========
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
+
+
 #################################################################################
 # Implementations
 #################################################################################
 
-class select_object_to_fetch(PrimitiveBase):
+class navigate_and_open_door(SkillBase):
     def createDescription(self):
-        self.setDescription(SelectObjectToFetch(), "Select Object To Fetch")
+        self.setAvailableForPlanning(False)
+        self.setDescription(NavigateAndOpenDoor(), "Navigate and Open Single Door")
+    
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("Navigate", ""),
+            self.skill(Selector())(
+                self.skill("LocationIsDoor", "", remap={"Location": "TargetLocation"}, specify={"ReverseResult": True, "Open": False}),
+                self.skill("OpenOpenableLocation", "", remap={"OpenableLocation": "TargetLocation"}),
+            ),
+        )
 
-    def onPreempt(self):
-        """ Called when skill is requested to stop. """
-        return self.success("Stopped")
-    
-    def onStart(self):
-        self.current_object = None
-        return True
-    
-    def get_elements_contained_by_location(self, location):
-        location_element = self._wmi.get_element(location.id)
-        contain_relations = location_element.getRelations(pred="skiros:contain", subj='-1')
-        contained = [v["dst"] for v in contain_relations]
-        return contained
+class navigate_and_open_doors(SkillBase):
+    def createDescription(self):
+        self.setDescription(NavigateAndOpenDoor(), "Navigate and Open Doors")
+
+    def modifyDescription(self, skill):
+        skill.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("BbUnsetParam", "", remap={"Parameter": "IntermediateLocation"}),
+            self.skill(Serial())(
+                self.skill(Selector())(
+                    self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
+                    self.skill(SerialStar())(
+                        self.skill("NavigateAndOpenDoor", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
+                        self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
+                    ),
+                ),
+                self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
+            ),
+        )
+
+
+class location_is_door(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(LocationIsDoor(), "Location is Door")
 
     def execute(self):
-        """ Main execution function. Should return with either: self.fail, self.step or self.success """
-        if self.current_object:
-            # Check if the object is at the target location
-            contained_objects = self.get_elements_contained_by_location(self.params["TargetLocation"].value)
-            if self.current_object.id not in contained_objects:
-                return self.step(f"Object '{self.current_object.label}' is not at the target location yet")
-    
-        # We fetch the latest from the WM to make sure that all relations are updated
-        contained_objects = self.get_elements_contained_by_location(self.params["Location"].value)
-        if len(contained_objects) == 0:
-            return self.success("No objects to fetch. We are done!")
-        
-        object_element = self._wmi.get_element(contained_objects[0])
-        self.current_object = object_element
-        self.params["Object"].value = object_element
-        return self.step(f"Object '{object_element.label}' selected")
+        location = self.params["Location"].value
+
+        is_door = location.type == "skiros:Door"
+        is_open = location.getProperty("skiros:Open").value if is_door else False
+
+        result = is_door and (is_open == self.params["Open"].value)
+        if self.params["ReverseResult"].value:
+            result = not result
+
+        data = dict(location=location.label, is_door=is_door, is_open=is_open)
+        if result:
+            return self.success(str(data))
+        else:
+            return self.fail(str(data), -1)
 
 
 class select_doors_to_target(PrimitiveBase):
@@ -226,24 +262,3 @@ class select_doors_to_target(PrimitiveBase):
         self.current_location, self.path = self.path[0], self.path[1:]
         self.params["IntermediateLocation"].value = self.current_location
         return self.step(f"Door '{self.current_location.label}' selected")
-
-
-class location_is_door(PrimitiveBase):
-    def createDescription(self):
-        self.setDescription(LocationIsDoor(), "Location is Door")
-
-    def execute(self):
-        location = self.params["Location"].value
-
-        is_door = location.type == "skiros:Door"
-        is_open = location.getProperty("skiros:Open").value if is_door else False
-
-        result = is_door and (is_open == self.params["Open"].value)
-        if self.params["ReverseResult"].value:
-            result = not result
-
-        data = dict(location=location.label, is_door=is_door, is_open=is_open)
-        if result:
-            return self.success(str(data))
-        else:
-            return self.fail(str(data), -1)

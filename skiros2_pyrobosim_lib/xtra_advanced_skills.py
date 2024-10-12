@@ -1,9 +1,7 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase
-from skiros2_skill.core.processors import SerialStar, Selector, Serial, RetryOnFail
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, ParallelFf, SerialStar
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
-from .basic_compound_skills import Navigate
 
 #################################################################################
 # Descriptions
@@ -20,6 +18,7 @@ class OpenHallwayDoor(SkillDescription):
         # Planning book-keeping conditions:
         self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", True, False))
 
+
 class CloseHallwayDoor(SkillDescription):
     def createDescription(self):
         # =======Params=========
@@ -31,17 +30,20 @@ class CloseHallwayDoor(SkillDescription):
         # Planning book-keeping conditions:
         self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", False, False))
 
-class Charge(SkillDescription):
+class MoveAllObjects(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("InitialLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
+
+
+class SelectObjectToFetch(SkillDescription):
     def createDescription(self):
         # =======Params=========
-        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
-        self.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Required)
+        self.addParam("Location", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Object", Element("skiros:Part"), ParamTypes.Optional)
         # =======PreConditions=========
-        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
-        # =======PostConditions=========
-        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "ChargerLocation", True))
-        # Planning book-keeping conditions:
-        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
 
 class OpenLocation(SkillDescription):
     def createDescription(self):
@@ -56,23 +58,6 @@ class CloseLocation(SkillDescription):
         self.addParam("Location", Element("skiros:Location"), ParamTypes.Inferred)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Location", True))
-
-class BatteryCheckAndCharge(SkillDescription):
-    def createDescription(self):
-        # =======Params=========
-        self.addParam("MinBatteryLevel", 40.0, ParamTypes.Required)
-        self.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Optional)
-
-
-class NavigateAndOpenDoor(SkillDescription):
-    def createDescription(self):
-        # =======Params=========
-        self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
-        # =======PreConditions=========
-        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
-        # =======PostConditions=========
-        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
 
 
 #################################################################################
@@ -99,18 +84,61 @@ class close_hallway_door(SkillBase):
             self.skill("CloseLocation", "", remap={"Location": "Door"}),
         )
 
-class charge(SkillBase):
+class move_all_objects(SkillBase):
+    """
+    """
     def createDescription(self):
-        self.setDescription(Charge(), "Navigate to Charger")
+        self.setDescription(MoveAllObjects(), "Move All Objects from Initial to Target Location")
 
     def expand(self, skill):
-        skill.setProcessor(SerialStar())
+        skill.setProcessor(ParallelFs())
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("NavigateExecution", "", remap={"TargetLocation": "ChargerLocation"}),
+            self.skill("SelectObjectToFetch", "", remap={"Location": "InitialLocation", "TargetLocation": "Table"}),
+            self.skill(ParallelFf())(
+                self.skill("SelectObjectToFetch", "", remap={"Location": "InitialLocation", "TargetLocation": "Table"}),
+                self.skill(SerialStar())(
+                    self.skill("Problem1Solution", "", remap={"ObjectStartLocation": "InitialLocation", "ObjectTargetLocation": "Table"}),
+                    self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+                )
             ),
-            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "ChargerLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
+
+
+class select_object_to_fetch(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(SelectObjectToFetch(), "Select Object To Fetch")
+
+    def onPreempt(self):
+        """ Called when skill is requested to stop. """
+        return self.success("Stopped")
+    
+    def onStart(self):
+        self.current_object = None
+        return True
+    
+    def get_elements_contained_by_location(self, location):
+        location_element = self._wmi.get_element(location.id)
+        contain_relations = location_element.getRelations(pred="skiros:contain", subj='-1')
+        contained = [v["dst"] for v in contain_relations]
+        return contained
+
+    def execute(self):
+        """ Main execution function. Should return with either: self.fail, self.step or self.success """
+        if self.current_object:
+            # Check if the object is at the target location
+            contained_objects = self.get_elements_contained_by_location(self.params["TargetLocation"].value)
+            if self.current_object.id not in contained_objects:
+                return self.step(f"Object '{self.current_object.label}' is not at the target location yet")
+    
+        # We fetch the latest from the WM to make sure that all relations are updated
+        contained_objects = self.get_elements_contained_by_location(self.params["Location"].value)
+        if len(contained_objects) == 0:
+            return self.success("No objects to fetch. We are done!")
+        
+        object_element = self._wmi.get_element(contained_objects[0])
+        self.current_object = object_element
+        self.params["Object"].value = object_element
+        return self.step(f"Object '{object_element.label}' selected")
 
 class open_location(SkillBase):
     def createDescription(self):
@@ -179,56 +207,3 @@ class skip_close_location(PrimitiveBase):
 
     def execute(self):
         return self.success("Skipped closing location that can not be closed")
-
-
-class navigate_and_open_door(SkillBase):
-    def createDescription(self):
-        self.setAvailableForPlanning(False)
-        self.setDescription(NavigateAndOpenDoor(), "Navigate and Open Single Door")
-    
-    def expand(self, skill):
-        skill.setProcessor(SerialStar())
-        skill(
-            self.skill("Navigate", ""),
-            self.skill(Selector())(
-                self.skill("LocationIsDoor", "", remap={"Location": "TargetLocation"}, specify={"ReverseResult": True, "Open": False}),
-                self.skill("OpenOpenableLocation", "", remap={"OpenableLocation": "TargetLocation"}),
-            ),
-        )
-
-class navigate_and_open_doors(SkillBase):
-    def createDescription(self):
-        self.setDescription(NavigateAndOpenDoor(), "Navigate and Open Doors")
-
-    def modifyDescription(self, skill):
-        skill.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
-
-    def expand(self, skill):
-        skill.setProcessor(SerialStar())
-        skill(
-            self.skill("BbUnsetParam", "", remap={"Parameter": "IntermediateLocation"}),
-            self.skill(Serial())(
-                self.skill(Selector())(
-                    self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
-                    self.skill(SerialStar())(
-                        self.skill("NavigateAndOpenDoor", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
-                        self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
-                    ),
-                ),
-                self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
-            ),
-        )
-
-class battery_check_and_charge(SkillBase):
-    def createDescription(self):
-        self.setDescription(BatteryCheckAndCharge(), "Battery Check and Charge")
-
-    def expand(self, skill):
-        skill.setProcessor(Selector())
-        skill(
-            self.skill("BatteryAboveLevel", ""),
-            self.skill(Serial())(
-                self.skill("ChargerLocationFromWM", ""),
-                self.skill("Charge", ""),
-            )
-        )

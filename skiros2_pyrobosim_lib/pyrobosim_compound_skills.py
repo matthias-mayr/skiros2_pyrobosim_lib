@@ -1,7 +1,6 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase
 from skiros2_skill.core.processors import RetryOnFail, SerialStar, Serial
 from skiros2_common.core.params import ParamTypes
-from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.world_element import Element
 
 #################################################################################
