@@ -1,6 +1,7 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, SerialStar, Selector
+from skiros2_skill.core.skill import SkillDescription, SkillBase, SerialStar, Selector, Serial, RetryOnFail
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
+from .pyrobosim_compound_skills import Navigate
 
 #################################################################################
 # Descriptions
@@ -154,4 +155,22 @@ class problem_4_solution(SkillBase):
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
             self.skill("Problem2Solution", ""),
+        )
+
+class navigate_problem_4_solution(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate to Location")
+
+    def expand(self, skill):
+        skill.setProcessor(Serial())
+        skill(
+            self.skill("BatteryCheckAndCharge"),
+            self.skill(SerialStar())(
+                self.skill(RetryOnFail(10))(
+                    self.skill("NavigateExecution", ""),
+                ),
+                self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
+            )
         )

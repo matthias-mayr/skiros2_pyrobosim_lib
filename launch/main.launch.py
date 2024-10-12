@@ -16,16 +16,15 @@ def skills_and_skiros2(context, *args, **kwargs):
     own_skills = []
 
     # This is our basic skill set that we work with:
-    reasoning_skills = ["location_is_door", "copy_value", "is_none"]
-    primitive_skills = ["navigate_execution", "pick_execution", "place_execution", "open_execution", "close_execution", "get_battery_percentage", "wm_set_relation", "wm_move_object", "wm_set_properties", "bb_unset_param", "success"]
-    basic_compound_skills = ["navigate", "pick", "place", "open_openablelocation", "close_openablelocation", "navigate_and_open_door", "navigate_and_open_doors"]
+    primitive_skills = ["navigate_execution", "pick_execution", "place_execution", "open_execution", "close_execution", "wm_set_relation", "wm_move_object", "wm_set_properties", "bb_unset_param"]
+    basic_compound_skills = ["navigate", "pick", "place", "open_openablelocation", "close_openablelocation"]
     # Then we have new skills for each of the problems:
-    problem_1_item_skills = ["problem_1", "problem_1_solution"]
-    problem_2_waste_skills = ["problem_2_solution", "select_doors_to_target", "skip_open_openablelocation", "skip_open_location", "open_location", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door"]
+    problem_1_item_skills = ["problem_1", "problem_1_solution", "open_location", "skip_open_location", "skip_open_openablelocation"]
+    problem_2_waste_skills = ["problem_2_solution", "select_doors_to_target", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door", "location_is_door", "copy_value", "is_none", "success", "navigate_and_open_door", "navigate_and_open_doors"]
     problem_3_table_skills = ["problem_3", "problem_3_solution"]
     problem_4_charge_skills = ["problem_4_solution", "charge", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
     planner_skills = ["plan_from_file", "extract_pddl_goal_from_file", "task_plan"]
-    skill_list = [*reasoning_skills, *basic_compound_skills, *primitive_skills, *problem_1_item_skills, *planner_skills]
+    skill_list = [*basic_compound_skills, *primitive_skills, *problem_1_item_skills, *planner_skills]
     if problem_number > 1:
         skill_list.extend(problem_2_waste_skills)
     if problem_number > 2:
@@ -39,7 +38,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         "libraries_list": "[skiros2_pyrobosim_lib, skiros2_std_skills]",
         "skill_list": f"[{','.join(skill_list)}]",
         "init_scene": f"p{problem_number}_scene.turtle",
-        "verbose": "false",
+        "verbose": "true",
         "workspace_dir": get_package_share_directory("skiros2_pyrobosim_lib") + "/owl",
         "robot_name": "robot",
         "robot_ontology_prefix": "robi",
@@ -67,7 +66,7 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             "problem_number",
-            default_value="1"   ,
+            default_value="4",
             description="The problem to start",
         )
     )

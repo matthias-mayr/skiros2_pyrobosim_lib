@@ -81,15 +81,11 @@ class navigate(SkillBase):
         self.setDescription(Navigate(), "Navigate to Location")
 
     def expand(self, skill):
-        skill.setProcessor(Serial())
         skill(
-            self.skill("BatteryCheckAndCharge"),
-            self.skill(SerialStar())(
-                self.skill(RetryOnFail(10))(
-                    self.skill("NavigateExecution", ""),
-                ),
-                self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
-            )
+            self.skill(RetryOnFail(10))(
+                self.skill("NavigateExecution", ""),
+            ),
+            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
 
 class pick(SkillBase):
