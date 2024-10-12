@@ -132,7 +132,7 @@ skiros:Location-20 a skiros:Location,
 skiros:Pantry-18 a skiros:Pantry,
         owl:NamedIndividual ;
     rdfs:label "pantry" ;
-    skiros:Open true ;
+    skiros:Open false ;
     skiros:contain skiros:Bread-22,
         skiros:Snacks-23 .
 
