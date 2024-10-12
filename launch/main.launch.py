@@ -11,7 +11,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def skills_and_skiros2(context, *args, **kwargs):
     problem_number = int(LaunchConfiguration('problem_number').perform(context))
-    load_solutions = LaunchConfiguration('load_solutions').perform(context)
+    load_only_solutions = bool(LaunchConfiguration('load_only_solutions').perform(context))
 
     environment_deterministic = True if problem_number < 3 else False
     ### Build skill list of skills to load:
@@ -20,29 +20,44 @@ def skills_and_skiros2(context, *args, **kwargs):
 
     # This is our basic skill set that we work with:
     primitive_skills = ["navigate_execution", "pick_execution", "place_execution", "open_execution", "close_execution", "wm_set_relation", "wm_move_object", "wm_set_properties", "bb_unset_param"]
+    # The compound skills depend on the determinism of the environment
     if environment_deterministic:
         basic_compound_skills = ["navigate", "pick", "place", "open_openablelocation", "close_openablelocation"]
+        basic_compound_solution_skills = list(basic_compound_skills)
     else:
         basic_compound_skills = ["navigate_with_retry", "pick_with_retry", "place_with_retry", "open_openablelocation_with_retry", "close_openablelocation_with_retry"]
-    # Then we have new skills for each of the problems and their solutions:
-    problem_1_item_skills = ["problem_1", "open_location", "skip_open_location", "skip_open_openablelocation"]
-    solution_skills = ["problem_1_solution"]
-    problem_2_waste_skills = ["select_doors_to_target", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door", "location_is_door", "copy_value", "is_none", "success", "navigate_and_open_door", "navigate_and_open_doors"]
-    problem_3_table_skills = ["problem_3"]
-    problem_4_charge_skills = ["problem_4_solution", "charge", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
+        basic_compound_solution_skills = ["pick_with_retry_solution", "place_with_retry_solution", "open_openablelocation_with_retry_solution", "close_openablelocation_with_retry_solution"]
+    # Then we have new skills for each of the problems:
+    problem_1_item_skills_given = ["open_location", "skip_open_location", "skip_open_openablelocation"]
+    problem_2_waste_skills_given = ["select_doors_to_target", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door", "location_is_door", "copy_value", "is_none", "success", "navigate_and_open_door", "navigate_and_open_doors"]
+    problem_4_charge_skills_given = ["charge_directly", "charge_and_open_doors", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
+
+    problem_1_item_skills_todo = ["problem_1"]
+    problem_2_waste_skills_todo = []
+    problem_3_table_skills_todo = ["problem_3"]
+    problem_4_charge_skills_todo = []
+
     planner_skills = ["plan_from_file", "extract_pddl_goal_from_file", "task_plan"]
-    skill_list = [*primitive_skills, *basic_compound_skills, *problem_1_item_skills, *planner_skills]
+    problem_skill_list = [*problem_1_item_skills_todo, *basic_compound_skills]
+    solution_skills = ["problem_1_solution", *basic_compound_solution_skills]
+    skill_list = [*primitive_skills, *planner_skills, *own_skills, *problem_1_item_skills_given]
     if problem_number > 1:
-        skill_list.extend(problem_2_waste_skills)
+        problem_skill_list.extend(problem_2_waste_skills_todo)
         solution_skills.extend(["problem_2_solution"])
+        skill_list.extend(problem_2_waste_skills_given)
     if problem_number > 2:
-        skill_list.extend(problem_3_table_skills)
-        solution_skills.extend(["problem_3_solution", "navigate_with_retry_solution", "pick_with_retry_solution", "place_with_retry_solution", "open_openablelocation_with_retry_solution", "close_openablelocation_with_retry_solution"])
+        problem_skill_list.extend(problem_3_table_skills_todo)
+        solution_skills.extend(["problem_3_solution"])
+    if problem_number == 3:
+        solution_skills.append("navigate_with_retry_solution")
     if problem_number > 3:
-        skill_list.extend(problem_4_charge_skills)
-    skill_list.extend(own_skills)
-    if load_solutions == "True":
+        problem_skill_list.extend(problem_4_charge_skills_todo)
+        solution_skills.extend(["problem_4_solution", "navigate_with_retry_and_battery_check"])
+        skill_list.extend(problem_4_charge_skills_given)
+    if load_only_solutions:
         skill_list.extend(solution_skills)
+    else:
+        skill_list.extend(problem_skill_list)
 
     ### SkiROS2 configuration and launch setup
     skiros_config = {
@@ -71,20 +86,20 @@ def skills_and_skiros2(context, *args, **kwargs):
 
 def generate_launch_description():
     problem_number = LaunchConfiguration('problem_number')
-    load_solutions = LaunchConfiguration('load_solutions')
+    load_only_solutions = LaunchConfiguration('load_only_solutions')
     start_pyrobosim = LaunchConfiguration('start_pyrobosim')
 
     ld = LaunchDescription()
     ld.add_action(
         DeclareLaunchArgument(
             "problem_number",
-            default_value="4",
+            default_value="1",
             description="The problem to start",
         )
     )
     ld.add_action(
         DeclareLaunchArgument(
-            "load_solutions",
+            "load_only_solutions",
             default_value="False",
             description="Load the problem solutions as well",
         )

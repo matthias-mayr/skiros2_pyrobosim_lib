@@ -127,43 +127,21 @@ class problem_3_solution(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill(SerialStar())(
-                self.skill("Problem1Solution", "problem_1_solution_for_problem_3", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
-                self.skill("Navigate", "navigate_with_retry_solution", remap={"TargetLocation": "Pantry"}),
-                self.skill(RetryOnFail(10))(    # Note: You do not need this retry. It is only here, because we might use the unfinished skill
-                    self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
-                ),
+                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
+                self.skill("Navigate", "", remap={"TargetLocation": "Pantry"}),
+                self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
                 # Unset some blackboard parameters to avoid conflicts
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             ),
             self.skill(SerialStar())(
-                self.skill("Problem1Solution", "problem_1_solution_for_problem_3", remap={"ObjectTargetLocation": "Table", "Object": "Butter"}),
-                self.skill("Navigate", "navigate_with_retry_solution", remap={"TargetLocation": "Fridge"}),
-                self.skill(RetryOnFail(10))(    # Note: You do not need this retry. It is only here, because we might use the unfinished skill
-                    self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
-                ),
+                self.skill("Problem1Solution", "", remap={"ObjectTargetLocation": "Table", "Object": "Butter"}),
+                self.skill("Navigate", "", remap={"TargetLocation": "Fridge"}),
+                self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
             )
         )
 
-class problem_1_solution_for_problem_3(SkillBase):
-    """
-    """
-    def createDescription(self):
-        self.setDescription(Problem1Solution(), "Problem 1 Solution - Fetch Item")
-
-    def expand(self, skill):
-        skill.setProcessor(SerialStar())
-        skill(
-            self.skill("Navigate", "navigate_with_retry_solution", remap={"TargetLocation": "ObjectStartLocation"}),
-            self.skill(RetryOnFail(10))(
-                self.skill("OpenLocation", "", remap={"Location": "ObjectStartLocation"}),
-            ),
-            self.skill("Pick", "pick_with_retry_solution"),
-            self.skill("Navigate", "navigate_with_retry_solution", remap={"StartLocation": "ObjectStartLocation", "TargetLocation": "ObjectTargetLocation"}),
-            self.skill("Place", "place_with_retry_solution", remap={"PlacingLocation": "ObjectTargetLocation"}),
-            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
-        )
 
 class navigate_with_retry_solution(SkillBase):
     """
@@ -243,13 +221,15 @@ class problem_4_solution(SkillBase):
     def expand(self, skill):
         skill.setProcessor(SerialStar())
         skill(
+            self.skill("Charge", "charge_and_open_doors"),
             self.skill("Problem3Solution", ""),
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             self.skill("Problem2Solution", ""),
         )
 
-class navigate_problem_4_solution(SkillBase):
+class navigate_with_retry_and_battery_check(SkillBase):
     """
     """
     def createDescription(self):

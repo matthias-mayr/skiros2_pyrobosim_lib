@@ -82,9 +82,7 @@ class navigate(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("NavigateExecution", ""),
-            ),
+            self.skill("NavigateExecution", ""),
             self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
 
@@ -94,9 +92,7 @@ class pick(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("PickExecution", ""),
-            ),
+            self.skill("PickExecution", ""),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Container", "TargetLocation": "Gripper"}),
         )
@@ -107,9 +103,7 @@ class place(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("PlaceExecution", ""),
-            ),
+            self.skill("PlaceExecution", ""),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
         )
@@ -120,9 +114,7 @@ class open_openablelocation(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("OpenExecution", ""),
-            ),
+            self.skill("OpenExecution", ""),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
                 specify={"Properties": {"skiros:Open": True}}),
@@ -134,9 +126,7 @@ class close_openablelocation(SkillBase):
 
     def expand(self, skill):
         skill(
-            self.skill(RetryOnFail(10))(
-                self.skill("CloseExecution", ""),
-            ),
+            self.skill("CloseExecution", ""),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
                 specify={"Properties": {"skiros:Open": False}}),

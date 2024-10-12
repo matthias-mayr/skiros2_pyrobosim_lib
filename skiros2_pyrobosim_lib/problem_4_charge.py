@@ -39,8 +39,6 @@ class Charge(SkillDescription):
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
         self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "ChargerLocation", True))
-        # Planning book-keeping conditions:
-        self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
 
 
 class BatteryCheckAndCharge(SkillDescription):
@@ -56,9 +54,9 @@ class BatteryCheckAndCharge(SkillDescription):
 # Implementations
 #################################################################################
 
-class charge(SkillBase):
+class charge_directly(SkillBase):
     def createDescription(self):
-        self.setDescription(Charge(), "Navigate to Charger")
+        self.setDescription(Charge(), "Navigate Directly to Charger")
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())
@@ -66,6 +64,21 @@ class charge(SkillBase):
             self.skill(RetryOnFail(10))(
                 self.skill("NavigateExecution", "", remap={"TargetLocation": "ChargerLocation"}),
             ),
+            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "ChargerLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
+        )
+
+class charge_and_open_doors(SkillBase):
+    def createDescription(self):
+        self.setDescription(Charge(), "Navigate to Charger and Open Doors")
+
+    def modifyDescription(self, skill):
+        skill.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Optional)
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            self.skill("ChargerLocationFromWM", ""),
+            self.skill("NavigateAndOpenDoor", "navigate_and_open_doors", remap={"TargetLocation": "ChargerLocation"}),
             self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "ChargerLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
 
@@ -80,6 +93,6 @@ class battery_check_and_charge(SkillBase):
             self.skill("BatteryAboveLevel", ""),
             self.skill(Serial())(
                 self.skill("ChargerLocationFromWM", ""),
-                self.skill("Charge", ""),
+                self.skill("Charge", "charge_directly"),
             )
         )
