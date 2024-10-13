@@ -103,12 +103,12 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
         elif location_data["name"] == "fridge":
             rdf_type = SKIROS.Fridge
             rdf_name = "Fridge"
-        elif location_data["category"] == "trashcan_large":
-            rdf_type = SKIROS.Dumpster
-            rdf_name = "Dumpster"
         else:
             rdf_type = SKIROS.OpenableLocation
             rdf_name = "OpenableLocation"
+    elif location_data["category"] == "trashcan_large":
+            rdf_type = SKIROS.Dumpster
+            rdf_name = "Dumpster"
     elif location_data["category"] == "table":
         rdf_type = SKIROS.Table
         rdf_name = "Table"

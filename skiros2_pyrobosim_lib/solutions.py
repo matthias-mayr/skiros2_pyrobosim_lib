@@ -22,7 +22,7 @@ class Problem1Solution(SkillDescription):
 class Problem2Solution(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Dumpster", Element("skiros:Dumpster"), ParamTypes.Required)
         self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
         self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
 

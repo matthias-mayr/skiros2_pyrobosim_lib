@@ -93,6 +93,10 @@ skiros:Door-9 a skiros:Door,
     skiros:adjacentLocation skiros:Room-1,
         skiros:Room-2 .
 
+skiros:Dumpster-20 a skiros:Dumpster,
+        owl:NamedIndividual ;
+    rdfs:label "dumpster" .
+
 skiros:Fridge-17 a skiros:Fridge,
         owl:NamedIndividual ;
     rdfs:label "fridge" ;
@@ -109,10 +113,6 @@ skiros:Location-19 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "bin" ;
     skiros:contain skiros:Waste-27 .
-
-skiros:Location-20 a skiros:Location,
-        owl:NamedIndividual ;
-    rdfs:label "dumpster" .
 
 skiros:Pantry-18 a skiros:Pantry,
         owl:NamedIndividual ;
@@ -170,7 +170,7 @@ skiros:Room-2 a skiros:Room,
 skiros:Room-3 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "trash" ;
-    skiros:contain skiros:Location-20 .
+    skiros:contain skiros:Dumpster-20 .
 
 skiros:Room-4 a skiros:Room,
         owl:NamedIndividual ;
