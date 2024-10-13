@@ -100,10 +100,7 @@ class problem_2_solution(SkillBase):
             self.skill(SerialStar())(
                 self.skill("Navigate", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
-                self.skill(Selector())(
-                    self.skill("OpenLocation", "", remap={"OpenableLocation": "Dumpster"}),
-                    self.skill("Success", ""),
-                ),
+                self.skill("OpenLocation", "", remap={"OpenableLocation": "Dumpster"}),
             ),
             self.skill(SerialStar())(
                 self.skill("Problem1Solution", "", remap={"Object": "Object1", "ObjectTargetLocation": "Dumpster"}),

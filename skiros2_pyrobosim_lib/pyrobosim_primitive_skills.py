@@ -59,9 +59,6 @@ class ChargerLocationFromWM(SkillDescription):
         #=======Params=========
         self.addParam("ChargerLocation", Element("skiros:Location"), ParamTypes.Optional)
 
-class Success(SkillDescription):
-    pass
-
 
 #################################################################################
 # Implementations
@@ -196,10 +193,3 @@ class charger_location_from_wm(PrimitiveBase):
             return self.fail("No charger found in the world model")
         self.params["ChargerLocation"].value = self.chargers[0]
         return self.success(f"Charger location set to '{self.chargers[0].id}'")
-
-class success(PrimitiveBase):
-    def createDescription(self):
-        self.setDescription(Success(), "Success")
-
-    def execute(self):
-        return self.success("Success")
