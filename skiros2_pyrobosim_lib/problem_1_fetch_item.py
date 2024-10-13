@@ -42,7 +42,7 @@ class problem_1(SkillBase):
             # However, the 'Navigate' skill takes only a parameter 'TargetLocation', so we need to remap/rewire those parameters like this:
             self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
             # FIXME 1: Add more skills to solve this task
-            # From here, feel free to add more skills. Check out 'basic_compound_skills.py' to see which ones are available.
+            # From here, feel free to add more skills. Check out 'pyrobosim_compound_skills.py' to see which ones are available.
 
 
 

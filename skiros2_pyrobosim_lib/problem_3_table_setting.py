@@ -55,7 +55,7 @@ class problem_3(SkillBase):
                 self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             ),
-            # FIXME 3: Now fetch the butter
+            # FIXME 3: Now fetch the butter and close the fridge
             self.skill(SerialStar())(
                 # FIXME 3: Add more skills to solve this task. Try to use a previous skill
             )
@@ -70,6 +70,7 @@ class navigate_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
+            # FIXME 3: Make this 'NavigateExecution' skill retryable
             self.skill("NavigateExecution", ""),
             self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
@@ -80,6 +81,7 @@ class pick_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
+            # FIXME 3: Make this next skill execution retryable
             self.skill("PickExecution", ""),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Container", "TargetLocation": "Gripper"}),
@@ -91,6 +93,7 @@ class place_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
+            # FIXME 3: Make this next skill execution retryable
             self.skill("PlaceExecution", ""),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
@@ -102,6 +105,7 @@ class open_openablelocation_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
+            # FIXME 3: Make this next skill execution retryable
             self.skill("OpenExecution", ""),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
@@ -114,6 +118,7 @@ class close_openablelocation_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
+            # FIXME 3: Make this next skill execution retryable
             self.skill("CloseExecution", ""),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},

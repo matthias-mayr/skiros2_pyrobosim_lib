@@ -35,11 +35,20 @@ We have video introductions to the platform with varying lengths. Feel free to c
 
 ## How to get Started with the pyrobosim Problems
 You can launch SkiROS2 together with pyrobosim with this command:
-```
+```sh
 ros2 launch skiros2_pyrobosim_lib main.launch.py problem_number:=1
 ```
 
 This brings up the SkiROS2 interface as well as the pyrobosim world. As a first thing, it is a good browse through the available skills and the world model. You can do this with the SkiROS2 interface or by looking at the files in the `skiros2_pyrobosim_lib` package.
+
+### View Solutions
+
+We include the solutions to all problems in this repository. We assume that you have an interest to solve the problems yourself, but if you're stuck and want to see the robot move, you can load the solution of a given problem with:
+```sh
+ros2 launch skiros2_pyrobosim_lib main.launch.py load_only_solutions:=True problem_number:=1
+```
+
+This loads the set of solution skills that are in [skiros2_pyrobosim_lib/solutions.py](skiros2_pyrobosim_lib/solutions.py).
 
 
 ## Repository Structure
@@ -49,27 +58,39 @@ You can also get it directly from [github.com/matthias-mayr/skiros2_pyrobosim_li
 
 ```
 ├── README.md  
-├── docs                 ### The documents guiding you through 
+├── docs ------------------ ### The documents guiding you through 
 │   ├── 0_Start.md                  --> Introduction
 │   └── 1_Problem_1_Object_Fetch.md --> Instructions for Problem 1
-├── launch
-│   └── main.launch.py              --> Launch file for SkiROS2 in the workshop
-├── owl                     ### Knowledge: scenes and ontology
-│   ├── p1_scene.turtle     ├── Scenes for problem 1
-│   ├── p2_scene.turtle     ├── to
-│   ├── p3_scene.turtle     ├── problem
-│   ├── p4_scene.turtle     └── 4
+├── launch ---------------- ### Launch file
+│   └── main.launch.py          --> Launch file for SkiROS2 in the workshop
+├── owl ------------------- ### Knowledge: scenes and ontology
+│   ├── p1_scene.turtle         --> Scene for problem 1
+│   ├── ...
 │   └── robi_robot_description.owl  --> Ontology with classes & relations
-├── scripts
-│   └── yaml_world_to_turtle.py     --> Converts world.yaml to scene.turtle 
-└── skiros2_pyrobosim_lib           ### All our skills
-    ├── basic_compound_skills.py    --> Skills wrapping pyrobosim primitives
-    ├── extra_compound_skills.py    --> More advanced skills
-    ├── primitive_skills.py         --> Skills for pyrobosim & python directly
-    ├── reasoning_skills.py         --> Skills that use relations to reason
-    ├── solutions.py                --> Don't look here until you're done:-)
-    └── utils                       --> Extra utility skills
-        └── blackboard.py
+├── pddl ------------------ ### PDDL Planning Files
+│   ├── problem1.pddl
+│   ├── ...
+│   ├── skiros.pddl         
+│   ├── solutions
+│   │   ├── problem1.pddl
+│   │   ...
+│   │   └── problem4.pddl
+│   └── test.pddl
+├── scripts ----------------------- ### Helper scripts
+│   ├── update_battery_percentage.py    --> Script to update the world model
+│   └── yaml_world_to_turtle.py         --> Converts pyrobosim world.yaml to scene.turtle 
+└── skiros2_pyrobosim_lib --------- ### All our skills
+    ├── problem_1_fetch_item.py         --> Skills for problem 1
+    ├── problem_2_waste_and_doors.py    
+    ├── problem_3_table_setting.py
+    ├── problem_4_charge.py
+    ├── pyrobosim_compound_skills.py    --> Skills wrapping pyrobosim primitives
+    ├── pyrobosim_primitive_skills.py   --> Skills for interfacing with pyrobosim 
+    ├── solutions.py                    --> Don't look here until you're done:-)
+    ├── task_planning.py                --> Extra skills to demonstrate task planning
+    ├── utils                           --> Utility skills
+    │   └── ...
+    └── xtra_advanced_skills.py         --> Extra skills to show some features
 ```
 
 ## Let's get Started

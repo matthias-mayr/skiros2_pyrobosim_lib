@@ -1,7 +1,7 @@
 # Problem 2 - Waste Disposal
-
-In [0_Start.md](0_Start.md) we learned about the primitive skills and compound skills.  
-In [1 Problem 1 Object Fetch.md](1_Problem_1_Object_Fetch.md) we learned how to build a behavior tree (BT) from multiple skills.
+**Recap**:
+* In [0_Start.md](0_Start.md) we learned about the primitive skills and compound skills.  
+* In [1 Problem 1 Object Fetch.md](1_Problem_1_Object_Fetch.md) we learned how to build a behavior tree (BT) from multiple skills.
 
 In this problem, we are going to throw waste items into a large bin:
 | Goal | Initial State | SkiROS2 Skills | Notes |
