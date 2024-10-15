@@ -33,7 +33,7 @@ def skills_and_skiros2(context, *args, **kwargs):
     problem_4_charge_skills_given = ["charge_directly", "charge_and_open_doors", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
 
     problem_1_item_skills_todo = ["problem_1"]
-    problem_2_waste_skills_todo = []
+    problem_2_waste_skills_todo = ["problem_2"]
     problem_3_table_skills_todo = ["problem_3"]
     problem_4_charge_skills_todo = ["problem_4", "navigate_with_retry_and_battery_check"]
 

@@ -48,6 +48,42 @@ class SelectDoorsToTarget(SkillDescription):
 # Implementations
 #################################################################################
 
+
+class problem_2(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Problem2(), "Problem 2 - Waste Disposal")
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            # First we need to open the dumpster, because we need an empty gripper to do that.
+            # As a side-effect, this also opens all the doors leading to the dumpster.
+            self.skill(SerialStar())(
+                # Navigate to the dumpster with the new skill that opens doors on the way
+                self.skill("Navigate", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
+                self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+                # FIXME 2.1: Add a skill to open the dumpster:
+
+            ),
+            # As a next step we need to pick up the first waste item and dispose of it
+            self.skill(SerialStar())(
+                # FIXME 2.2: Add a skill to pick up the first waste object and that brings it to the dumpster. Try to reuse a previously implemented skill
+
+                # We need to clean up some parameters on the blackboard. Nothing to do here.
+                self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+                self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
+                self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
+            ),
+            # Now we want to pick up the second waste item and dispose of it
+            self.skill(SerialStar())(
+                # FIXME 2.3: Add a skill to pick up the second waste object and that brings it to the dumpster. Try to reuse a previously implemented skill
+            ),
+            # FIXME 2.4: Add a skill to close the dumpster after disposing of the waste
+            
+        )
+
 class navigate_and_open_door(SkillBase):
     def createDescription(self):
         self.setAvailableForPlanning(False)
