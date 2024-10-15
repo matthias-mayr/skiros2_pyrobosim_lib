@@ -8,7 +8,7 @@ In this problem, we are setting the table with items from the kitchen:
 
 | Goal | Initial State | Needed SkiROS2 Skills | Notes |
 |------|---------------|------------|-------|
-| 1. Bring bread and butter to the dining table.<br>2. Fridge and pantry should be closed at the end.. | 1. Bread is in the pantry, which is closed.<br>Butter is in the fridge, which is closed. | - Problem1<br>- Navigate<br>- CloseLocation | pyrobosim actions might fail in this and the next world  |
+| 1. Bring bread and butter to the dining table.<br>2. Fridge and pantry should be closed at the end. | - Bread is in the pantry, which is closed.<br>- Butter is in the fridge, which is closed. | - Problem1<br>- Navigate<br>- CloseLocation | pyrobosim actions might fail in this and the next world  |
 
 So we have two problems to tackle:  
 1. pyrobosim actions like "pick" might fail with some probability
