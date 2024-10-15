@@ -36,9 +36,7 @@ class plan_from_file(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill("ExtractPddlGoalFromFile", ""),
-            self.skill(RetryOnFail(10))(
-                self.skill("TaskPlan", ""),
-            ),
+            self.skill("TaskPlan", ""),
         )
 
 class extract_pddl_goal_from_file(PrimitiveBase):
