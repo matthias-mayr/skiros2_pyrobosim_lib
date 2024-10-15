@@ -64,7 +64,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         "libraries_list": "[skiros2_pyrobosim_lib, skiros2_std_skills]",
         "skill_list": f"[{','.join(skill_list)}]",
         "init_scene": f"p{problem_number}_scene.turtle",
-        "verbose": "false",
+        "verbose": LaunchConfiguration('verbose').perform(context),
         "workspace_dir": get_package_share_directory("skiros2_pyrobosim_lib") + "/owl",
         "robot_name": "robot",
         "robot_ontology_prefix": "robi",
@@ -108,6 +108,13 @@ def generate_launch_description():
             "start_pyrobosim",
             default_value="True",
             description="Start pyrobosim world as well",
+        )
+    )
+    ld.add_action(
+        DeclareLaunchArgument(
+            "verbose",
+            default_value="False",
+            description="Start SkiROS2 in verbose mode",
         )
     )
 
