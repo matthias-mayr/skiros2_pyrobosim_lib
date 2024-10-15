@@ -11,7 +11,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def skills_and_skiros2(context, *args, **kwargs):
     problem_number = int(LaunchConfiguration('problem_number').perform(context))
-    load_only_solutions = bool(LaunchConfiguration('load_only_solutions').perform(context))
+    load_only_solutions_str = bool(LaunchConfiguration('load_only_solutions').perform(context))
 
     environment_deterministic = True if problem_number < 3 else False
     ### Build skill list of skills to load:
@@ -54,7 +54,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         problem_skill_list.extend(problem_4_charge_skills_todo)
         solution_skills.extend(["problem_4_solution", "navigate_with_retry_and_battery_check"])
         skill_list.extend(problem_4_charge_skills_given)
-    if load_only_solutions:
+    if load_only_solutions_str in ["True", "true"]:
         skill_list.extend(solution_skills)
     else:
         skill_list.extend(problem_skill_list)
@@ -64,7 +64,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         "libraries_list": "[skiros2_pyrobosim_lib, skiros2_std_skills]",
         "skill_list": f"[{','.join(skill_list)}]",
         "init_scene": f"p{problem_number}_scene.turtle",
-        "verbose": "true",
+        "verbose": "false",
         "workspace_dir": get_package_share_directory("skiros2_pyrobosim_lib") + "/owl",
         "robot_name": "robot",
         "robot_ontology_prefix": "robi",
@@ -86,7 +86,6 @@ def skills_and_skiros2(context, *args, **kwargs):
 
 def generate_launch_description():
     problem_number = LaunchConfiguration('problem_number')
-    load_only_solutions = LaunchConfiguration('load_only_solutions')
     start_pyrobosim = LaunchConfiguration('start_pyrobosim')
 
     ld = LaunchDescription()
