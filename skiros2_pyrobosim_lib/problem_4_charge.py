@@ -1,6 +1,7 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFf, SerialStar, Selector, Serial, RetryOnFail
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
+from .pyrobosim_compound_skills import Navigate
 
 #################################################################################
 # Descriptions
@@ -48,11 +49,69 @@ class BatteryCheckAndCharge(SkillDescription):
         self.addParam("ChargerLocation", Element("skiros:Charger"), ParamTypes.Optional)
 
 
-
-
 #################################################################################
 # Implementations
 #################################################################################
+
+class battery_check_and_charge(SkillBase):
+    def createDescription(self):
+        self.setDescription(BatteryCheckAndCharge(), "Battery Check and Charge")
+
+    def expand(self, skill):
+        skill.setProcessor(Selector())
+        skill(
+            # We check whether the battery is above the minimum level
+            self.skill("BatteryAboveLevel", ""),
+            # If the battery is below the minimum level, we charge the robot:
+            self.skill(Serial())(
+                # This sets the charger location to the charger location in the blackboard:
+                self.skill("ChargerLocationFromWM", ""),
+                # This navigates to the charger location:
+                self.skill("Charge", "charge_directly"),
+            )
+        )
+
+
+class navigate_with_retry_and_battery_check(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Navigate(), "Navigate to Location")
+
+    def expand(self, skill):
+        # Previously we were executing everything with a SerialStar processor. If we would use that for the battery check, we would only check it once at the beginning of the skill. However, we want to check the battery level constantly, so we set it to a Serial processor:
+        skill.setProcessor(Serial())
+        skill(
+            # FIXME 4.1: Add the battery check and charge skill here:
+            
+            # FIXME 4.2: Now we want to navigate to the target location. This skill is intended to replace our previous "navigate_with_retry" skill, so we want to bring that code here. Note that it's a good idea to still use "SerialStar" as the processor to connect the navigation skills:
+            
+        )
+
+class problem_4(SkillBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(Problem4(), "Problem 4 - Waste Disposal and Setting the Table")
+
+    def expand(self, skill):
+        skill.setProcessor(SerialStar())
+        skill(
+            # FIXME 4.1: Charge the robot before starting the task and make sure that the path to the charger is not blocked by doors.
+            # You can look at the new skills that were introduced in this file and think about which one should be included here.
+
+
+            # FIXME 4.2: Before using butter it's often a good idea to have it warm up a bit, so we will set the table first. Try to reuse what you did in Problem3 to set the table:
+
+
+
+            # After setting the table, we need to remove some parameters from the blackboard. Nothing to do here:
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
+            # FIXME 4.3: Now we can fetch the waste and dispose of it. Try to re-use a skill from the previous problems to do this:
+
+        )
 
 class charge_directly(SkillBase):
     def createDescription(self):
@@ -83,16 +142,3 @@ class charge_and_open_doors(SkillBase):
         )
 
 
-class battery_check_and_charge(SkillBase):
-    def createDescription(self):
-        self.setDescription(BatteryCheckAndCharge(), "Battery Check and Charge")
-
-    def expand(self, skill):
-        skill.setProcessor(Selector())
-        skill(
-            self.skill("BatteryAboveLevel", ""),
-            self.skill(Serial())(
-                self.skill("ChargerLocationFromWM", ""),
-                self.skill("Charge", "charge_directly"),
-            )
-        )

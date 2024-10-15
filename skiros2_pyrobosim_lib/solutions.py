@@ -226,7 +226,7 @@ class problem_4_solution(SkillBase):
             self.skill("Problem2Solution", ""),
         )
 
-class navigate_with_retry_and_battery_check(SkillBase):
+class navigate_with_retry_and_battery_check_solution(SkillBase):
     """
     """
     def createDescription(self):

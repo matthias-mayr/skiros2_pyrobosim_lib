@@ -35,7 +35,7 @@ def skills_and_skiros2(context, *args, **kwargs):
     problem_1_item_skills_todo = ["problem_1"]
     problem_2_waste_skills_todo = []
     problem_3_table_skills_todo = ["problem_3"]
-    problem_4_charge_skills_todo = []
+    problem_4_charge_skills_todo = ["problem_4", "navigate_with_retry_and_battery_check"]
 
     planner_skills = ["plan_from_file", "extract_pddl_goal_from_file", "task_plan"]
     problem_skill_list = [*problem_1_item_skills_todo, *basic_compound_skills]
@@ -52,7 +52,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         solution_skills.append("navigate_with_retry_solution")
     if problem_number > 3:
         problem_skill_list.extend(problem_4_charge_skills_todo)
-        solution_skills.extend(["problem_4_solution", "navigate_with_retry_and_battery_check"])
+        solution_skills.extend(["problem_4_solution", "navigate_with_retry_and_battery_check_solution"])
         skill_list.extend(problem_4_charge_skills_given)
     if load_only_solutions_str in ["True", "true"]:
         skill_list.extend(solution_skills)
