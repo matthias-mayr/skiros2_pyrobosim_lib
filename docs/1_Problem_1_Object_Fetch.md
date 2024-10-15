@@ -10,7 +10,7 @@ Now we want to use them to solve problem 1:
 |------|---------------|------------|-------|
 | Snacks on the dining room table. | Snacks in the kitchen pantry. | - Pick<br>- Navigate<br>- Place |       |
 
-Navigate to [src/skiros2_pyrobosim_lib/problem_skills.py](../skiros2_pyrobosim_lib/problem_skills.py). You will find a skeleton for a compound skill to fill out:
+Navigate to [skiros2_pyrobosim_lib/problem_1_fetch_item.py](../skiros2_pyrobosim_lib/problem_1_fetch_item.py). You will find a skeleton for a compound skill to fill out:
 
 ```python
 class problem_1(SkillBase):
@@ -35,7 +35,7 @@ You can search the codebase for `FIXME 1` for all spots where something for prob
 In order to use this skill, it needs to be in the list of skills to be loaded in `main.launch.py`. For the `problem_1` skill, this is already done.  
 From the GUI you can just select the skill and run it:
 
-FIXME
+![Run Problem 1](skiros2_problem_1_skill.png)
 
 After doing any changes in code, the skill needs to be loaded with the skill manager. You can either launch the whole launch file from scratch or especially in debug mode, just restart the skill manager node.
 
@@ -51,3 +51,7 @@ self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
 We use a `SerialStar` processor to execute the skills in sequence. This means that if any of the skills fail, the whole skill will be aborted. This is useful for this problem, because if we can't navigate to the pantry, we can't fetch the bread either.
 
 Now we need to add the skills to fetch the bread. We need to pick it up and place it on the dining room table. The `Pick` skill is already available in `basic_compound_skills.py`. The `Place` skill is also available there. Check out their descriptions to see which parameters need to be remapped.
+
+## Next
+
+Once you have solved this task, you can move on to the [next problem](2_Problem_2_Waste_Disposal.md).

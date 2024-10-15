@@ -75,3 +75,6 @@ Now we need to pick up the second waste item and bring it to the dumpster. You m
 
 As a final step we need to close the dumpster and are done.
 
+# Next
+
+Continue with the [next problem, the table setting problem](3_Problem_3_Table_Setting.md).

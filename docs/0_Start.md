@@ -180,3 +180,7 @@ class open_openablelocation(SkillBase):
         )
 ```
 But here, after we succeeded to execute the `OpenExecution` skill, we need to set a property in the world model to remember that we just opened this `OpenableLocation`.
+
+# Next
+
+Now that you have an idea of the SkiROS2 skill model, you can start with the [first problem](1_Problem_1_Object_Fetch.md).

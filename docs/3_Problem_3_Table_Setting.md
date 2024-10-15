@@ -132,3 +132,7 @@ Luckily with our skills, getting butter from the fridge is pretty much the same 
 Small side note: The `BbUnsetParam` skill is not needed. It's just there for technical reason to allow for autoparameterization.
 
 One you can successfully place those two objects on the table, you have solved the problem and can move on to problem 4.
+
+# Next
+
+Now that you have set the table, you can move on to the [next problem, that includes the battery level](4_Problem_4_Table_Waste_Charge.md).
