@@ -108,6 +108,7 @@ skiros:Fridge-17 a skiros:Fridge,
 skiros:Location-16 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "desk" ;
+    skiros:Open true ;
     skiros:contain skiros:Waste-26 .
 
 skiros:Location-19 a skiros:Location,
@@ -133,7 +134,8 @@ skiros:Soda-24 a skiros:Soda,
 
 skiros:Table-15 a skiros:Table,
         owl:NamedIndividual ;
-    rdfs:label "table" .
+    rdfs:label "table" ;
+    skiros:Open true .
 
 skiros:Waste-26 a skiros:Waste,
         owl:NamedIndividual ;

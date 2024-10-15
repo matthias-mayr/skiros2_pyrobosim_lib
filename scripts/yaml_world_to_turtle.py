@@ -107,8 +107,8 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
             rdf_type = SKIROS.OpenableLocation
             rdf_name = "OpenableLocation"
     elif location_data["category"] == "trashcan_large":
-            rdf_type = SKIROS.Dumpster
-            rdf_name = "Dumpster"
+        rdf_type = SKIROS.Dumpster
+        rdf_name = "Dumpster"
     elif location_data["category"] == "table":
         rdf_type = SKIROS.Table
         rdf_name = "Table"
@@ -124,7 +124,9 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
     graph.add((location_uri, RDFS.label, Literal(location_data['name'])))
     if 'is_open' in location_data:
         graph.add((location_uri, SKIROS.Open, Literal(location_data['is_open'], datatype=XSD.boolean)))
-    
+    elif location_data["category"] != "charger":
+        graph.add((location_uri, SKIROS.Open, Literal(True, datatype=XSD.boolean)))
+
     # Store in location_mapping
     location_mapping[location_data['name']] = location_uri
     
