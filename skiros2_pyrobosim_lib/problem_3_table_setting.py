@@ -40,24 +40,21 @@ class problem_3(SkillBase):
     def expand(self, skill):
         skill.setProcessor(SerialStar())
         skill(
-            # FIXME 3: We will fetch the bread here and later the butter
+            # FIXME 3.2: We will fetch the bread here and later the butter
             self.skill(SerialStar())(
-                # FIXME 3: Add more skills to solve this task. Try to use a previous skill.
-                # If you could not solve problme 1, you can use the solution "Problem1Solution" instead of "Problem1" in the next line
+                # As an example, we reuse our Problem1 skill to fetch an item. The Problem1 skill has parameter 'Object' and 'ObjectTargetLocation' that we need to set. If you check the Problem3 skill description you will see that we have parameters with names like "Bread" and "Table" that we need to remap like this:
                 self.skill("Problem1", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
-                
-
-                # FIXME 3: Close the pantry
+                # FIXME 3.2: Now add skills to close the pantry
 
 
-                # Unset some blackboard parameters to avoid conflicts
+                # Unset some blackboard parameters to avoid conflicts. Nothing to do here.
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
             ),
-            # FIXME 3: Now fetch the butter and close the fridge
+            # FIXME 3.3: Now fetch the butter and close the fridge
             self.skill(SerialStar())(
-                # FIXME 3: Add more skills to solve this task. Try to use a previous skill
+                # FIXME 3.3: Add more skills to solve this task. Try to use a previous skill
             )
         )
 
@@ -70,7 +67,7 @@ class navigate_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
-            # FIXME 3: Make this 'NavigateExecution' skill retryable
+            # FIXME 3.1: Make this 'NavigateExecution' skill retryable
             self.skill("NavigateExecution", ""),
             self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
         )
@@ -81,7 +78,7 @@ class pick_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
-            # FIXME 3: Make this next skill execution retryable
+            # FIXME 3.1: Make this next skill execution retryable
             self.skill("PickExecution", ""),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Container", "TargetLocation": "Gripper"}),
@@ -93,7 +90,7 @@ class place_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
-            # FIXME 3: Make this next skill execution retryable
+            # FIXME 3.1: Make this next skill execution retryable
             self.skill("PlaceExecution", ""),
             self.skill("WmMoveObject", "wm_move_object",
                 remap={"StartLocation": "Gripper", "TargetLocation": "PlacingLocation"}),
@@ -105,7 +102,7 @@ class open_openablelocation_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
-            # FIXME 3: Make this next skill execution retryable
+            # FIXME 3.1: Make this next skill execution retryable
             self.skill("OpenExecution", ""),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
@@ -118,7 +115,7 @@ class close_openablelocation_with_retry(SkillBase):
 
     def expand(self, skill):
         skill(
-            # FIXME 3: Make this next skill execution retryable
+            # FIXME 3.1: Make this next skill execution retryable
             self.skill("CloseExecution", ""),
             self.skill("WmSetProperties", "",
                 remap={"Src": "OpenableLocation"},
