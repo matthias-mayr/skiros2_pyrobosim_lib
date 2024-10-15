@@ -30,7 +30,7 @@ class ExtractPddlGoalFromFile(SkillDescription):
 class plan_from_file(SkillBase):
     def createDescription(self):
         self.setAvailableForPlanning(False)
-        self.setDescription(PlanFromFile(), "Plan from File")
+        self.setDescription(PlanFromFile(), "Task Planning from PDDL File")
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())

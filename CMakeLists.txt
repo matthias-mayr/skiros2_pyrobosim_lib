@@ -16,7 +16,7 @@ install(
   DIRECTORY
     launch
     owl
-    pddl
+    planning
     scripts
   DESTINATION share/${PROJECT_NAME}
 )
