@@ -13,9 +13,10 @@ class Navigate(SkillDescription):
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         # =======PreConditions=========
-        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
+        self.addPreCondition(self.getRelationCond("RobotAtStart", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
-        self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
+        self.addPostCondition(self.getRelationCond("RobotAtTarget", "skiros:at", "Robot", "TargetLocation", True))
+        self.addPostCondition(self.getRelationCond("NotRobotAtStart", "skiros:at", "Robot", "StartLocation", False))
 
 class Pick(SkillDescription):
     def createDescription(self):
@@ -27,6 +28,7 @@ class Pick(SkillDescription):
         self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getRelationCond("ObjectInContainer", "skiros:contain", "Container", "Object", True))
+        self.addPreCondition(self.getPropCond("IsOpen", "skiros:Open", "Container", "=", True, True))
         #=======HoldConditions=========
         self.addHoldCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
         #=======PostConditions=========
@@ -42,6 +44,8 @@ class Place(SkillDescription):
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
         self.addPreCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True))
+        self.addPreCondition(self.getPropCond("NotEmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", False))
+        self.addPreCondition(self.getPropCond("IsOpen", "skiros:Open", "PlacingLocation", "=", True, True))
         #=======HoldConditions=========
         self.addHoldCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "PlacingLocation", True))
         #=======PostConditions=========
