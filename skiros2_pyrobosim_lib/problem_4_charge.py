@@ -84,8 +84,13 @@ class navigate_with_retry_and_battery_check(SkillBase):
         skill(
             # FIXME 4.1: Add the battery check and charge skill here:
             
-            # FIXME 4.2: Now we want to navigate to the target location. This skill is intended to replace our previous "navigate_with_retry" skill, so we want to bring that code here. Note that it's a good idea to still use "SerialStar" as the processor to connect the navigation skills:
-            
+            # Now we can plug in our previous navigation skill:
+            self.skill(SerialStar())(
+                self.skill(RetryOnFail(10))(
+                    self.skill("NavigateExecution", ""),
+                ),
+                self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
+            )
         )
 
 class problem_4(SkillBase):
@@ -97,11 +102,11 @@ class problem_4(SkillBase):
     def expand(self, skill):
         skill.setProcessor(SerialStar())
         skill(
-            # FIXME 4.1: Charge the robot before starting the task and make sure that the path to the charger is not blocked by doors.
+            # FIXME 4.2: Charge the robot before starting the task and make sure that the path to the charger is not blocked by doors.
             # You can look at the new skills that were introduced in this file and think about which one should be included here.
 
 
-            # FIXME 4.2: Before using butter it's often a good idea to have it warm up a bit, so we will set the table first. Try to reuse what you did in Problem3 to set the table:
+            # FIXME 4.3: Before using butter it's often a good idea to have it warm up a bit, so we will set the table first. Try to reuse what you did in Problem3 to set the table:
 
 
 
@@ -109,7 +114,7 @@ class problem_4(SkillBase):
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
-            # FIXME 4.3: Now we can fetch the waste and dispose of it. Try to re-use a skill from the previous problems to do this:
+            # FIXME 4.4: Now we can fetch the waste and dispose of it. Try to re-use a skill from the previous problems to do this:
 
         )
 
