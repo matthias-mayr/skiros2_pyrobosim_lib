@@ -11,7 +11,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def skills_and_skiros2(context, *args, **kwargs):
     problem_number = int(LaunchConfiguration('problem_number').perform(context))
-    load_only_solutions_str = bool(LaunchConfiguration('load_only_solutions').perform(context))
+    load_only_solutions_str = LaunchConfiguration('load_only_solutions').perform(context)
 
     environment_deterministic = True if problem_number < 3 else False
     ### Build skill list of skills to load:
