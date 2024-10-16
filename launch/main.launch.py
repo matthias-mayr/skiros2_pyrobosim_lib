@@ -16,7 +16,7 @@ def skills_and_skiros2(context, *args, **kwargs):
     environment_deterministic = True if problem_number < 3 else False
     ### Build skill list of skills to load:
     # Add your own skills here, comma separated:
-    own_skills = []
+    own_skills = []  # ["my_primitive", "my_skill"]
 
     # This is our basic skill set that we work with:
     primitive_skills = ["navigate_execution", "pick_execution", "place_execution", "open_execution", "close_execution", "wm_set_relation", "wm_move_object", "wm_set_properties", "bb_unset_param"]
