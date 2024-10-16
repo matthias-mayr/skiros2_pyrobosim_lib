@@ -59,14 +59,18 @@ You can also get it directly from [github.com/matthias-mayr/skiros2_pyrobosim_li
 ```
 ├── README.md  
 ├── docs ------------------ ### The documents guiding you through 
-│   ├── 0_Start.md                  --> Introduction
-│   └── 1_Problem_1_Object_Fetch.md --> Instructions for Problem 1
+│   ├── 0_Start.md                      --> Introduction
+│   ├── 1_Problem_1_Object_Fetch.md     --> Instructions for Problem 1
+│   ├── 2_Problem_2_Waste_Disposal.md
+│   ├── 3_Problem_3_Table_Setting.md
+│   ├── 4_Problem_4_Table_Waste_Charge.md
+│   └── Planning.md                     --> Instructions for planning with SkiROS2
 ├── launch ---------------- ### Launch file
-│   └── main.launch.py          --> Launch file for SkiROS2 in the workshop
+│   └── main.launch.py                  --> Launch file for SkiROS2 in the workshop
 ├── owl ------------------- ### Knowledge: scenes and ontology
-│   ├── p1_scene.turtle         --> Scene for problem 1
+│   ├── p1_scene.turtle                 --> Scene for problem 1
 │   ├── ...
-│   └── robi_robot_description.owl  --> Ontology with classes & relations
+│   └── robi_robot_description.owl      --> Ontology with classes & relations
 ├── planning -------------- ### PDDL Planning Files
 │   ├── problem1.pddl
 │   ├── ...
