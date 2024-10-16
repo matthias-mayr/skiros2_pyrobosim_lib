@@ -11,7 +11,7 @@ from .pyrobosim_compound_skills import Navigate
 class Problem4(SkillDescription):
     def createDescription(self):
         # ======= Params =========
-        self.addParam("Dumpster", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("Dumpster", Element("skiros:Dumpster"), ParamTypes.Required)
         self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
         self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
         self.addParam("Table", Element("skiros:Table"), ParamTypes.Required)
