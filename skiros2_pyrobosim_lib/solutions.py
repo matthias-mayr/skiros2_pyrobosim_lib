@@ -219,6 +219,7 @@ class problem_4_solution(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill("Charge", "charge_and_open_doors"),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("Problem3Solution", ""),
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),

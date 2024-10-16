@@ -105,7 +105,7 @@ class problem_4(SkillBase):
             # FIXME 4.2: Charge the robot before starting the task and make sure that the path to the charger is not blocked by doors.
             # You can look at the new skills that were introduced in this file and think about which one should be included here.
 
-
+            self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             # FIXME 4.3: Before using butter it's often a good idea to have it warm up a bit, so we will set the table first. Try to reuse what you did in Problem3 to set the table:
 
 

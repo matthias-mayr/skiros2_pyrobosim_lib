@@ -105,11 +105,13 @@ class navigate_and_open_doors(SkillBase):
 
     def modifyDescription(self, skill):
         skill.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
+        skill.addParam("FirstStartLocation", Element("skiros:Location"), ParamTypes.Optional)
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())
         skill(
             self.skill("BbUnsetParam", "", remap={"Parameter": "IntermediateLocation"}),
+            self.skill("CopyValue", "", remap={"Input": "StartLocation", "Output": "FirstStartLocation", }),
             self.skill(Serial())(
                 self.skill(Selector())(
                     self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
@@ -119,6 +121,7 @@ class navigate_and_open_doors(SkillBase):
                     ),
                 ),
                 self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
+                self.skill("CopyValue", "", remap={"Input": "FirstStartLocation", "Output": "StartLocation"}),
             ),
         )
 
