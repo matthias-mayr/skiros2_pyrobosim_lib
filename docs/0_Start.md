@@ -130,11 +130,11 @@ This can be read as:
 Robot skiros:at StartLocation
 ```
 and means that the robot must be at the `StartLocation` to start this skill. And here it helps us to set the `StartLocation` parameter. How?  
-We already know which `Robot` we are controlling. We can just use this rule when starting the skill to see at which location it is when starting to execute the skill.
+We already know which `Robot` we are controlling. We can just use this rule when starting the skill to see at which location the robot is at when starting to execute the skill.
 
 #### Compound Skill Implementation
 
-Now that we saw the skill description of the `Navigate` skill, we can have a look at the implementation with some explanations:
+Now that we have seen the skill description of the `Navigate` skill, we can have a look at the implementation with some explanations:
 
 ```python
 class navigate(SkillBase):
@@ -151,7 +151,7 @@ class navigate(SkillBase):
             # First we execute our navigation
             self.skill("NavigateExecution", ""),
             # Once this succeeded. We need to update the world model with a special skill.
-            # What we want to state is that now that we arrived:
+            # What we want to state is that we have arrived:
             # "Robot skiros:at TargetLocation"
             self.skill("WmSetRelation", "wm_set_relation",
           remap={'Dst': "TargetLocation", 'Src': "Robot"},

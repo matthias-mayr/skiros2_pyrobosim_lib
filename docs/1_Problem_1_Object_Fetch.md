@@ -43,7 +43,7 @@ After doing any changes in code, the skill needs to be loaded with the skill man
 ## Tips
 > Read this if you're stuck or need some idea about what to do
 
-For this problem we need to fetch `bread` from the `pantry`. The pantry is in the kitchen, but fortunately it is enough to specify the pantry as a target location. This is what we already do here:
+For this problem we need to fetch `bread` from the `pantry`. The pantry is in the kitchen and fortunately specifying the pantry as the target location is sufficient. This is what we already do here:
 ```python
 self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
 ```

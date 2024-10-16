@@ -48,7 +48,7 @@ How the return signal from a skill makes its way through a behavior tree is deci
 * **ParallelFs (Parallel First Stop)**: Process children in parallel until one succeeds. Stop all processes if a child finishes (succeeded/fail).
 * **RetryOnFail**: Like Sequential, but retries up to 'max_retries' if a child node fails. Restarts all child nodes on failure.
 
-Quite obviously we want to use the `RetryOnFail` processor for our skills here. So we want to wrap the `NavigateExecution` skill in a `RetryOnFail` processor. This processor also takes an argument on how often it should retry and we will set it to 10 retries.
+The `RetryOnFail` processor is begging to be used in this scenario. So we want to wrap the `NavigateExecution` skill in a `RetryOnFail` processor. This processor also takes an argument on how many times it should retry and we will set it to 10 retries.
 
 Once you have adapted this skill and the remaining skills in [skiros2_pyrobosim_lib/problem_3_table_setting.py](../skiros2_pyrobosim_lib/problem_3_table_setting.py), you can test it in the pyrobosim world. The navigation should only fail if a door is blocking the path.
 
@@ -131,7 +131,7 @@ Luckily with our skills, getting butter from the fridge is pretty much the same 
 
 Small side note: The `BbUnsetParam` skill is not needed. It's just there for technical reason to allow for autoparameterization.
 
-One you can successfully place those two objects on the table, you have solved the problem and can move on to problem 4.
+Once you can successfully place those two objects on the table, you have solved the problem and can move on to problem 4.
 
 # Next
 
