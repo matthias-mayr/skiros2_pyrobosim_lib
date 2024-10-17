@@ -22,10 +22,14 @@ class NavigateAndOpenDoor(SkillDescription):
         # =======Params=========
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
+        self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
         self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
+        self.addPostCondition(self.getPropCond("IsReachable", "skiros:Reachable", "TargetLocation", "=", True, True))
 
 
 class LocationIsDoor(SkillDescription):
@@ -122,18 +126,24 @@ class navigate_and_open_doors(SkillBase):
                             remap={"Src": "IntermediateLocation"},
                             specify={"Properties": {"skiros:Reachable": True}}),
                         self.skill("NavigateAndOpenDoor", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
+                        self.skill("WmSetProperties", "",
+                            remap={"Src": "IntermediateLocation"},
+                            specify={"Properties": {"skiros:Reachable": True}}),
                         self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
                     ),
                 ),
                 self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
                 self.skill("CopyValue", "", remap={"Input": "FirstStartLocation", "Output": "StartLocation"}),
+                self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
             ),
         )
 
 
 class location_is_door(PrimitiveBase):
     def createDescription(self):
+        self.setAvailableForPlanning(False)
         self.setDescription(LocationIsDoor(), "Location is Door")
+
 
     def execute(self):
         location = self.params["Location"].value
@@ -159,6 +169,7 @@ class select_doors_to_target(PrimitiveBase):
         sublocation = auto()
 
     def createDescription(self):
+        self.setAvailableForPlanning(False)
         self.setDescription(SelectDoorsToTarget(), "Select Closest Door Leading to Target")
 
     def onPreempt(self):

@@ -22,6 +22,8 @@ class Problem1(SkillDescription):
         self.addPreCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectStartLocation", "Object", True))
         self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
+        self.addPreCondition(self.getPropCond("IsReachable", "skiros:Reachable", "ObjectTargetLocation", "=", True, True))
+        self.addPreCondition(self.getPropCond("ObjectTargetLocationIsOpen", "skiros:Open", "ObjectTargetLocation", "=", True, True))
         # =======PostConditions=========
         # Finally a postcondition stating that after the Problem1 skill ran, the object must be contained by the 'ObjectTargetLocation'
         self.addPostCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectTargetLocation", "Object", True))
