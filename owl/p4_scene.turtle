@@ -42,6 +42,7 @@ skiros:Door-10 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_kitchen_trash" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-2,
         skiros:Room-3 .
 
@@ -49,6 +50,7 @@ skiros:Door-11 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_kitchen_office" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-2,
         skiros:Room-5 .
 
@@ -56,6 +58,7 @@ skiros:Door-12 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_closet_trash" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-3,
         skiros:Room-4 .
 
@@ -63,6 +66,7 @@ skiros:Door-13 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_closet_office" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-4,
         skiros:Room-5 .
 
@@ -70,6 +74,7 @@ skiros:Door-6 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_dining_office" ;
     skiros:Open true ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-1,
         skiros:Room-5 .
 
@@ -77,6 +82,7 @@ skiros:Door-7 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_dining_closet" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-1,
         skiros:Room-4 .
 
@@ -84,6 +90,7 @@ skiros:Door-8 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_dining_trash" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-1,
         skiros:Room-3 .
 
@@ -91,6 +98,7 @@ skiros:Door-9 a skiros:Door,
         owl:NamedIndividual ;
     rdfs:label "hall_dining_kitchen" ;
     skiros:Open true ;
+    skiros:Reachable true ;
     skiros:adjacentLocation skiros:Room-1,
         skiros:Room-2 .
 

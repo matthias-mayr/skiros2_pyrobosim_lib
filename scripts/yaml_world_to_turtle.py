@@ -163,6 +163,8 @@ def create_door_ttl(graph, door_data, door_id, room_mapping):
     if 'is_open' in door_data:
         graph.add((door_uri, SKIROS.Open, Literal(door_data['is_open'], datatype=XSD.boolean)))
     
+    graph.add((door_uri, SKIROS.Reachable, Literal(True, datatype=XSD.boolean)))
+
     return door_uri
 
 # Create Turtle for objects
