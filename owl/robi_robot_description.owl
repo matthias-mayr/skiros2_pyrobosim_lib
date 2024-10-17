@@ -112,6 +112,13 @@
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     </owl:DatatypeProperty>
 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Reachable -->
+
+    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#Reachable">
+        <rdfs:domain rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Location"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
