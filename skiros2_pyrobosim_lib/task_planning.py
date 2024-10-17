@@ -69,13 +69,13 @@ class extract_pddl_goal_from_file(PrimitiveBase):
             while not line.startswith("(:goal"):
                 line = f.readline().strip()
 
-            goal = [line[6:] + '\n']
+            goal = [self.get_pddl_line(line[6:])]
 
             paren = sum((c == '(') - (c == ')') for c in line)
             while paren > 0:
-                line = f.readline()
+                line = self.get_pddl_line(f.readline())
                 goal.append(line)
-                paren += sum((c == '(') - (c == ')') for c in line)
+                paren += sum((c == '(') - (c == ')') for c in line.split(';')[0])
 
             last_line = goal[-1]
             goal[-1] = ")".join(last_line.split(")")[:-1])
@@ -83,8 +83,16 @@ class extract_pddl_goal_from_file(PrimitiveBase):
         if not goal:
             return self.fail(f"File '{file}' did not contain a line starting with '(:goal' or there was an unclosed parenthesis.", -1)
 
-        goal_str = "".join(goal)
+        goal = [g for g in goal if g]
+        if not goal:
+            return self.fail("Planning file had an empty goal")
+
+        goal_str = " ".join(goal)
         log.debug(f"Found goal\n{goal_str}")
 
         self.params["Goal"].value = goal_str
         return self.success(f"Extracted goal from {file}")
+
+    def get_pddl_line(self, line):
+        without_comment = line.strip().split(';')[0]
+        return without_comment.strip()
