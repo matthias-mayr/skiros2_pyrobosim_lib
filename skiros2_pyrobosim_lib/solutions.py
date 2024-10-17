@@ -27,6 +27,7 @@ class problem_1_solution(SkillBase):
             self.skill("Navigate", "", remap={"StartLocation": "ObjectStartLocation", "TargetLocation": "ObjectTargetLocation"}),
             self.skill("Place", "", remap={"PlacingLocation": "ObjectTargetLocation"}),
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
         )
 
 class problem_2_solution(SkillBase):

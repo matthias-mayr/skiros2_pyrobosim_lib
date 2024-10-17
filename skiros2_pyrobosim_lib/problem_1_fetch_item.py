@@ -56,4 +56,5 @@ class problem_1(SkillBase):
 
             # This is for temporary cleanup - just ignore its existence:
             self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "Container"}),
         )
