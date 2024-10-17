@@ -15,6 +15,15 @@ class Problem2(SkillDescription):
         self.addParam("Dumpster", Element("skiros:Dumpster"), ParamTypes.Required)
         self.addParam("Waste1", Element("skiros:Waste"), ParamTypes.Required)
         self.addParam("Waste2", Element("skiros:Waste"), ParamTypes.Required)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
+        #=======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
+        self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
+        #=======PostConditions=========
+        self.addPostCondition(self.getRelationCond("RobotAtDumpster", "skiros:at", "Robot", "Dumpster", True))
+        self.addPostCondition(self.getRelationCond("Waste1Contained", "skiros:contain", "Dumpster", "Waste1", True))
+        self.addPostCondition(self.getRelationCond("Waste2Contained", "skiros:contain", "Dumpster", "Waste2", True))
+        self.addPostCondition(self.getPropCond("DumpsterIsNotOpen", "skiros:Open", "Dumpster", "=", True, False))
 
 
 class NavigateAndOpenDoor(SkillDescription):
