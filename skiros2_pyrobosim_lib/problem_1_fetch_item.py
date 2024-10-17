@@ -28,6 +28,7 @@ class Problem1(SkillDescription):
         # Finally a postcondition stating that after the Problem1 skill ran, the object must be contained by the 'ObjectTargetLocation'
         self.addPostCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectTargetLocation", "Object", True))
         self.addPostCondition(self.getRelationCond("RobotAtTargetLocation", "skiros:at", "Robot", "ObjectTargetLocation", True))
+        self.addPostCondition(self.getPropCond("ObjectStartLocationIsOpen", "skiros:Open", "ObjectStartLocation", "=", True, True))
 
 
 #################################################################################
