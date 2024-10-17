@@ -35,7 +35,8 @@ skiros:Butter-25 a skiros:Butter,
 
 skiros:Charger-21 a skiros:Charger,
         owl:NamedIndividual ;
-    rdfs:label "charger" .
+    rdfs:label "charger" ;
+    skiros:Reachable false .
 
 skiros:Door-10 a skiros:Door,
         owl:NamedIndividual ;
@@ -96,12 +97,14 @@ skiros:Door-9 a skiros:Door,
 skiros:Dumpster-20 a skiros:Dumpster,
         owl:NamedIndividual ;
     rdfs:label "dumpster" ;
-    skiros:Open false .
+    skiros:Open false ;
+    skiros:Reachable false .
 
 skiros:Fridge-17 a skiros:Fridge,
         owl:NamedIndividual ;
     rdfs:label "fridge" ;
     skiros:Open false ;
+    skiros:Reachable true ;
     skiros:contain skiros:Butter-25,
         skiros:Soda-24 .
 
@@ -109,18 +112,21 @@ skiros:Location-16 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "desk" ;
     skiros:Open true ;
+    skiros:Reachable true ;
     skiros:contain skiros:Waste-26 .
 
 skiros:Location-19 a skiros:Location,
         owl:NamedIndividual ;
     rdfs:label "bin" ;
     skiros:Open true ;
+    skiros:Reachable true ;
     skiros:contain skiros:Waste-27 .
 
 skiros:Pantry-18 a skiros:Pantry,
         owl:NamedIndividual ;
     rdfs:label "pantry" ;
-    skiros:Open true ;
+    skiros:Open false ;
+    skiros:Reachable true ;
     skiros:contain skiros:Bread-22,
         skiros:Snacks-23 .
 
@@ -135,7 +141,8 @@ skiros:Soda-24 a skiros:Soda,
 skiros:Table-15 a skiros:Table,
         owl:NamedIndividual ;
     rdfs:label "table" ;
-    skiros:Open true .
+    skiros:Open true ;
+    skiros:Reachable true .
 
 skiros:Waste-26 a skiros:Waste,
         owl:NamedIndividual ;
@@ -168,27 +175,32 @@ cora:Robot-14 a cora:Robot,
 skiros:Room-2 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "kitchen" ;
+    skiros:Reachable true ;
     skiros:contain skiros:Fridge-17,
         skiros:Pantry-18 .
 
 skiros:Room-3 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "trash" ;
+    skiros:Reachable false ;
     skiros:contain skiros:Dumpster-20 .
 
 skiros:Room-4 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "closet" ;
+    skiros:Reachable false ;
     skiros:contain skiros:Charger-21 .
 
 skiros:Room-5 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "office" ;
+    skiros:Reachable true ;
     skiros:contain skiros:Location-16,
         skiros:Location-19 .
 
 skiros:Room-1 a skiros:Room,
         owl:NamedIndividual ;
     rdfs:label "dining" ;
+    skiros:Reachable true ;
     skiros:contain skiros:Table-15 .
 
