@@ -13,7 +13,7 @@ class PlanFromFile(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Package", "skiros2_pyrobosim_lib", ParamTypes.Optional)
-        self.addParam("File", "planning/test.pddl", ParamTypes.Required)
+        self.addParam("File", "planning/problem1.pddl", ParamTypes.Required)
 
 
 class ExtractPddlGoalFromFile(SkillDescription):
