@@ -14,6 +14,7 @@ class Navigate(SkillDescription):
         self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAtStart", "skiros:at", "Robot", "StartLocation", True))
+        self.addPreCondition(self.getPropCond("IsReachable", "skiros:Reachable", "TargetLocation", "=", True, True))
         # =======PostConditions=========
         self.addPostCondition(self.getRelationCond("RobotAtTarget", "skiros:at", "Robot", "TargetLocation", True))
         self.addPostCondition(self.getRelationCond("NotRobotAtStart", "skiros:at", "Robot", "StartLocation", False))
