@@ -54,6 +54,7 @@ class problem_2_solution(SkillBase):
                 self.skill("Problem1", "", remap={"Object": "Object2", "ObjectTargetLocation": "Dumpster"}),
             ),
             self.skill("CloseLocation", "", remap={"OpenableLocation": "Dumpster"}),
+            self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
         )
 
 class problem_3_solution(SkillBase):
