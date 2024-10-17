@@ -81,21 +81,27 @@ def create_robot_ttl(graph, robot_data, robot_id, room_mapping):
     return robot_uri
 
 # Create Turtle for rooms
-def create_room_ttl(graph, room_data, room_id, room_mapping):
+def create_room_ttl(graph, room_data, room_id, room_mapping, world_number):
     """Create Turtle for rooms and map their labels to URIs."""
     room_uri = SKIROS[f"Room-{room_id}"]
     graph.add((room_uri, RDF.type, SKIROS.Room))
     graph.add((room_uri, RDF.type, OWL.NamedIndividual))
     graph.add((room_uri, RDFS.label, Literal(room_data['name'])))
     
+    reachable = True
+    if room_data['name'] in ['trash', 'closet'] and world_number >= 2:
+        reachable = False
+    graph.add((room_uri, SKIROS.Reachable, Literal(reachable, datatype=XSD.boolean)))
+
     # Store in room_mapping
     room_mapping[room_data['name']] = room_uri
     
     return room_uri
 
 # Create Turtle for locations
-def create_location_ttl(graph, location_data, location_id, location_mapping):
+def create_location_ttl(graph, location_data, location_id, location_mapping, world_number):
     """Create Turtle for locations, handling openable locations."""
+    reachable = True
     if location_data["category"] == "storage":
         if location_data["name"] == "pantry":
             rdf_type = SKIROS.Pantry
@@ -109,12 +115,14 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
     elif location_data["category"] == "trashcan_large":
         rdf_type = SKIROS.Dumpster
         rdf_name = "Dumpster"
+        reachable = world_number < 2
     elif location_data["category"] == "table":
         rdf_type = SKIROS.Table
         rdf_name = "Table"
     elif location_data["category"] == "charger":
         rdf_type = SKIROS.Charger
         rdf_name = "Charger"
+        reachable = world_number < 2
     else:
         rdf_type = SKIROS.Location
         rdf_name = "Location"
@@ -126,6 +134,8 @@ def create_location_ttl(graph, location_data, location_id, location_mapping):
         graph.add((location_uri, SKIROS.Open, Literal(location_data['is_open'], datatype=XSD.boolean)))
     elif location_data["category"] != "charger":
         graph.add((location_uri, SKIROS.Open, Literal(True, datatype=XSD.boolean)))
+
+    graph.add((location_uri, SKIROS.Reachable, Literal(reachable, datatype=XSD.boolean)))
 
     # Store in location_mapping
     location_mapping[location_data['name']] = location_uri
@@ -212,7 +222,7 @@ def yaml_to_turtle(yaml_data, world_number: int):
 
     # Create rooms
     for room in yaml_data.get('rooms', []):
-        room_uri = create_room_ttl(graph, room, id_gen.get_next(), room_mapping)
+        room_uri = create_room_ttl(graph, room, id_gen.get_next(), room_mapping, world_number)
         room_uris.append(room_uri)
 
     # Create doors/hallways
@@ -227,7 +237,7 @@ def yaml_to_turtle(yaml_data, world_number: int):
 
     # Create locations
     for location in yaml_data.get('locations', []):
-        location_uri = create_location_ttl(graph, location, id_gen.get_next(), location_mapping)
+        location_uri = create_location_ttl(graph, location, id_gen.get_next(), location_mapping, world_number)
         
         # Ensure parent containment
         parent_uri = room_mapping.get(location.get('parent'))
