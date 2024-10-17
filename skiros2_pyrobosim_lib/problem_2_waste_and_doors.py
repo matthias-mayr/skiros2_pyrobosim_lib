@@ -223,21 +223,21 @@ class select_doors_to_target(PrimitiveBase):
             room_type = self.location_type(room)
             if room_type is None:
                 continue
-            yield 2, room_type, room
+            yield 100, room_type, room
 
             for room_relation in room.getRelations(subj='-1', pred='skiros:contain'):
                 sublocation = self.wmi.get_element(room_relation['dst'])
                 sublocation_type = self.location_type(sublocation)
                 if sublocation_type is None:
                     continue
-                yield 2, sublocation_type, sublocation
+                yield 100, sublocation_type, sublocation
 
             for room_relation in room.getRelations(obj='-1', pred='skiros:adjacentLocation'):
                 door = self.wmi.get_element(room_relation['src'])
                 door_type = self.location_type(door)
                 if door_type is None:
                     continue
-                yield 1, door_type, door
+                yield 1 + 10 * int(not door.getProperty("skiros:Open").value), door_type, door
 
     def connections_from_room(self, elm):
         for room_relation in elm.getRelations(obj='-1', pred='skiros:adjacentLocation'):
@@ -245,14 +245,14 @@ class select_doors_to_target(PrimitiveBase):
             door_type = self.location_type(door)
             if door_type is None:
                 continue
-            yield 1, door_type, door
+            yield 1 + 10 * int(not door.getProperty("skiros:Open").value), door_type, door
 
         for room_relation in elm.getRelations(subj='-1', pred='skiros:contain'):
             sublocation = self.wmi.get_element(room_relation['dst'])
             sublocation_type = self.location_type(sublocation)
             if sublocation_type is None:
                 continue
-            yield 2, sublocation_type, sublocation
+            yield 100, sublocation_type, sublocation
 
     def connections_from_sublocation(self, elm):
         for sublocation_relation in elm.getRelations(obj='-1', pred='skiros:contain'):
@@ -260,14 +260,14 @@ class select_doors_to_target(PrimitiveBase):
             room_type = self.location_type(room)
             if room_type is None:
                 continue
-            yield 2, room_type, room
+            yield 100, room_type, room
 
             for room_relation in room.getRelations(obj='-1', pred='skiros:adjacentLocation'):
                 door = self.wmi.get_element(room_relation['src'])
                 door_type = self.location_type(door)
                 if door_type is None:
                     continue
-                yield 1, door_type, door
+                yield 1 + 10 * int(not door.getProperty("skiros:Open").value), door_type, door
 
     def location_type(self, location):
         cls = location.type
@@ -303,6 +303,11 @@ class select_doors_to_target(PrimitiveBase):
         elif not self.path:
             return self.success("Path has been completed")
 
-        self.current_location, self.path = self.path[0], self.path[1:]
+        self.current_location = None
+        while not self.current_location:
+            self.current_location, self.path = self.path[0], self.path[1:]
+            if self.location_type(self.current_location) is self.Edge.door and self.current_location.getProperty("skiros:Open").value:
+                self.current_location = None
+
         self.params["IntermediateLocation"].value = self.current_location
         return self.step(f"Door '{self.current_location.label}' selected")
