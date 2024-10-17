@@ -58,9 +58,12 @@ class OpenOpenableLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
         self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Inferred)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         # =======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
         self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "OpenableLocation", "=", False, True))
+        self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
+        self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         # =======PostConditions=========
         self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", True, True))
 
@@ -68,7 +71,10 @@ class CloseOpenableLocation(SkillDescription):
     def createDescription(self):
         # =======Params=========
         self.addParam("OpenableLocation", Element("skiros:OpenableLocation"), ParamTypes.Inferred)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
+        self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "OpenableLocation", True))
         self.addPreCondition(self.getPropCond("IsOpen", "skiros:Open", "OpenableLocation", "=", True, True))
         # =======PostConditions=========

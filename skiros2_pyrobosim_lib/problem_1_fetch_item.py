@@ -15,13 +15,17 @@ class Problem1(SkillDescription):
         self.addParam("ObjectTargetLocation", Element("skiros:Location"), ParamTypes.Required)
         # An inferred parameter on the start (current) location of the object since we go there first and need to know where to go:
         self.addParam("ObjectStartLocation", Element("skiros:Location"), ParamTypes.Inferred)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
 
         # =======PreConditions=========
         # Precondition stating that 'ObjectStartLocation' must contain the object. Since we know the 'Object' from the required parameter, we can automatically fill out the 'ObjectStartLocation' with this rule:
         self.addPreCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectStartLocation", "Object", True))
+        self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
+        self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         # =======PostConditions=========
         # Finally a postcondition stating that after the Problem1 skill ran, the object must be contained by the 'ObjectTargetLocation'
         self.addPostCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectTargetLocation", "Object", True))
+        self.addPostCondition(self.getRelationCond("RobotAtTargetLocation", "skiros:at", "Robot", "ObjectTargetLocation", True))
 
 
 #################################################################################

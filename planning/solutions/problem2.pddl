@@ -54,14 +54,8 @@
 ; where `?x` can then be used as an arbitrary object of type <type> in
 ; <condition>. Since there are only two pieces of waste this is not
 ; strictly required.
-(:goal (and
-    ; All waste in dumpster
-    (forall (?x - skiros:Waste) (skiros:contain skiros:Location-20 ?x))
-    ; (skiros:contain skiros:Location-20 skiros:Waste-26)
-    ; (skiros:contain skiros:Location-20 skiros:Waste-27)
-
-    ; Dumpster closed
-    (= (skiros:Open skiros:Location-20) False)
-))
+(:goal
+	(skiros:contain skiros:Dumpster-20 skiros:Waste-26),(skiros:contain skiros:Dumpster-20 skiros:Waste-27),(not (skiros:Open skiros:Dumpster-20))
+)
 
 )
