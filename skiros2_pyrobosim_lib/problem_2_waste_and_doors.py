@@ -107,6 +107,7 @@ class navigate_and_open_doors(SkillBase):
     def modifyDescription(self, skill):
         skill.addParam("IntermediateLocation", Element("skiros:Location"), ParamTypes.Optional)
         skill.addParam("FirstStartLocation", Element("skiros:Location"), ParamTypes.Optional)
+        skill.addPostCondition(self.getPropCond("NowReachable", "skiros:Reachable", "TargetLocation", "=", True, True))
 
     def expand(self, skill):
         skill.setProcessor(SerialStar())
@@ -124,6 +125,9 @@ class navigate_and_open_doors(SkillBase):
                 self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
                 self.skill("CopyValue", "", remap={"Input": "FirstStartLocation", "Output": "StartLocation"}),
             ),
+            self.skill("WmSetProperties", "",
+                remap={"Src": "TargetLocation"},
+                specify={"Properties": {"skiros:Reachable": True}}),
         )
 
 
