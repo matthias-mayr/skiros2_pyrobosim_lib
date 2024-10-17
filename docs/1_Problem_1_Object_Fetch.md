@@ -3,7 +3,7 @@
 In the previous markdown file [0_Start.md](0_Start.md) we learned about the primitive skills and compound skills.
 
 The primitive skills interface directly with `pyrobosim` are in [src/skiros2_pyrobosim_lib/primitive_skills.py](../skiros2_pyrobosim_lib/primitive_skills.py).  
-The compound skills that use and update the world model (WM) are in [src/skiros2_pyrobosim_lib/basic_compound_skills.py](../skiros2_pyrobosim_lib/basic_compound_skills.py).  
+The compound skills that use and update the world model (WM) are in [src/skiros2_pyrobosim_lib/pyrobosim_compound_skills.py](../skiros2_pyrobosim_lib/pyrobosim_compound_skills.py).  
 
 Now we want to use them to solve problem 1:
 | Goal | Initial State | SkiROS2 Skills | Notes |
@@ -50,7 +50,7 @@ self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
 
 We use a `SerialStar` processor to execute the skills in sequence. This means that if any of the skills fail, the whole skill will be aborted. This is useful for this problem, because if we can't navigate to the pantry, we can't fetch the bread either.
 
-Now we need to add the skills to fetch the bread. We need to pick it up and place it on the dining room table. The `Pick` skill is already available in `basic_compound_skills.py`. The `Place` skill is also available there. Check out their descriptions to see which parameters need to be remapped.
+Now we need to add the skills to fetch the bread. We need to pick it up and place it on the dining room table. The `Pick` skill is already available in `pyrobosim_compound_skills.py`. The `Place` skill is also available there. Check out their descriptions to see which parameters need to be remapped.
 
 ## Next
 
