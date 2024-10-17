@@ -39,7 +39,7 @@ class problem_2_solution(SkillBase):
         skill.setProcessor(SerialStar())
         skill(
             self.skill(SerialStar())(
-                self.skill("Navigate", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
+                self.skill("NavigateAndOpenDoor", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 self.skill("OpenLocation", "", remap={"OpenableLocation": "Dumpster"}),
             ),

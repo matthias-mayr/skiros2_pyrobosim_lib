@@ -63,7 +63,7 @@ class problem_2(SkillBase):
             # As a side-effect, this also opens all the doors leading to the dumpster.
             self.skill(SerialStar())(
                 # Navigate to the dumpster with the new skill that opens doors on the way
-                self.skill("Navigate", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
+                self.skill("NavigateAndOpenDoor", "navigate_and_open_doors", remap={"TargetLocation": "Dumpster"}),
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
                 # FIXME 2.1: Add a skill to open the dumpster:
 
