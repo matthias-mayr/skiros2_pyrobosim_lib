@@ -118,6 +118,9 @@ class navigate_and_open_doors(SkillBase):
                 self.skill(Selector())(
                     self.skill("IsNone", "", remap={"Param": "IntermediateLocation"}),
                     self.skill(SerialStar())(
+                        self.skill("WmSetProperties", "",
+                            remap={"Src": "IntermediateLocation"},
+                            specify={"Properties": {"skiros:Reachable": True}}),
                         self.skill("NavigateAndOpenDoor", "navigate_and_open_door", remap={"TargetLocation": "IntermediateLocation"}),
                         self.skill("CopyValue", "", remap={"Output": "StartLocation", "Input": "IntermediateLocation"}),
                     ),
@@ -125,9 +128,6 @@ class navigate_and_open_doors(SkillBase):
                 self.skill("SelectDoorsToTarget", "", remap={"Location": "StartLocation"}),
                 self.skill("CopyValue", "", remap={"Input": "FirstStartLocation", "Output": "StartLocation"}),
             ),
-            self.skill("WmSetProperties", "",
-                remap={"Src": "TargetLocation"},
-                specify={"Properties": {"skiros:Reachable": True}}),
         )
 
 
