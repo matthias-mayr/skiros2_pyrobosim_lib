@@ -32,6 +32,7 @@ class problem_1(SkillBase):
     """
     """
     def createDescription(self):
+        self.setAvailableForPlanning(False)
         self.setDescription(description=Problem1(), label="Problem 1 - Fetch Item")
 
     def expand(self, skill):

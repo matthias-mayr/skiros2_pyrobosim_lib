@@ -97,6 +97,7 @@ class problem_4(SkillBase):
     """
     """
     def createDescription(self):
+        self.setAvailableForPlanning(False)
         self.setDescription(Problem4(), "Problem 4 - Waste Disposal and Setting the Table")
 
     def expand(self, skill):
