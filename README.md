@@ -34,12 +34,18 @@ We have video introductions to the platform with varying lengths. Feel free to c
 | [1min URL](https://www.youtube.com/watch?v=0ejGWLx94a8)  | [5min URL](https://www.youtube.com/watch?v=jy-LlNn3e58)  | [ROSCon Talk URL](https://vimeo.com/879001825/2a0e9d5412)  |
 
 ## How to get Started with the pyrobosim Problems
-You can launch SkiROS2 together with pyrobosim with this command:
+
+> For the **ROSCon24 workshop**, this repository is integrated into a docker container that the workshop organizers have prepared.  
+> You can follow the [setup instructions in the workshop repository](https://github.com/ros-wg-delib/roscon24-workshop/?tab=readme-ov-file#setup). Inside this docker container, you can find the SkiROS2 integration in `/delib_ws/src/technologies/SkiROS2` 
+
+In this container you can launch SkiROS2 together with pyrobosim with this command:
 ```sh
 ros2 launch skiros2_pyrobosim_lib main.launch.py problem_number:=1
 ```
 
 This brings up the SkiROS2 interface as well as the pyrobosim world. As a first thing, it is a good browse through the available skills and the world model. You can do this with the SkiROS2 interface or by looking at the files in the `skiros2_pyrobosim_lib` package.
+
+![pyrobosim world 1](docs/pyrobosim_world_1.png)
 
 ### View Solutions
 
@@ -49,6 +55,8 @@ ros2 launch skiros2_pyrobosim_lib main.launch.py load_only_solutions:=True probl
 ```
 
 This loads the set of solution skills that are in [skiros2_pyrobosim_lib/solutions.py](skiros2_pyrobosim_lib/solutions.py).
+
+
 
 
 ## Repository Structure
