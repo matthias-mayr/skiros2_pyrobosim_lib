@@ -97,11 +97,17 @@ The latter is important because we need an empty gripper to open doors. It is of
 
 You can find a skill `charge_and_open_doors` that does exactly this. It will charge the robot and open doors if necessary.
 
-## 4.3 Setting the Table
+## 4.3 Reachable Locations
+
+Up until now locations being reachable without opening doors has not been a big problem since for problem 1 and 3 no doors needed to be opened and for problem 2 the robot needed to go to the dumpster to open the door before progressing after which no more doors needed to be opened. Here in problem 4 we do not ever need to visit the charger unless the robot starts to run out of battery but when low battery is detected it is very important that the way to the charger is free since we do not know if we will be holding something in the gripper or not at that point.
+
+When writing a skill manually one can keep a mental model of what locations are reachable at each step of execution but for planning as well as more complicated skills it could be beneficial to model this reachability property explicitly. For this problem the decision was made to keep track of a reachable property which is set to True once the robot visits that location thus any planning would make sure that the charger is reachable as long as the other skills require that the charger is reachable.
+
+## 4.4 Setting the Table
 
 We will set the table before fetching the waste. Now we can see how important it is to have a skill-based system. We can just reuse the skills that we already have and use our problem 3 skill to set the table.
 
-## 4.4 Waste Disposal
+## 4.5 Waste Disposal
 
 Now we can fetch the waste and dispose of it. We can reuse the skills from problem 2 to do this.
 
