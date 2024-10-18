@@ -16,6 +16,7 @@ class Problem1(SkillDescription):
         # An inferred parameter on the start (current) location of the object since we go there first and need to know where to go:
         self.addParam("ObjectStartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
+        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
 
         # =======PreConditions=========
         # Precondition stating that 'ObjectStartLocation' must contain the object. Since we know the 'Object' from the required parameter, we can automatically fill out the 'ObjectStartLocation' with this rule:
@@ -24,6 +25,7 @@ class Problem1(SkillDescription):
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getPropCond("IsReachable", "skiros:Reachable", "ObjectTargetLocation", "=", True, True))
         self.addPreCondition(self.getPropCond("ObjectTargetLocationIsOpen", "skiros:Open", "ObjectTargetLocation", "=", True, True))
+        self.addPreCondition(self.getRelationCond("RobotAtStartLocation", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
         # Finally a postcondition stating that after the Problem1 skill ran, the object must be contained by the 'ObjectTargetLocation'
         self.addPostCondition(self.getRelationCond("ObjectContained", "skiros:contain", "ObjectTargetLocation", "Object", True))
@@ -39,7 +41,6 @@ class problem_1(SkillBase):
     """
     """
     def createDescription(self):
-        self.setAvailableForPlanning(False)
         self.setDescription(description=Problem1(), label="Problem 1 - Fetch Item")
 
     def expand(self, skill):
