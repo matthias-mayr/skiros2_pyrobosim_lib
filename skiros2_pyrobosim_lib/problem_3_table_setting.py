@@ -109,6 +109,7 @@ class problem_3(SkillBase):
                 # As an example, we reuse our Problem1 skill to fetch an item. The Problem1 skill has parameter 'Object' and 'ObjectTargetLocation' that we need to set. If you check the Problem3 skill description you will see that we have parameters with names like "Bread" and "Table" that we need to remap like this:
                 self.skill("Problem1", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
                 # FIXME 3.2: Now add skills to close the pantry
+                # When using the "Navigate" skill, set the "StartLocation" parameter to the robot's current location
 
 
                 # Unset some blackboard parameters to avoid conflicts. Nothing to do here.
@@ -119,5 +120,6 @@ class problem_3(SkillBase):
             # FIXME 3.3: Now fetch the butter and close the fridge
             self.skill(SerialStar())(
                 # FIXME 3.3: Add more skills to solve this task. Try to use a previous skill
+                # When using the "Navigate" skill, set the "StartLocation" parameter to the robot's current location
             )
         )

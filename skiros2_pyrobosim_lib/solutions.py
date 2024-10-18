@@ -68,7 +68,7 @@ class problem_3_solution(SkillBase):
         skill(
             self.skill(SerialStar())(
                 self.skill("Problem1", "", remap={"ObjectTargetLocation": "Table", "Object": "Bread"}),
-                self.skill("Navigate", "", remap={"TargetLocation": "Pantry"}),
+                self.skill("Navigate", "", remap={"StartLocation": "Table", "TargetLocation": "Pantry"}),
                 self.skill("CloseLocation", "", remap={"Location": "Pantry"}),
                 # Unset some blackboard parameters to avoid conflicts
                 self.skill("BbUnsetParam", "", remap={"Parameter": "StartLocation"}),
@@ -77,7 +77,7 @@ class problem_3_solution(SkillBase):
             ),
             self.skill(SerialStar())(
                 self.skill("Problem1", "", remap={"ObjectTargetLocation": "Table", "Object": "Butter"}),
-                self.skill("Navigate", "", remap={"TargetLocation": "Fridge"}),
+                self.skill("Navigate", "", remap={"StartLocation": "Table", "TargetLocation": "Fridge"}),
                 self.skill("CloseLocation", "", remap={"Location": "Fridge"}),
             )
         )

@@ -52,6 +52,7 @@ class problem_1(SkillBase):
             self.skill("Navigate", "", remap={"TargetLocation": "ObjectStartLocation"}),
             # FIXME 1: Add more skills to solve this task
             # From here, feel free to add more skills. Check out 'pyrobosim_compound_skills.py' to see which ones are available.
+            # Hint: when you use "Navigate" again, explicitly set the "StartLocation" parameter to the current location of the robot.
 
 
 
