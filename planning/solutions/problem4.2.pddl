@@ -35,6 +35,6 @@
 ; room table, fridge and pantry closed
 (:goal
     (skiros:Reachable skiros:Charger-21),(skiros:contain skiros:Table-15 skiros:Butter-25),(skiros:contain skiros:Table-15 skiros:Bread-22),(not (skiros:Open skiros:Fridge-17)),(not (skiros:Open skiros:Pantry-18)),(skiros:contain skiros:Dumpster-20 skiros:Waste-26),(skiros:contain skiros:Dumpster-20 skiros:Waste-27),(not (skiros:Open skiros:Dumpster-20))
-))
+)
 
 )
