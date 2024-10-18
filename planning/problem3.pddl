@@ -48,7 +48,9 @@
 ; This exercise should be an opportunity to reuse the existing
 ; concepts from the previous two exercises
 (:goal (and
-    ; Conditions go here
+    ; FIXME P3.1: Express that the bread and butter must be on the dining table
+
+    ; FIXME P3.2: Express that the pantry and fridge must be closed
 ))
 
 )

@@ -64,7 +64,7 @@
 ;
 ; In SkiROS2 the `skiros:contain` relation is used to specify this property
 (:goal
-    ; Condition goes here
+    ; FIXME P1: express the desired relation between the snacks and the table
 )
 
 )

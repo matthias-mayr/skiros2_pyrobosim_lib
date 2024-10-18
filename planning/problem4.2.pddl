@@ -47,7 +47,7 @@
 ; Goal: all waste in dumpster, dumpster closed. Bread and butter on dining
 ; room table, fridge and pantry closed
 (:goal (and
-    ; Conditions go here
+    ; FIXME P4.2: Express the combined goal of problem 2 and 3
 ))
 
 )

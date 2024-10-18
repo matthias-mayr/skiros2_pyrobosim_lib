@@ -46,7 +46,7 @@
 
 ; Goal: Charger reachable
 (:goal (and
-    ; Conditions go here
+    ; FIXME P4.1: Express that the charger must be reachable
 ))
 
 )
