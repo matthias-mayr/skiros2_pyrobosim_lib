@@ -87,21 +87,32 @@ class extract_pddl_goal_from_file(PrimitiveBase):
                     return self.fail(f"Unexpected EOF, goal parenthesis was not closed", -1)
 
                 line = self.get_pddl_line(line)
-                if line.strip().startswith(")"):
-                    if not line.strip().startswith("))"):
+                if line.startswith(")"):
+                    if not line.startswith("))"):
                         return self.fail(f"Error on line {line_number}: expected goal to end with '))', got '{line}'", -1)
                     break
 
+                line_number += 1
+                if not line:
+                    continue
+
                 if sum((c == "(") - (c == ")") for c in line) != 0:
                     return self.fail(f"Error on line {line_number}: contained unclosed parenthesis. Condition cannot be broken over multiple lines.", -1)
-                if ")(" in line.replace(" ", ""):
-                    return self.fail(f"Error on line {line_number}: line has multiple conditions, each line may only contain one condition.", -1)
-                if "," in line:
-                    return self.fail(f"Error on line {line_number}: contained illegal ','", -1)
 
-                line_number += 1
-                if not line.strip():
-                    continue
+                if not line.startswith("("):
+                    return self.fail(f"Error on line {line_number}: line did not start with '('", -1)
+
+                index = 1
+                paren = 1
+                for c in line[1:]:
+                    paren += (c == "(") - (c == ")")
+                    if paren == 0:
+                        break
+                    index += 1
+
+                after_first_condition = line[index + 1:]
+                if after_first_condition:
+                    return self.fail(f"Error on line {line_number}: line contained text after first condition '{after_first_condition}'", -1)
 
                 goal.append(line)
 

@@ -69,9 +69,9 @@
 ; strictly required.
 (:goal (and
 	; All waste in dumpster
-	; (forall (?x - Skiros:Waste) (skiros:contain skiros:Dumpster-20 ?x))
-	(skiros:contain skiros:Dumpster-20 skiros:Waste-26)
-	(skiros:contain skiros:Dumpster-20 skiros:Waste-27)
+	(forall (?x - Skiros:Waste) (skiros:contain skiros:Dumpster-20 ?x))
+	; (skiros:contain skiros:Dumpster-20 skiros:Waste-26)
+	; (skiros:contain skiros:Dumpster-20 skiros:Waste-27)
 
 	; Dumpster closed
 	(not (skiros:Open skiros:Dumpster-20))
