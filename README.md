@@ -35,8 +35,12 @@ We have video introductions to the platform with varying lengths. Feel free to c
 
 ## How to get Started with the pyrobosim Problems
 
-> For the **ROSCon24 workshop**, this repository is integrated into a docker container that the workshop organizers have prepared.  
-> You can follow the [setup instructions in the workshop repository](https://github.com/ros-wg-delib/roscon24-workshop/?tab=readme-ov-file#setup). Inside this docker container, you can find the SkiROS2 integration in `/delib_ws/src/technologies/SkiROS2` 
+> **Note 1**: For the **ROSCon24 workshop**, this repository is integrated into a docker container that the workshop organizers have prepared.  
+> You can follow the [setup instructions in the workshop repository](https://github.com/ros-wg-delib/roscon24-workshop/?tab=readme-ov-file#setup). Inside this docker container, you can find the SkiROS2 integration in `/delib_ws/src/technologies/SkiROS2`  
+
+> **Note 2:** If you set up the container some days before the workshop, chances are we updated this repository. You can update this repository with the following command executed in your `roscon24-workshop` repo clone:  
+> `git submodule update --init`
+
 
 In this container you can launch SkiROS2 together with pyrobosim with this command:
 ```sh
