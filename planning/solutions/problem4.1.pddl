@@ -44,8 +44,7 @@
 	(skiros:Open skiros:Table-15)
 )
 
-; Goal: all waste in dumpster, dumpster closed. Bread and butter on dining
-; room table, fridge and pantry closed
+; Goal: Charger reachable
 (:goal (and
 	; Charger reachable, i.e. robot can navigate to charger directly without opening doors
     (skiros:Reachable skiros:Charger-21)
