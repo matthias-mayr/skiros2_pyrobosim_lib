@@ -63,31 +63,52 @@ class extract_pddl_goal_from_file(PrimitiveBase):
             log.warn(no_file_msg)
             return self.fail(no_file_msg, -1)
 
+        line_number = 1
         goal = []
         with open(file_path, "r") as f:
             line = ""
-            while not line.startswith("(:goal"):
-                line = f.readline().strip()
+            while not line.strip().replace(' ', '').startswith("(:goal(and"):
+                line = f.readline()
+                if not line:
+                    return self.fail("Unexpected EOF, did not find start of goal '(:goal (and'", -1)
+                line = line.strip()
+                line_number += 1
 
-            goal = [self.get_pddl_line(line[6:])]
+            if not line.startswith("(:goal (and"):
+                return self.fail(f"Error on line {line_number}: Malformed goal does not start with (exactly) '(:goal (:and'", -1)
 
-            paren = sum((c == '(') - (c == ')') for c in line)
-            while paren > 0:
-                line = self.get_pddl_line(f.readline())
+            if line[11:].strip():
+                return self.fail(f"Error on line {line_number}: start of goal contained text after '(:goal (and': '{line[11:]}'", -1)
+
+            goal = []
+            while True:
+                line = f.readline()
+                if not line:
+                    return self.fail(f"Unexpected EOF, goal parenthesis was not closed", -1)
+
+                line = self.get_pddl_line(line)
+                if line.strip().startswith(")"):
+                    if not line.strip().startswith("))"):
+                        return self.fail(f"Error on line {line_number}: expected goal to end with '))', got '{line}'", -1)
+                    break
+
+                if sum((c == "(") - (c == ")") for c in line) != 0:
+                    return self.fail(f"Error on line {line_number}: contained unclosed parenthesis. Condition cannot be broken over multiple lines.", -1)
+                if ")(" in line.replace(" ", ""):
+                    return self.fail(f"Error on line {line_number}: line has multiple conditions, each line may only contain one condition.", -1)
+                if "," in line:
+                    return self.fail(f"Error on line {line_number}: contained illegal ','", -1)
+
+                line_number += 1
+                if not line.strip():
+                    continue
+
                 goal.append(line)
-                paren += sum((c == '(') - (c == ')') for c in line.split(';')[0])
-
-            last_line = goal[-1]
-            goal[-1] = ")".join(last_line.split(")")[:-1])
 
         if not goal:
-            return self.fail(f"File '{file}' did not contain a line starting with '(:goal' or there was an unclosed parenthesis.", -1)
+            return self.fail(f"Planning file '{file}' had an empty goal", -1)
 
-        goal = [g for g in goal if g]
-        if not goal:
-            return self.fail("Planning file had an empty goal")
-
-        goal_str = " ".join(goal)
+        goal_str = ",".join(goal)
         log.debug(f"Found goal\n{goal_str}")
 
         self.params["Goal"].value = goal_str
