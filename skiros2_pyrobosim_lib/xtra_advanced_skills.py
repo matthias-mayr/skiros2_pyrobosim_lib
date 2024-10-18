@@ -7,29 +7,6 @@ from skiros2_common.core.world_element import Element
 # Descriptions
 #################################################################################
 
-class OpenHallwayDoor(SkillDescription):
-    def createDescription(self):
-        # =======Params=========
-        self.addParam("Door", Element("skiros:Door"), ParamTypes.Required)
-        # =======PreConditions=========
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", False, True))
-        # =======PostConditions=========
-        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "Door", "=", True, True))
-        # Planning book-keeping conditions:
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", True, False))
-
-
-class CloseHallwayDoor(SkillDescription):
-    def createDescription(self):
-        # =======Params=========
-        self.addParam("Door", Element("skiros:Door"), ParamTypes.Required)
-        # =======PreConditions=========
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", True, True))
-        # =======PostConditions=========
-        self.addPostCondition(self.getPropCond("IsOpen", "skiros:Open", "Door", "=", False, True))
-        # Planning book-keeping conditions:
-        self.addPreCondition(self.getPropCond("IsClosed", "skiros:Open", "Door", "=", False, False))
-
 class MoveAllObjects(SkillDescription):
     def createDescription(self):
         #=======Params=========
@@ -63,26 +40,6 @@ class CloseLocation(SkillDescription):
 #################################################################################
 # Implementations
 #################################################################################
-
-class open_hallway_door(SkillBase):
-    def createDescription(self):
-        self.setDescription(OpenHallwayDoor(), "Open Hallway Door")
-
-    def expand(self, skill):
-        skill(
-            self.skill("Navigate", "", remap={"TargetLocation": "Door"}),
-            self.skill("OpenLocation", "", remap={"Location": "Door"}),
-        )
-
-class close_hallway_door(SkillBase):
-    def createDescription(self):
-        self.setDescription(CloseHallwayDoor(), "Close Hallway Door")
-
-    def expand(self, skill):
-        skill(
-            self.skill("Navigate", "", remap={"TargetLocation": "Door"}),
-            self.skill("CloseLocation", "", remap={"Location": "Door"}),
-        )
 
 class move_all_objects(SkillBase):
     """

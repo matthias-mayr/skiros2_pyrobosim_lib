@@ -29,7 +29,7 @@ def skills_and_skiros2(context, *args, **kwargs):
         basic_compound_solution_skills = ["pick_with_retry_solution", "place_with_retry_solution", "open_openablelocation_with_retry_solution", "close_openablelocation_with_retry_solution"]
     # Then we have new skills for each of the problems:
     problem_1_item_skills_given = ["open_location", "skip_open_location", "skip_open_openablelocation"]
-    problem_2_waste_skills_given = ["select_doors_to_target", "skip_close_openablelocation", "skip_close_location", "close_location", "open_hallway_door", "close_hallway_door", "location_is_door", "copy_value", "is_none", "navigate_and_open_door", "navigate_and_open_doors"]
+    problem_2_waste_skills_given = ["select_doors_to_target", "skip_close_openablelocation", "skip_close_location", "close_location", "location_is_door", "copy_value", "is_none", "navigate_and_open_door", "navigate_and_open_doors"]
     problem_4_charge_skills_given = ["charge_directly", "charge_and_open_doors", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
 
     problem_1_item_skills_todo = ["problem_1"]
