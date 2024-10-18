@@ -38,6 +38,7 @@ class NavigateAndOpenDoor(SkillDescription):
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
         # =======PostConditions=========
         self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
+        self.addPostCondition(self.getRelationCond("RobotNotAt", "skiros:at", "Robot", "StartLocation", False))
         self.addPostCondition(self.getPropCond("IsReachable", "skiros:Reachable", "TargetLocation", "=", True, True))
 
 
