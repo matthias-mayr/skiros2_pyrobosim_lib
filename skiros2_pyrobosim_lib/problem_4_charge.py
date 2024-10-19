@@ -25,6 +25,9 @@ class Problem4(SkillDescription):
         self.addPreCondition(self.getRelationCond("PantryContainsBread", "skiros:contain", "Pantry", "Bread", True))
 
         # =======PostConditions=========
+        self.addPostCondition(self.getRelationCond("Waste1Contained", "skiros:contain", "Dumpster", "Waste1", True))
+        self.addPostCondition(self.getRelationCond("Waste2Contained", "skiros:contain", "Dumpster", "Waste2", True))
+        self.addPostCondition(self.getPropCond("DumpsterIsNotOpen", "skiros:Open", "Dumpster", "=", True, False))
         self.addPostCondition(self.getRelationCond("TableContainsBread", "skiros:contain", "Table", "Bread", True))
         self.addPostCondition(self.getRelationCond("TableContainsButter", "skiros:contain", "Table", "Butter", True))
         self.addPostCondition(self.getPropCond("FridgeClosed", "skiros:Open", "Fridge", "=", False, True))
