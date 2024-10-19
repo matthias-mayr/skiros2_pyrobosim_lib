@@ -1,3 +1,5 @@
 *.user
 *.pyc
 *.creator
+planning/generated_domain.pddl
+planning/generated_problem.pddl

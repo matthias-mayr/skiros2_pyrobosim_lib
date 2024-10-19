@@ -9,6 +9,7 @@ ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
         scripts/yaml_world_to_turtle.py
         scripts/update_battery_percentage.py
+        scripts/link_generated_pddl_files.sh
   DESTINATION lib/${PROJECT_NAME}
 )
 
