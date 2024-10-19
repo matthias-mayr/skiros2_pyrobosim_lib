@@ -115,7 +115,36 @@ To keep things easy it uses the `SerialStar` processor to execute the skills in 
 
 This remapping works, because for example the parameter `ObjectTargetLocation` in the `Problem1` skill is a generic parameter that expects a `skiros:Location` and the `Table` parameter that we have here is a more specific type of location. The same with the parameters `Object` and `Bread`: bread is a specific kind of object `skiros:Part`.
 
-Now we need to add the skills to close the pantry. So first we need to navigate to the pantry and then close it. The closing of the pantry is done with the `CloseLocation` skill. Try adding those and think about the parameters and remaps.
+#### Opening the Pantry
+
+Depending on how you solved problem 1, there is a catch here: The pantry is closed.  
+If your problem 1 solution just navigates there, picks and navigates back, you will need to add a skill to open the pantry.
+
+What you can do to problem 1 is to add a skill to open the pantry. You can use the `OpenLocation` skill for that. Check the parameters and make an appropriate remap.
+
+> **Additional Background: SkiROS2 'skill overloading'**  
+> You might wonder what happens if the location we fetch from with the problem1 skill is not a location that can be opened, but we still execute an `OpenLocation` skill.  
+In SkiROS2 we can make several skill implementations for a single skill description. `OpenLocation` is one such example. There are 3 implementations:  
+> 1. `open_location`: This one requires that the location is openable and that it is closed. It will use our pyrobosim compound skill `OpenOpenableLocation`  
+> 2. `skip_open_openablelocation`: This one requires that the location is openable and that it is open. It will do nothing then.
+> 3. `skip_open_location`: This one can be used for locations that are not openable. It will do nothing then.
+>
+> Whenever you create a compound skill, you can decide if you just want to specify a skill description like this:
+> ```python
+> self.skill("OpenLocation", "", remap={"Location": "Pantry"}),
+> ```
+> or you can decide to also require a specific skill implementation like this:
+> ```python
+> self.skill("OpenLocation", "skip_open_location", remap={"Location": "Pantry"}),
+> ```
+> If no implementation is specified, SkiROS2 will iterate over all implementations and check the preconditions. This allows to make implementations for specific hardware or specific situations.  
+> Here, this allows us to automatically 
+
+
+
+#### Closing the Pantry
+
+Now we need to add the skills to close the pantry. We do not want to do this in the problem1 skill, because we might fetch multiple objects from the same location. So we do it in this skill and that means to navigate to the pantry and then close it. The closing of the pantry is done with the `CloseLocation` skill. Try adding those and think about the parameters and remaps.
 
 ### 3.3 Fetch the Butter from the Fridge and Close the Fridge
 
