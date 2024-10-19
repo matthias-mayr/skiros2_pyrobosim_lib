@@ -65,6 +65,8 @@ If you formulate the condition and the planner is able to find a valid plan you 
 The unfinished goal for problem 2 can be found here [src/planning/problem2.pddl](../planning/problem2.pddl).  
 The task description is here [2 Problem 2 Waste Disposal.md](2_Problem_2_Waste_Disposal.md).
 
+> If the skill `Problem 1 - Fetch Item` was set as as unavailable for planning in the previous step it now needs to be enabled again. The planner is (most likely) able to solve problem 2 without this skill available but the planning time will exceed 1 hour.
+
 When writing a skill which solves this problem it is slightly harder to write something which grabs all available pieces of waste compared to sending a goal which expresses that all pieces of waste need to be in the dumpster. Here the planner is able to use explicit knowledge about the state of the world as it plans while the skill should optimally be agnostic to this since it needs to work in any situation.
 
 ### Problem 3
