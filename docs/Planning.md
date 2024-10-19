@@ -26,7 +26,7 @@ By default SkiROS2 supplies a skill, `Task Planning from PDDL Goal`, where one c
 
 ### Goals in PDDL files
 
-For this workshop we have created a skill which can extract a PDDL goal from a file (with very rudimentary parsing) for planning. Try out this skill by attempting to fill in the blanks in the [planning](../planning) folder. Note that the goal of each PDDL file must abide by the following rules:
+For this workshop we have created a skill, `Task Planning from PDDL File`, which can extract a PDDL goal from a file (with very rudimentary parsing) for planning. Try out this skill by attempting to fill in the blanks in the [planning](../planning) folder. Note that the goal of each PDDL file must abide by the following rules:
 
 * The goal starts with _exactly_ '(:goal (and' and nothing else
 * The goal ends with '))'
