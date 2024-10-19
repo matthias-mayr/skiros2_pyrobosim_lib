@@ -19,12 +19,16 @@ class Problem4(SkillDescription):
         self.addParam("Butter", Element("skiros:Butter"), ParamTypes.Required)
         self.addParam("Fridge", Element("skiros:Fridge"), ParamTypes.Inferred)
         self.addParam("Pantry", Element("skiros:Pantry"), ParamTypes.Inferred)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
 
         # =======PreConditions=========
+        self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
+        self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getRelationCond("FridgeContainsButter", "skiros:contain", "Fridge", "Butter", True))
         self.addPreCondition(self.getRelationCond("PantryContainsBread", "skiros:contain", "Pantry", "Bread", True))
 
         # =======PostConditions=========
+        self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPostCondition(self.getRelationCond("Waste1Contained", "skiros:contain", "Dumpster", "Waste1", True))
         self.addPostCondition(self.getRelationCond("Waste2Contained", "skiros:contain", "Dumpster", "Waste2", True))
         self.addPostCondition(self.getPropCond("DumpsterIsNotOpen", "skiros:Open", "Dumpster", "=", True, False))

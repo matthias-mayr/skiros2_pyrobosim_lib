@@ -20,6 +20,7 @@ class Problem2(SkillDescription):
         self.addPreCondition(self.getRelationCond("RobotHasAGripper", "skiros:hasA", "Robot", "Gripper", True))
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         #=======PostConditions=========
+        self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPostCondition(self.getRelationCond("RobotAtDumpster", "skiros:at", "Robot", "Dumpster", True))
         self.addPostCondition(self.getRelationCond("Waste1Contained", "skiros:contain", "Dumpster", "Waste1", True))
         self.addPostCondition(self.getRelationCond("Waste2Contained", "skiros:contain", "Dumpster", "Waste2", True))
