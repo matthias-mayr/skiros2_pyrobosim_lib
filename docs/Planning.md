@@ -59,7 +59,7 @@ In this problem the actions that the robot performs have become fallible, i.e. t
 
 For problem 4 you need to complete two files [src/planning/problem4.1.pddl](../planning/problem4.1.pddl) and [src/planning/problem4.2.pddl](../planning/problem4.2.pddl).
 
-In this case we need to make sure that there is a valid path to the charger which does not require opening any doors before we progress with solving the rest of the problem. This can most likely be solved with a single goal depending on how you model the problem and how you express the goal but an simple pragmatic approach is to separate the problem solution into a two-stage plan. The first stage of the plan ensures that the charger is reachable and the second stage tells the planner the end state we would like to achieve.
+In this case we need to make sure that there is a valid path to the charger which does not require opening any doors before we progress with solving the rest of the problem. This can most likely be solved with a single goal depending on how you model the problem and how you express the goal but a simple pragmatic approach is to separate the problem solution into a two-stage plan. The first stage of the plan ensures that the charger is reachable and the second stage tells the planner the end state we would like to achieve.
 
 ### Summary
 
