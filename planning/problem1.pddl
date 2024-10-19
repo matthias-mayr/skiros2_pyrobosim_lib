@@ -63,8 +63,8 @@
 ;   (<relation> <from_object> <to_object>)
 ;
 ; In SkiROS2 the `skiros:contain` relation is used to specify this property
-(:goal
+(:goal (and
     ; FIXME P1: express the desired relation between the snacks and the table
-)
+))
 
 )

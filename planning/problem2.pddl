@@ -48,16 +48,22 @@
 ;
 ; Properties on objects can also be expressed like so:
 ;
-;   (= (<property> <object>) <value>)
+;   (<property> <object>)
+;	
+; or
+;
+;	(not (<property> <object>))
 ;
 ; in this particular problem we have the `skiros:Open` property
 ; which tells us if something is open or not.
 ;
-; Hint: the possible values for the `skiros:Open` property are `True` and `False`
-;
 ; To combine two or more conditions you can use `and`:
 ;
-;   (and <condition1> <condition2> ...)
+;   (and
+;		<condition1>
+;		<condition2>
+;		...
+;	)
 ;
 ; Additionally it might be intractable to write down that _every_ piece
 ; of waste should be in the dumpster. For this one can use `forall`
