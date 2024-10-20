@@ -29,15 +29,17 @@ skiros2_pyrobosim_lib
 │   ├── problem1.pddl
 │   ...
 ```
+
+Feel free to look at the content of these files to see how the world model and the skills are translated into PDDL after you submitted a goal.
 ### Plan Execution
 
 Once a plan has been derived SkiROS will transform it into a BT and start executing. This is essentially the control one has over the execution. Specify a goal and see if the robot is able to execute it correctly. If a plan is not found or the robot executes something unexpected one might have to tweak the conditions of the available skills. In this case a plan which solves the goal is possible to find and execute as long as it is expressed correctly.
 
-### Goals as Strings
+### Passing Goals as Strings
 
 By default SkiROS2 supplies a skill, `Task Planning from PDDL Goal`, where one can write an arbitrary string in the SkiROS2 interface as input for planning. This skill is available in the SkiROS interface if you want to try out simple goals. You can also provide more advanced goals as comma-separated list of subgoals.
 
-### Goals in PDDL files
+### Passing Goals in PDDL files
 
 For this workshop we have created a skill, `Task Planning from PDDL File`, which can extract a PDDL goal from a file (with very rudimentary parsing) for planning. Try out this skill by attempting to fill in the blanks in the [planning](../planning) folder. Note that the goal of each PDDL file must abide by the following rules:
 
@@ -58,7 +60,13 @@ ros2 launch skiros2_pyrobosim_lib main.launch.py load_only_solutions:=True probl
 For these problems you will be editing PDDL files, for problem 1 this is [src/planning/problem1.pddl](../planning/problem1.pddl).  
 The intended goal is to fetch the item `item1` from the table, which is also described in [1_Problem_1_Object_Fetch.md](1_Problem_1_Object_Fetch.md).
 
-If you formulate the condition and the planner is able to find a valid plan you might notice that the planner quite happily uses `Problem 1 - Fetch Item` which is explicitly written to solve this problem. To see if the planner is able to solve this problem without this skill you could mark it as unavailable for planning by adding `self.setAvailableForPlanning(False)` as the first line in `def createDescription(self):` in `problem_1` in [skiros2_pyrobosim_lib/problem_1_fetch_item.py](../skiros2_pyrobosim_lib/problem_1_fetch_item.py).
+If you formulate the condition and the planner is able to find a valid plan you might notice that the planner quite happily uses `Problem 1 - Fetch Item` which is explicitly written to solve this problem.
+
+To see if the planner is able to solve this problem without this skill you have two options:
+1) Preferred: Launch SkiROS2 without this skill by passing `load_current_problem_skill:=False` like this:  
+`ros2 launch skiros2_pyrobosim_lib main.launch.py load_only_solutions:=True problem_number:=1 load_current_problem_skill:=False`
+
+2) You could mark it as unavailable for planning by adding `self.setAvailableForPlanning(False)` as the first line in `def createDescription(self):` in `problem_1` in [skiros2_pyrobosim_lib/problem_1_fetch_item.py](../skiros2_pyrobosim_lib/problem_1_fetch_item.py). Remember to put it back on though when looking into problems 2-4.
 
 ### Problem 2
 

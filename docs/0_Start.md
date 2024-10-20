@@ -106,7 +106,7 @@ self.params["TargetLocation"].value
 
 SkiROS2 uses behavior trees to combine skills to more complex ones. You can find the following snippets in `src/skiros2_pyrobosim_lib/pyrobosim_compound_skills.py`.
 
-Let's take a look at the `Navigate` skill description:
+Let's take a look at a simplified `Navigate` skill description:
 ```python
 class Navigate(SkillDescription):
     def createDescription(self):
@@ -153,13 +153,8 @@ class navigate(SkillBase):
             # Once this succeeded. We need to update the world model with a special skill.
             # What we want to state is that we have arrived:
             # "Robot skiros:at TargetLocation"
-            self.skill("WmSetRelation", "wm_set_relation",
-          remap={'Dst': "TargetLocation", 'Src': "Robot"},
-          specify={'Relation': 'skiros:at', 'RelationState': True})
             # Furthermore, we also need to update that we are not at the StartLocation anymore:
-            self.skill("WmSetRelation", "wm_set_relation",
-          remap={'Dst': "StartLocation", 'Src': "Robot"},
-          specify={'Relation': 'skiros:at', 'RelationState': False})
+            self.skill("WmSetRelation", "wm_set_relation", remap={"Dst": "TargetLocation", "OldDstToRemove": "StartLocation"}, specify={'Src': self.params["Robot"].value, 'Relation': 'skiros:at', 'RelationState': True}),
     )
 ```
 
