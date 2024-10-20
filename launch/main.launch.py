@@ -12,7 +12,7 @@ from ament_index_python.packages import get_package_share_directory
 def skills_and_skiros2(context, *args, **kwargs):
     problem_number = int(LaunchConfiguration('problem_number').perform(context))
     load_only_solutions = str2bool(LaunchConfiguration('load_only_solutions').perform(context))
-    include_current_solution = str2bool(LaunchConfiguration("include_current_solution").perform(context))
+    include_current_problem = str2bool(LaunchConfiguration("include_current_problem").perform(context))
 
     environment_deterministic = problem_number < 3
     ### Build skill list of skills to load:
@@ -40,21 +40,21 @@ def skills_and_skiros2(context, *args, **kwargs):
 
     if problem_number > 0:
         skill_list.extend(problem_1_item_skills_given)
-        if problem_number > 1 or include_current_solution:
+        if problem_number > 1 or include_current_problem:
             problem_skill_list.append("problem_1")
             solution_skills.append("problem_1_solution")
     if problem_number > 1:
         skill_list.extend(problem_2_waste_skills_given)
-        if problem_number > 2 or include_current_solution:
+        if problem_number > 2 or include_current_problem:
             problem_skill_list.append("problem_2")
             solution_skills.append("problem_2_solution")
     if problem_number > 2:
-        if problem_number > 3 or include_current_solution:
+        if problem_number > 3 or include_current_problem:
             problem_skill_list.append("problem_3")
             solution_skills.append("problem_3_solution")
     if problem_number > 3:
         skill_list.extend(problem_4_charge_skills_given)
-        if problem_number > 4 or include_current_solution:
+        if problem_number > 4 or include_current_problem:
             problem_skill_list.append("problem_4")
             solution_skills.append("problem_4_solution")
 
@@ -129,7 +129,7 @@ def generate_launch_description():
     )
     ld.add_action(
         DeclareLaunchArgument(
-            "include_current_solution",
+            "include_current_problem",
             default_value="True",
             description="Decides if current solution should be loaded. Previous solutions will still be loaded.",
         )
