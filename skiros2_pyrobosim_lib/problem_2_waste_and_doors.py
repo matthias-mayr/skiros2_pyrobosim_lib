@@ -97,7 +97,9 @@ class problem_2(SkillBase):
                 # FIXME 2.3: Add a skill to pick up the second waste object and that brings it to the dumpster. Try to reuse a previously implemented skill
             ),
             # FIXME 2.4: Add a skill to close the dumpster after disposing of the waste
-            
+
+
+            self.skill("BbUnsetParam", "", remap={"Parameter": "ObjectStartLocation"}),
         )
 
 class navigate_and_open_door(SkillBase):
