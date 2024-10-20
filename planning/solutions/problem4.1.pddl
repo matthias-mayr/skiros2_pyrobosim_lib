@@ -48,6 +48,11 @@
 (:goal (and
 	; Charger reachable, i.e. robot can navigate to charger directly without opening doors
     (skiros:Reachable skiros:Charger-21)
+
+	; Robot is in closed
+	; Background: The problem 4 solution goes to the charger first. If the robot starts at the
+	; charger, that skill fails.
+	(skiros:at cora:Robot-14 skiros:Room-4)
 ))
 
 )
