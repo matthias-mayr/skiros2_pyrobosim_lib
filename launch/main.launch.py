@@ -11,11 +11,12 @@ from ament_index_python.packages import get_package_share_directory
 
 def skills_and_skiros2(context, *args, **kwargs):
     problem_number = int(LaunchConfiguration('problem_number').perform(context))
-    load_only_solutions_str = LaunchConfiguration('load_only_solutions').perform(context)
+    load_only_solutions = str2bool(LaunchConfiguration('load_only_solutions').perform(context))
+    include_current_solution = str2bool(LaunchConfiguration("include_current_solution").perform(context))
 
-    environment_deterministic = True if problem_number < 3 else False
+    environment_deterministic = problem_number < 3
     ### Build skill list of skills to load:
-    # Add your own skills here, comma separated:
+    # Add your own skills here:
     own_skills = []  # ["my_primitive", "my_skill"]
 
     # This is our basic skill set that we work with:
@@ -32,29 +33,38 @@ def skills_and_skiros2(context, *args, **kwargs):
     problem_2_waste_skills_given = ["select_doors_to_target", "skip_close_openablelocation", "skip_close_location", "close_location", "location_is_door", "copy_value", "is_none", "navigate_and_open_door", "navigate_and_open_doors"]
     problem_4_charge_skills_given = ["charge_directly", "charge_and_open_doors", "charger_location_from_wm", "battery_above_level", "battery_check_and_charge"]
 
-    problem_1_item_skills_todo = ["problem_1"]
-    problem_2_waste_skills_todo = ["problem_2"]
-    problem_3_table_skills_todo = ["problem_3"]
-    problem_4_charge_skills_todo = ["problem_4", "navigate_with_retry_and_battery_check"]
-
     planner_skills = ["plan_from_file", "extract_pddl_goal_from_file", "task_plan"]
-    problem_skill_list = [*problem_1_item_skills_todo, *basic_compound_skills]
-    solution_skills = ["problem_1_solution", *basic_compound_solution_skills]
-    skill_list = [*primitive_skills, *planner_skills, *own_skills, *problem_1_item_skills_given]
+    problem_skill_list = [*basic_compound_skills]
+    solution_skills = [*basic_compound_solution_skills]
+    skill_list = [*primitive_skills, *planner_skills, *own_skills]
+
+    if problem_number > 0:
+        skill_list.extend(problem_1_item_skills_given)
+        if problem_number > 1 or include_current_solution:
+            problem_skill_list.append("problem_1")
+            solution_skills.append("problem_1_solution")
     if problem_number > 1:
-        problem_skill_list.extend(problem_2_waste_skills_todo)
-        solution_skills.extend(["problem_2_solution"])
         skill_list.extend(problem_2_waste_skills_given)
+        if problem_number > 2 or include_current_solution:
+            problem_skill_list.append("problem_2")
+            solution_skills.append("problem_2_solution")
     if problem_number > 2:
-        problem_skill_list.extend(problem_3_table_skills_todo)
-        solution_skills.extend(["problem_3_solution"])
+        if problem_number > 3 or include_current_solution:
+            problem_skill_list.append("problem_3")
+            solution_skills.append("problem_3_solution")
+    if problem_number > 3:
+        skill_list.extend(problem_4_charge_skills_given)
+        if problem_number > 4 or include_current_solution:
+            problem_skill_list.append("problem_4")
+            solution_skills.append("problem_4_solution")
+
     if problem_number == 3:
         solution_skills.append("navigate_with_retry_solution")
-    if problem_number > 3:
-        problem_skill_list.extend(problem_4_charge_skills_todo)
-        solution_skills.extend(["problem_4_solution", "navigate_with_retry_and_battery_check_solution"])
-        skill_list.extend(problem_4_charge_skills_given)
-    if load_only_solutions_str in ["True", "true"]:
+    if problem_number == 4:
+        problem_skill_list.append("navigate_with_retry_and_battery_check")
+        solution_skills.append("navigate_with_retry_and_battery_check_solution")
+
+    if load_only_solutions:
         skill_list.extend(solution_skills)
     else:
         skill_list.extend(problem_skill_list)
@@ -117,6 +127,13 @@ def generate_launch_description():
             description="Start SkiROS2 in verbose mode",
         )
     )
+    ld.add_action(
+        DeclareLaunchArgument(
+            "include_current_solution",
+            default_value="True",
+            description="Decides if current solution should be loaded. Previous solutions will still be loaded.",
+        )
+    )
 
     ld.add_action(OpaqueFunction(function=skills_and_skiros2))
 
@@ -131,3 +148,8 @@ def generate_launch_description():
     )
 
     return ld
+
+
+def str2bool(bool_string: str) -> bool:
+    assert bool_string.lower() in ["true", "false"], f"Expected bool as string, got '{bool_string}'"
+    return bool_string.lower() == "true"
