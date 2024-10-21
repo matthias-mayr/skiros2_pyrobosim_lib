@@ -77,8 +77,8 @@
     ; FIXME P2.1: Express the condition that the dumpster should be closed
 
     ; FIXME P2.2: Optionally, express that _all_ waste must be in the dumpster no matter how many pieces of waste there are
-    (skiros:contain skiros:Location-20 skiros:Waste-26)
-    (skiros:contain skiros:Location-20 skiros:Waste-27)
+    (skiros:contain skiros:Dumpster-20 skiros:Waste-26)
+    (skiros:contain skiros:Dumpster-20 skiros:Waste-27)
 ))
 
 )
